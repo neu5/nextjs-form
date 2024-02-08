@@ -5,10 +5,10 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme Dashboard',
-    default: 'Acme Dashboard',
+    template: '%s | Rajd Świętego Emeryka',
+    default: 'Rajd Świętego Emeryka',
   },
-  description: 'The official Next.js Course Dashboard, built with App Router.',
+  description: 'Formularz zgłoszeniowy do rajdu Świętego Emeryka',
 };
 
 export default function RootLayout({
@@ -18,7 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} bg-slate-200 antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }
