@@ -17,110 +17,67 @@ export async function authenticate(
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return 'Invalid credentials.';
+          return 'Błędne dane.';
         default:
-          return 'Something went wrong.';
+          return 'Coś poszło nie tak.';
       }
     }
     throw error;
   }
 }
 
-const FormSchema = z.object({
+const FormGroupSchema = z.object({
   id: z.string(),
-  customerId: z.string({
-    invalid_type_error: 'Please select a customer.',
-  }),
-  amount: z.coerce
-    .number()
-    .gt(0, { message: 'Please enter an amount greater than $0.' }),
-  status: z.enum(['pending', 'paid'], {
-    invalid_type_error: 'Please select an invoice status.',
-  }),
+  groupName: z
+    .string({ required_error: 'Name is required' })
+    .min(2, { message: 'Nazwa musi mieć co najmniej 2 znaki' })
+    .max(180, { message: 'Nazwa nie może mieć więcej niż 180 znaków' }),
   date: z.string(),
 });
 
-const CreateInvoice = FormSchema.omit({ id: true, date: true });
-
-const UpdateInvoice = FormSchema.omit({ id: true, date: true });
-
-export type State = {
+export type GroupState = {
   errors?: {
-    customerId?: string[];
-    amount?: string[];
-    status?: string[];
+    groupName?: string[];
   };
   message?: string | null;
 };
 
-export async function createInvoice(prevState: State, formData: FormData) {
+const CreateGroup = FormGroupSchema.omit({ id: true, date: true });
+
+export async function createGroup(prevState: GroupState, formData: FormData) {
   // Validate form using Zod
-  const validatedFields = CreateInvoice.safeParse({
-    customerId: formData.get('customerId'),
-    amount: formData.get('amount'),
-    status: formData.get('status'),
+  const validatedFields = CreateGroup.safeParse({
+    groupName: formData.get('groupName'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Invoice.',
+      message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
     };
   }
 
   // Prepare data for insertion into the database
-  const { customerId, amount, status } = validatedFields.data;
-  const amountInCents = amount * 100;
+  const { groupName } = validatedFields.data;
   const date = new Date().toISOString().split('T')[0];
 
+  console.log('add to the database...');
+
   // Insert data into the database
-  try {
-    await sql`
-      INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
-    `;
-  } catch (error) {
-    // If a database error occurs, return a more specific error.
-    return {
-      message: 'Database Error: Failed to Create Invoice.',
-    };
-  }
+  // try {
+  //   await sql`
+  //     INSERT INTO invoices (customer_id, amount, status, date)
+  //     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+  //   `;
+  // } catch (error) {
+  //   // If a database error occurs, return a more specific error.
+  //   return {
+  //     message: 'Database Error: Failed to Create Invoice.',
+  //   };
+  // }
 
   // Revalidate the cache for the invoices page and redirect the user.
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
-}
 
-export async function updateInvoice(id: string, formData: FormData) {
-  const { customerId, amount, status } = UpdateInvoice.parse({
-    customerId: formData.get('customerId'),
-    amount: formData.get('amount'),
-    status: formData.get('status'),
-  });
-
-  const amountInCents = amount * 100;
-
-  try {
-    await sql`
-        UPDATE invoices
-        SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-        WHERE id = ${id}
-      `;
-  } catch (error) {
-    return { message: 'Database Error: Failed to Update Invoice.' };
-  }
-
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
-}
-
-export async function deleteInvoice(id: string) {
-  try {
-    await sql`DELETE FROM invoices WHERE id = ${id}`;
-    revalidatePath('/dashboard/invoices');
-    return { message: 'Deleted Invoice.' };
-  } catch (error) {
-    return { message: 'Database Error: Failed to Delete Invoice.' };
-  }
+  redirect('/success');
 }
