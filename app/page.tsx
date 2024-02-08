@@ -2,6 +2,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata } from 'next';
+import CreateGroup from '@/app/ui/groups/create-form';
 
 export const metadata: Metadata = {
   title: 'Rajd Świętego Emeryka | Formularz',
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main className="mx-8 my-8 flex-grow bg-white p-6 md:overflow-y-auto md:p-10">
-      <div className="flex">
+      <div className="flex justify-end gap-4">
         <Link
           href="/login"
           className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
@@ -36,9 +37,9 @@ export default function Page() {
           priority={true}
         />
       </div>
-      <h1 className="my-8 text-3xl font-bold">
+      <h2 className="my-8 text-3xl font-bold">
         Zanim wypełnisz formularz zgłoszeniowy…
-      </h1>
+      </h2>
       <ul className="list-disc	 leading-loose">
         <li>
           Prosimy o wcześniejsze zapoznanie się z przebiegiem tras i godzinami
@@ -116,6 +117,8 @@ export default function Page() {
           </strong>
         </li>
       </ul>
+      <h2 className="my-8 text-3xl font-bold">Dodaj zgłoszenie</h2>
+      <CreateGroup></CreateGroup>
     </main>
   );
 }
