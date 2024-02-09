@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import { CustomerField } from '@/app/lib/definitions';
+import { CustomerField } from '@/app/lib/definitions_TO_REMOVE/definitions';
 import Link from 'next/link';
 import {
   CheckIcon,
@@ -10,7 +10,7 @@ import {
   FingerPrintIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { createGroup } from '@/app/lib/actions';
+import { createGroup } from '@/app/lib/actions/groups';
 
 export default function Form() {
   const initialState = { message: null, errors: {} };
@@ -30,7 +30,6 @@ export default function Form() {
               <input
                 id="groupName"
                 name="groupName"
-                type="string"
                 placeholder="Nazwa drużyny"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 minLength={2}

@@ -3,6 +3,7 @@
 import {
   UserGroupIcon,
   HomeIcon,
+  GlobeEuropeAfricaIcon,
   DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -14,6 +15,7 @@ import clsx from 'clsx';
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
   { name: 'Grupy', href: '/dashboard/groups', icon: UserGroupIcon },
+  { name: 'Trasy', href: '/dashboard/paths', icon: GlobeEuropeAfricaIcon },
   {
     name: 'Invoices',
     href: '/dashboard/invoices',
