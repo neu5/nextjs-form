@@ -21,7 +21,7 @@ export default async function GroupsTable() {
                     <div className="mb-2 flex items-center">
                       <p>{group.name}</p>
                     </div>
-                    {/* <p className="text-sm text-gray-500">{invoice.email}</p> */}
+                    <p className="text-sm text-gray-500">{group.pathname}</p>
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
@@ -42,6 +42,9 @@ export default async function GroupsTable() {
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   Nazwa grupy
                 </th>
+                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                  Trasa
+                </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Data dodania zgłoszenia
                 </th>
@@ -60,6 +63,9 @@ export default async function GroupsTable() {
                     <div className="flex items-center gap-3">
                       <p>{group.name}</p>
                     </div>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {group.pathname}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatDateToLocal(group.date)}

@@ -3,12 +3,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata } from 'next';
 import CreateGroup from '@/app/ui/groups/create-form';
+import { fetchPaths } from '@/app/lib/data';
 
 export const metadata: Metadata = {
   title: 'Rajd Świętego Emeryka | Formularz',
 };
 
-export default function Page() {
+export default async function Page() {
+  const paths = await fetchPaths();
+
   return (
     <main className="mx-8 my-8 flex-grow bg-white p-6 md:overflow-y-auto md:p-10">
       <div className="flex justify-end gap-4">
@@ -117,8 +120,7 @@ export default function Page() {
           </strong>
         </li>
       </ul>
-      <h2 className="my-8 text-3xl font-bold">Dodaj zgłoszenie</h2>
-      <CreateGroup></CreateGroup>
+      <CreateGroup paths={paths} />
     </main>
   );
 }
