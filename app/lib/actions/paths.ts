@@ -22,7 +22,7 @@ export type PathState = {
 };
 
 const CreatePath = FormPathsSchema.omit({ id: true, date: true });
-const UpdatePath = FormPathsSchema.omit({ id: true, date: true });
+const UpdatePath = FormPathsSchema.omit({ date: true });
 
 export async function createPath(prevState: PathState, formData: FormData) {
   // Validate form using Zod
@@ -59,10 +59,22 @@ export async function createPath(prevState: PathState, formData: FormData) {
   redirect('/dashboard/paths');
 }
 
-export async function updatePath(id: string, formData: FormData) {
-  const { name } = UpdatePath.parse({
+export async function updatePath(prevState: PathState, formData: FormData) {
+  // Validate form using Zod
+  const validatedFields = UpdatePath.safeParse({
+    id: formData.get('id'),
     name: formData.get('name'),
   });
+
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Nie udało się edytować trasy. Uzupełnij brakujące pola.',
+    };
+  }
+
+  const { id, name } = validatedFields.data;
 
   try {
     await sql`
