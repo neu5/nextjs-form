@@ -9,6 +9,14 @@ export type User = {
   password: string;
 };
 
+export type GroupsTable = {
+  id: string;
+  name: string;
+  date: string;
+};
+
+/* ************** */
+
 export type Customer = {
   id: string;
   name: string;
