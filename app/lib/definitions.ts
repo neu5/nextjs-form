@@ -10,3 +10,8 @@ export type GroupsTable = {
   name: string;
   date: string;
 };
+
+export type PathForm = {
+  id: string;
+  name: string;
+};
