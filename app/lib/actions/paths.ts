@@ -22,6 +22,7 @@ export type PathState = {
 };
 
 const CreatePath = FormPathsSchema.omit({ id: true, date: true });
+const UpdatePath = FormPathsSchema.omit({ id: true, date: true });
 
 export async function createPath(prevState: PathState, formData: FormData) {
   // Validate form using Zod
@@ -52,6 +53,25 @@ export async function createPath(prevState: PathState, formData: FormData) {
     return {
       message: 'Błąd bazy danych: nie udało się dodać trasy.',
     };
+  }
+
+  revalidatePath('/dashboard/paths');
+  redirect('/dashboard/paths');
+}
+
+export async function updatePath(id: string, formData: FormData) {
+  const { name } = UpdatePath.parse({
+    name: formData.get('name'),
+  });
+
+  try {
+    await sql`
+      UPDATE paths
+      SET name = ${name}
+      WHERE id = ${id}
+    `;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Update Paths.' };
   }
 
   revalidatePath('/dashboard/paths');
