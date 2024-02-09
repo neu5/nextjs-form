@@ -8,10 +8,16 @@ export type User = {
 export type GroupsTable = {
   id: string;
   name: string;
+  pathname: string;
   date: string;
 };
 
 export type PathForm = {
+  id: string;
+  name: string;
+};
+
+export type PathsField = {
   id: string;
   name: string;
 };

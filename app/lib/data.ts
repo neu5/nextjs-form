@@ -17,7 +17,8 @@ export async function fetchGroups() {
   noStore();
 
   try {
-    const data = await sql<GroupsTable>`SELECT * FROM groups`;
+    const data =
+      await sql<GroupsTable>`SELECT groups.id, groups.name, groups.date, paths.name AS pathName FROM groups JOIN paths ON groups.path_id = paths.id`;
 
     return data.rows;
   } catch (error) {
