@@ -62,22 +62,18 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
   const { groupName } = validatedFields.data;
   const date = new Date().toISOString().split('T')[0];
 
-  console.log('add to the database...');
-
   // Insert data into the database
-  // try {
-  //   await sql`
-  //     INSERT INTO invoices (customer_id, amount, status, date)
-  //     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
-  //   `;
-  // } catch (error) {
-  //   // If a database error occurs, return a more specific error.
-  //   return {
-  //     message: 'Database Error: Failed to Create Invoice.',
-  //   };
-  // }
-
-  // Revalidate the cache for the invoices page and redirect the user.
+  try {
+    await sql`
+      INSERT INTO groups (name, date)
+      VALUES (${groupName}, ${date})
+    `;
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    return {
+      message: 'Błąd bazy danych: nie udało się dodać grupy.',
+    };
+  }
 
   redirect('/success');
 }
