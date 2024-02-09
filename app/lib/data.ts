@@ -1,6 +1,6 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
-import { User, GroupsTable } from './definitions';
+import { User, GroupsTable } from './definitions_TO_REMOVE/definitions';
 
 export async function getUser(email: string) {
   noStore();
@@ -14,8 +14,6 @@ export async function getUser(email: string) {
 }
 
 export async function fetchGroups() {
-  // Add noStore() here to prevent the response from being cached.
-  // This is equivalent to in fetch(..., {cache: 'no-store'}).
   noStore();
 
   try {
@@ -25,5 +23,18 @@ export async function fetchGroups() {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch groups data.');
+  }
+}
+
+export async function fetchPaths() {
+  noStore();
+
+  try {
+    const data = await sql<GroupsTable>`SELECT * FROM paths`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch paths data.');
   }
 }

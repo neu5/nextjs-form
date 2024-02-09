@@ -46,10 +46,33 @@ async function seedUsers(client) {
   }
 }
 
+async function seedPaths(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+        CREATE TABLE IF NOT EXISTS paths (
+          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          date DATE NOT NULL
+        );
+      `;
+
+    console.log(`Created "paths" table`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding paths:', error);
+    throw error;
+  }
+}
+
 async function seedGroups(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-    // Create the "groups" table if it doesn't exist
+
     const createTable = await client.sql`
         CREATE TABLE IF NOT EXISTS groups (
           id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -64,7 +87,7 @@ async function seedGroups(client) {
       createTable,
     };
   } catch (error) {
-    console.error('Error seeding users:', error);
+    console.error('Error seeding groups:', error);
     throw error;
   }
 }
@@ -73,6 +96,7 @@ async function main() {
   const client = await db.connect();
 
   await seedUsers(client);
+  await seedPaths(client);
   await seedGroups(client);
 
   await client.end();

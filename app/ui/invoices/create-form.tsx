@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import { CustomerField } from '@/app/lib/definitions';
+import { CustomerField } from '@/app/lib/definitions_TO_REMOVE/definitions';
 import Link from 'next/link';
 import {
   CheckIcon,
