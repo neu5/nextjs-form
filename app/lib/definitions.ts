@@ -21,3 +21,8 @@ export type PathsField = {
   id: string;
   name: string;
 };
+
+export type LeavingHoursTable = {
+  id: string;
+  value: string;
+};
