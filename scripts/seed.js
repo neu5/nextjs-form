@@ -1,10 +1,5 @@
 const { db } = require('@vercel/postgres');
-const {
-  invoices,
-  customers,
-  revenue,
-  users,
-} = require('../app/lib/placeholder-data.js');
+const { leavingHours, users } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
 async function seedUsers(client) {
@@ -83,8 +78,20 @@ async function seedLeavingHours(client) {
 
     console.log(`Created "leaving_hours" table`);
 
+    const insertedLeavingHours = await Promise.all(
+      leavingHours.map(
+        (leavingHour) => client.sql`
+          INSERT INTO leaving_hours (value)
+          VALUES (${leavingHour.value})
+        `,
+      ),
+    );
+
+    console.log(`Seeded ${insertedLeavingHours.length} leaving hours`);
+
     return {
       createTable,
+      leavingHours: insertedLeavingHours,
     };
   } catch (error) {
     console.error('Error seeding leaving_hours:', error);
