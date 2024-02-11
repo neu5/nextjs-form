@@ -30,8 +30,6 @@ export async function createLeavingHour(
     value: formData.get('value'),
   });
 
-  console.log(validatedFields);
-
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {

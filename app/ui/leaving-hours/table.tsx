@@ -4,9 +4,6 @@ import { formatDateToLocal } from '@/app/lib/utils';
 
 export default async function PathsTable() {
   const leavingHours = await fetchLeavingHours();
-
-  console.log(leavingHours);
-
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
