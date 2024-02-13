@@ -1,11 +1,17 @@
 import Form from '@/app/ui/paths/edit-form';
 import Breadcrumbs from '@/app/ui/breadcrumbs';
-import { fetchPathById } from '@/app/lib/data';
+import {
+  fetchLeavingHours,
+  fetchPathById,
+  fetchPathLeavingHours,
+} from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
   const path = await fetchPathById(id);
+  const leavingHours = await fetchLeavingHours();
+  const pathLeavingHours = await fetchPathLeavingHours(id);
 
   if (!path) {
     notFound();
@@ -23,7 +29,11 @@ export default async function Page({ params }: { params: { id: string } }) {
           },
         ]}
       />
-      <Form path={path} />
+      <Form
+        leavingHours={leavingHours}
+        path={path}
+        pathLeavingHours={pathLeavingHours}
+      />
     </main>
   );
 }

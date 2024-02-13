@@ -17,6 +17,11 @@ export type PathForm = {
   name: string;
 };
 
+export type LeavingHoursPathForm = {
+  id: string;
+  leaving_hour_id: string;
+};
+
 export type PathsField = {
   id: string;
   name: string;
@@ -26,3 +31,5 @@ export type LeavingHoursTable = {
   id: string;
   value: string;
 };
+
+export type LeavingHoursForm = LeavingHoursTable;
