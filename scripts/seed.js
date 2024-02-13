@@ -99,6 +99,29 @@ async function seedLeavingHours(client) {
   }
 }
 
+async function seedLeavingHoursToPaths(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS paths_leaving_hours (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        path_id UUID NOT NULL,
+        leaving_hour_id UUID NOT NULL
+      );
+    `;
+
+    console.log(`Created "paths_leaving_hours" table`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding paths:', error);
+    throw error;
+  }
+}
+
 async function seedGroups(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -129,6 +152,8 @@ async function main() {
   await seedUsers(client);
   await seedPaths(client);
   await seedLeavingHours(client);
+  await seedLeavingHoursToPaths(client);
+
   await seedGroups(client);
 
   await client.end();

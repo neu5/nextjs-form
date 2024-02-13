@@ -11,6 +11,7 @@ const FormPathsSchema = z.object({
     .string({ required_error: 'Name is required' })
     .min(2, { message: 'Nazwa musi mieć co najmniej 2 znaki' })
     .max(255, { message: 'Nazwa nie może mieć więcej niż 255 znaków' }),
+  leavingHours: z.array(z.string()),
   date: z.string(),
 });
 
@@ -64,6 +65,7 @@ export async function updatePath(prevState: PathState, formData: FormData) {
   const validatedFields = UpdatePath.safeParse({
     id: formData.get('id'),
     name: formData.get('name'),
+    leavingHours: formData.getAll('leavingHours'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
@@ -74,7 +76,7 @@ export async function updatePath(prevState: PathState, formData: FormData) {
     };
   }
 
-  const { id, name } = validatedFields.data;
+  const { id, name, leavingHours } = validatedFields.data;
 
   try {
     await sql`
@@ -85,6 +87,22 @@ export async function updatePath(prevState: PathState, formData: FormData) {
   } catch (error) {
     return { message: 'Database Error: Failed to Update Paths.' };
   }
+
+  try {
+    await sql`DELETE FROM paths_leaving_hours WHERE path_id = ${id}`;
+  } catch (error) {}
+
+  leavingHours.forEach(async (leavingHourId) => {
+    try {
+      await sql`
+        INSERT INTO paths_leaving_hours (path_id,leaving_hour_id) VALUES (${id},${leavingHourId});
+      `;
+    } catch (error) {
+      return {
+        message: 'Database Error: Failed to Update paths_leaving_hours.',
+      };
+    }
+  });
 
   revalidatePath('/dashboard/paths');
   redirect('/dashboard/paths');

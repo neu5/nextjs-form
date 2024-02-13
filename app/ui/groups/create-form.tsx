@@ -20,8 +20,10 @@ export default function Form({ paths }: { paths: PathsField[] }) {
         {/* Group Name */}
         <div className="mb-4">
           <label htmlFor="groupName" className="mb-2 block text-sm font-medium">
-            Nazwa drużyny <span className="text-red-600">*</span> (min 2 znaki,
-            max 180 znaków)
+            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
+              Nazwa drużyny
+            </span>{' '}
+            (min 2 znaki, max 180 znaków)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -50,7 +52,9 @@ export default function Form({ paths }: { paths: PathsField[] }) {
         {/* Path Name */}
         <div className="mb-4">
           <label htmlFor="path" className="mb-2 block text-sm font-medium">
-            Trasa <span className="text-red-600">*</span>
+            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
+              Trasa
+            </span>
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">

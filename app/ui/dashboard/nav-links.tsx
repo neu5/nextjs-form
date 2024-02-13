@@ -23,7 +23,7 @@ const links = [
     icon: GlobeEuropeAfricaIcon,
   },
   {
-    name: 'Invoices',
+    name: 'Invoices - do usunięcia',
     href: '/dashboard/invoices',
     icon: DocumentDuplicateIcon,
   },

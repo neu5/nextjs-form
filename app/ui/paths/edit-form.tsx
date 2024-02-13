@@ -1,13 +1,21 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import { PathForm } from '@/app/lib/definitions';
+import { LeavingHoursForm, PathForm } from '@/app/lib/definitions';
 import { GlobeEuropeAfricaIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updatePath } from '@/app/lib/actions/paths';
 
-export default function EditPathForm({ path }: { path: PathForm }) {
+export default function EditPathForm({
+  path,
+  leavingHours,
+  pathLeavingHours,
+}: {
+  path: PathForm;
+  leavingHours: Array<LeavingHoursForm>;
+  pathLeavingHours: Array<string>;
+}) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(updatePath, initialState);
 
@@ -40,6 +48,37 @@ export default function EditPathForm({ path }: { path: PathForm }) {
                   </p>
                 ))}
             </div>
+          </div>
+        </div>
+
+        {/* Leaving hours */}
+        <div className="mb-4">
+          <label htmlFor="name" className="mb-2 block text-sm font-medium">
+            Godziny startu
+          </label>
+          <div className="relative mt-2 rounded-md">
+            {leavingHours.map((leavingHour) => (
+              <div key={leavingHour.id}>
+                <div className="relative">
+                  <div>
+                    <input
+                      id={leavingHour.id}
+                      type="checkbox"
+                      name="leavingHours"
+                      value={leavingHour.id}
+                      defaultChecked={pathLeavingHours.includes(leavingHour.id)}
+                      className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                    />
+                  </div>
+                </div>
+                <label
+                  htmlFor={leavingHour.id}
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                >
+                  {leavingHour.value}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
       </div>

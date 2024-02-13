@@ -1,6 +1,12 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
-import { User, GroupsTable, PathForm, LeavingHoursTable } from './definitions';
+import {
+  User,
+  GroupsTable,
+  PathForm,
+  LeavingHoursTable,
+  LeavingHoursPathForm,
+} from './definitions';
 
 export async function getUser(email: string) {
   noStore();
@@ -69,5 +75,29 @@ export async function fetchLeavingHours() {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch leaving hours data.');
+  }
+}
+
+export async function fetchPathLeavingHours(id: string) {
+  noStore();
+
+  try {
+    const data = await sql<LeavingHoursPathForm>`
+      SELECT
+        leaving_hour_id
+      FROM paths_leaving_hours
+      WHERE path_id = ${id};
+    `;
+
+    return data.rows.reduce((result: Array<string>, row) => {
+      if (row.leaving_hour_id) {
+        result.push(row.leaving_hour_id);
+      }
+
+      return result;
+    }, []);
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch path.');
   }
 }
