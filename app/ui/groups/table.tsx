@@ -26,7 +26,7 @@ export default async function GroupsTable() {
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
-                    <p>{formatDateToLocal(group.date)}</p>
+                    <p>{group.datetime}</p>
                   </div>
                   <div className="flex justify-end gap-2">
                     {/* <UpdateInvoice id={invoice.id} />
@@ -68,7 +68,7 @@ export default async function GroupsTable() {
                     {group.pathname}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(group.date)}
+                    {group.datetime}
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

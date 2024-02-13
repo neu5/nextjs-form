@@ -3,6 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import {
   User,
   GroupsTable,
+  PathsTable,
   PathForm,
   LeavingHoursTable,
   LeavingHoursPathForm,
@@ -23,8 +24,14 @@ export async function fetchGroups() {
   noStore();
 
   try {
-    const data =
-      await sql<GroupsTable>`SELECT groups.id, groups.name, groups.date, paths.name AS pathName FROM groups JOIN paths ON groups.path_id = paths.id`;
+    const data = await sql<GroupsTable>`
+        SELECT 
+          groups.id, 
+          groups.name, 
+          groups.datetime, 
+          paths.name AS pathName 
+        FROM groups 
+        JOIN paths ON groups.path_id = paths.id`;
 
     return data.rows;
   } catch (error) {
@@ -37,7 +44,7 @@ export async function fetchPaths() {
   noStore();
 
   try {
-    const data = await sql<GroupsTable>`SELECT * FROM paths`;
+    const data = await sql<PathsTable>`SELECT * FROM paths`;
 
     return data.rows;
   } catch (error) {
@@ -78,6 +85,24 @@ export async function fetchLeavingHours() {
   }
 }
 
+export async function fetchPathsLeavingHours() {
+  noStore();
+
+  try {
+    const data = await sql<LeavingHoursPathForm>`
+      SELECT
+        paths_leaving_hours.path_id,
+        paths_leaving_hours.leaving_hour_id
+      FROM paths_leaving_hours
+    `;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch path leaving hours.');
+  }
+}
+
 export async function fetchPathLeavingHours(id: string) {
   noStore();
 
@@ -98,6 +123,27 @@ export async function fetchPathLeavingHours(id: string) {
     }, []);
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch path.');
+    throw new Error('Failed to fetch path leaving hours.');
   }
+}
+
+export async function fetchPathsWithItsLeavingHours() {
+  noStore();
+
+  const [paths, leavingHours, pathsLeavingHours] = await Promise.all([
+    fetchPaths(),
+    fetchLeavingHours(),
+    fetchPathsLeavingHours(),
+  ]);
+
+  return paths.map((path) => ({
+    ...path,
+    leavingHours: pathsLeavingHours
+      .filter((pathLeavingHour) => pathLeavingHour.path_id === path.id)
+      .map((pathLeavingHour) =>
+        leavingHours.find(
+          (leavingHour) => leavingHour.id === pathLeavingHour.leaving_hour_id,
+        ),
+      ),
+  }));
 }

@@ -131,7 +131,8 @@ async function seedGroups(client) {
           id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
           path_id UUID NOT NULL,
-          date DATE NOT NULL
+          leaving_hour_id UUID NOT NULL,
+          datetime VARCHAR(20) NOT NULL
         );
       `;
 

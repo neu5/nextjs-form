@@ -11,10 +11,14 @@ const FormGroupSchema = z.object({
     .min(2, { message: 'Nazwa musi mieć co najmniej 2 znaki' })
     .max(180, { message: 'Nazwa nie może mieć więcej niż 180 znaków' }),
   pathId: z.string({
-    invalid_type_error: 'Wybierz trasę.',
+    invalid_type_error: 'Wybierz trasę',
     required_error: 'Wybierz trasę',
   }),
-  date: z.string(),
+  leavingHourId: z.string({
+    invalid_type_error: 'Wybierz godzinę startu',
+    required_error: 'Wybierz godzinę startu',
+  }),
+  datetime: z.string(),
 });
 
 export type GroupState = {
@@ -25,13 +29,14 @@ export type GroupState = {
   message?: string | null;
 };
 
-const CreateGroup = FormGroupSchema.omit({ id: true, date: true });
+const CreateGroup = FormGroupSchema.omit({ id: true, datetime: true });
 
 export async function createGroup(prevState: GroupState, formData: FormData) {
   // Validate form using Zod
   const validatedFields = CreateGroup.safeParse({
     groupName: formData.get('groupName'),
     pathId: formData.get('pathId'),
+    leavingHourId: formData.get('leavingHourId'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
@@ -43,16 +48,17 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
   }
 
   // Prepare data for insertion into the database
-  const { groupName, pathId } = validatedFields.data;
-  const date = new Date().toISOString().split('T')[0];
+  const { groupName, pathId, leavingHourId } = validatedFields.data;
+  const datetime = new Date().toLocaleString('pl-PL');
 
   // Insert data into the database
   try {
     await sql`
-        INSERT INTO groups (name, path_id, date)
-        VALUES (${groupName}, ${pathId}, ${date})
+        INSERT INTO groups (name, path_id, leaving_hour_id, datetime)
+        VALUES (${groupName}, ${pathId}, ${leavingHourId}, ${datetime})
       `;
   } catch (error) {
+    console.log(error);
     // If a database error occurs, return a more specific error.
     return {
       message: 'Błąd bazy danych: nie udało się dodać grupy.',
