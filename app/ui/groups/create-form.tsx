@@ -4,6 +4,7 @@ import { useFormState } from 'react-dom';
 import { useState } from 'react';
 import { GroupForm } from '@/app/lib/definitions';
 import {
+  AtSymbolIcon,
   ClockIcon,
   GlobeEuropeAfricaIcon,
   FingerPrintIcon,
@@ -103,7 +104,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           </div>
         </div>
 
-        {/* Path Name */}
+        {/* Leaving Hour */}
         <div className="mb-4">
           <label
             htmlFor="leavingHour"
@@ -138,6 +139,44 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           ) : (
             <div>Najpierw wybierz trasę</div>
           )}
+        </div>
+
+        {/* Email */}
+        <div className="mb-4">
+          <label
+            htmlFor="requestingPersonEmail"
+            className="mb-2 block text-sm font-medium"
+          >
+            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
+              Email zgłaszającego
+            </span>
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="requestingPersonEmail"
+                name="requestingPersonEmail"
+                placeholder="Adres email"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                type="email"
+                required
+                aria-describedby="group-requesting-person-email-error"
+              />
+              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            </div>
+            <div
+              id="group-requesting-person-email-error"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {state.errors?.requestingPersonEmail &&
+                state.errors.requestingPersonEmail.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
         </div>
       </div>
 
