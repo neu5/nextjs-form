@@ -132,6 +132,7 @@ async function seedGroups(client) {
           name VARCHAR(255) NOT NULL,
           path_id UUID NOT NULL,
           leaving_hour_id UUID NOT NULL,
+          requesting_person_email TEXT NOT NULL UNIQUE,
           datetime VARCHAR(20) NOT NULL
         );
       `;
