@@ -9,6 +9,19 @@ export type GroupsTable = {
   id: string;
   name: string;
   pathname: string;
+  datetime: string;
+};
+
+export type GroupForm = {
+  id: string;
+  name: string;
+  date: string;
+  leavingHours: Array<{ id: string; value: string }>;
+};
+
+export type PathsTable = {
+  id: string;
+  name: string;
   date: string;
 };
 
@@ -19,17 +32,21 @@ export type PathForm = {
 
 export type LeavingHoursPathForm = {
   id: string;
+  path_id: string;
   leaving_hour_id: string;
 };
 
 export type PathsField = {
   id: string;
   name: string;
+  date: string;
+  leavingHours: Array<LeavingHoursForm>;
 };
 
 export type LeavingHoursTable = {
   id: string;
   value: string;
+  is_deleted: boolean;
 };
 
 export type LeavingHoursForm = LeavingHoursTable;

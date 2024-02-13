@@ -3,14 +3,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata } from 'next';
 import CreateGroup from '@/app/ui/groups/create-form';
-import { fetchPaths } from '@/app/lib/data';
+import { fetchPathsWithItsLeavingHours } from '@/app/lib/data';
 
 export const metadata: Metadata = {
   title: 'Rajd Świętego Emeryka | Formularz',
 };
 
 export default async function Page() {
-  const paths = await fetchPaths();
+  const paths = await fetchPathsWithItsLeavingHours();
 
   return (
     <main className="mx-8 my-8 flex-grow bg-white p-6 md:overflow-y-auto md:p-10">
@@ -120,6 +120,7 @@ export default async function Page() {
           </strong>
         </li>
       </ul>
+      {/* @ts-ignore */}
       <CreateGroup paths={paths} />
     </main>
   );
