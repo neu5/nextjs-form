@@ -9,7 +9,7 @@ const FormGroupSchema = z.object({
   groupName: z
     .string({ required_error: 'Name is required' })
     .min(2, { message: 'Nazwa musi mieć co najmniej 2 znaki' })
-    .max(180, { message: 'Nazwa nie może mieć więcej niż 180 znaków' }),
+    .max(255, { message: 'Nazwa nie może mieć więcej niż 255 znaków' }),
   pathId: z.string({
     invalid_type_error: 'Wybierz trasę',
     required_error: 'Wybierz trasę',
@@ -18,9 +18,17 @@ const FormGroupSchema = z.object({
     invalid_type_error: 'Wybierz godzinę startu',
     required_error: 'Wybierz godzinę startu',
   }),
-  requestingPersonEmail: z
+  submittingPersonEmail: z
     .string()
+    .max(100, { message: 'Adres email nie może mieć więcej niż 100 znaków' })
     .email({ message: 'Niepoprawny adres email' }),
+  submittingPersonPhoneNumber: z
+    .string()
+    .regex(/^[+0-9]*$/, {
+      message: 'Można wpisać tylko cyfry i opcjonalnie + na początku',
+    })
+    .min(5, { message: 'Numer telefonu musi mieć co najmniej 5 znaków' })
+    .max(20, { message: 'Numer telefonu nie może mieć więcej niż 20 znaków' }),
   datetime: z.string(),
 });
 
@@ -28,7 +36,9 @@ export type GroupState = {
   errors?: {
     groupName?: string[];
     pathId?: string[];
-    requestingPersonEmail?: string[];
+    leavingHourId?: string[];
+    submittingPersonEmail?: string[];
+    submittingPersonPhoneNumber?: string[];
   };
   message?: string | null;
 };
@@ -41,7 +51,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     groupName: formData.get('groupName'),
     pathId: formData.get('pathId'),
     leavingHourId: formData.get('leavingHourId'),
-    requestingPersonEmail: formData.get('requestingPersonEmail'),
+    submittingPersonEmail: formData.get('submittingPersonEmail'),
+    submittingPersonPhoneNumber: formData.get('submittingPersonPhoneNumber'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
@@ -53,15 +64,33 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
   }
 
   // Prepare data for insertion into the database
-  const { groupName, pathId, leavingHourId, requestingPersonEmail } =
-    validatedFields.data;
+  const {
+    groupName,
+    pathId,
+    leavingHourId,
+    submittingPersonEmail,
+    submittingPersonPhoneNumber,
+  } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
 
   // Insert data into the database
   try {
     await sql`
-        INSERT INTO groups (name, path_id, leaving_hour_id, requesting_person_email, datetime)
-        VALUES (${groupName}, ${pathId}, ${leavingHourId}, ${requestingPersonEmail}, ${datetime})
+        INSERT INTO groups (
+          name,
+          path_id,
+          leaving_hour_id,
+          submitting_person_email,
+          submitting_person_phone_number,
+          datetime
+        )
+        VALUES (
+          ${groupName},
+          ${pathId},
+          ${leavingHourId},
+          ${submittingPersonEmail},
+          ${submittingPersonPhoneNumber},
+          ${datetime})
       `;
   } catch (error) {
     console.log(error);
