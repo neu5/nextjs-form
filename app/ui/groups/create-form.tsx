@@ -154,7 +154,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           )}
         </div>
 
-        {/* Requesting Person Email */}
+        {/* Submitting Person Email */}
         <div className="mb-4">
           <label
             htmlFor="submittingPersonEmail"
@@ -193,7 +193,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           </div>
         </div>
 
-        {/* Requesting Person Phone Number */}
+        {/* Submitting Person Phone Number */}
         <div className="mb-4">
           <label
             htmlFor="submittingPersonPhoneNumber"
