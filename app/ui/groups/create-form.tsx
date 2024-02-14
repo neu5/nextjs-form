@@ -157,7 +157,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
         {/* Requesting Person Email */}
         <div className="mb-4">
           <label
-            htmlFor="requestingPersonEmail"
+            htmlFor="submittingPersonEmail"
             className="mb-2 block text-sm font-medium"
           >
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
@@ -167,24 +167,24 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
-                id="requestingPersonEmail"
-                name="requestingPersonEmail"
+                id="submittingPersonEmail"
+                name="submittingPersonEmail"
                 placeholder="Adres email"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 type="email"
                 maxLength={100}
                 required
-                aria-describedby="group-requesting-person-email-error"
+                aria-describedby="group-submitting-person-email-error"
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
             </div>
             <div
-              id="group-requesting-person-email-error"
+              id="group-submitting-person-email-error"
               aria-live="polite"
               aria-atomic="true"
             >
-              {state.errors?.requestingPersonEmail &&
-                state.errors.requestingPersonEmail.map((error: string) => (
+              {state.errors?.submittingPersonEmail &&
+                state.errors.submittingPersonEmail.map((error: string) => (
                   <p className="mt-2 text-sm text-red-500" key={error}>
                     {error}
                   </p>
@@ -196,7 +196,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
         {/* Requesting Person Phone Number */}
         <div className="mb-4">
           <label
-            htmlFor="requestingPersonPhoneNumber"
+            htmlFor="submittingPersonPhoneNumber"
             className="mb-2 block text-sm font-medium"
           >
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
@@ -206,25 +206,25 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
-                id="requestingPersonPhoneNumber"
-                name="requestingPersonPhoneNumber"
+                id="submittingPersonPhoneNumber"
+                name="submittingPersonPhoneNumber"
                 placeholder="Numer telefonu"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 type="tel"
                 minLength={5}
                 maxLength={20}
                 required
-                aria-describedby="group-requesting-person-phone-number-error"
+                aria-describedby="group-submitting-person-phone-number-error"
               />
               <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
             </div>
             <div
-              id="group-requesting-person-phone-number-error"
+              id="group-submitting-person-phone-number-error"
               aria-live="polite"
               aria-atomic="true"
             >
-              {state.errors?.requestingPersonPhoneNumber &&
-                state.errors.requestingPersonPhoneNumber.map(
+              {state.errors?.submittingPersonPhoneNumber &&
+                state.errors.submittingPersonPhoneNumber.map(
                   (error: string) => (
                     <p className="mt-2 text-sm text-red-500" key={error}>
                       {error}

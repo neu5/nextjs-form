@@ -18,11 +18,11 @@ const FormGroupSchema = z.object({
     invalid_type_error: 'Wybierz godzinę startu',
     required_error: 'Wybierz godzinę startu',
   }),
-  requestingPersonEmail: z
+  submittingPersonEmail: z
     .string()
     .max(100, { message: 'Adres email nie może mieć więcej niż 100 znaków' })
     .email({ message: 'Niepoprawny adres email' }),
-  requestingPersonPhoneNumber: z
+  submittingPersonPhoneNumber: z
     .string()
     .regex(/^[+0-9]*$/, {
       message: 'Można wpisać tylko cyfry i opcjonalnie + na początku',
@@ -37,8 +37,8 @@ export type GroupState = {
     groupName?: string[];
     pathId?: string[];
     leavingHourId?: string[];
-    requestingPersonEmail?: string[];
-    requestingPersonPhoneNumber?: string[];
+    submittingPersonEmail?: string[];
+    submittingPersonPhoneNumber?: string[];
   };
   message?: string | null;
 };
@@ -51,8 +51,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     groupName: formData.get('groupName'),
     pathId: formData.get('pathId'),
     leavingHourId: formData.get('leavingHourId'),
-    requestingPersonEmail: formData.get('requestingPersonEmail'),
-    requestingPersonPhoneNumber: formData.get('requestingPersonPhoneNumber'),
+    submittingPersonEmail: formData.get('submittingPersonEmail'),
+    submittingPersonPhoneNumber: formData.get('submittingPersonPhoneNumber'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
@@ -68,8 +68,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     groupName,
     pathId,
     leavingHourId,
-    requestingPersonEmail,
-    requestingPersonPhoneNumber,
+    submittingPersonEmail,
+    submittingPersonPhoneNumber,
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
 
@@ -80,16 +80,16 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           name,
           path_id,
           leaving_hour_id,
-          requesting_person_email,
-          requesting_person_phone_number,
+          submitting_person_email,
+          submitting_person_phone_number,
           datetime
         )
         VALUES (
           ${groupName},
           ${pathId},
           ${leavingHourId},
-          ${requestingPersonEmail},
-          ${requestingPersonPhoneNumber},
+          ${submittingPersonEmail},
+          ${submittingPersonPhoneNumber},
           ${datetime})
       `;
   } catch (error) {
