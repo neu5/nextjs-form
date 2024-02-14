@@ -8,6 +8,7 @@ import {
   ClockIcon,
   GlobeEuropeAfricaIcon,
   FingerPrintIcon,
+  PhoneIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createGroup } from '@/app/lib/actions/groups';
@@ -38,7 +39,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
               Nazwa drużyny
             </span>{' '}
-            (min 2 znaki, max 180 znaków)
+            (min 2 znaki, max 255 znaków)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -48,7 +49,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
                 placeholder="Nazwa drużyny"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 minLength={2}
-                maxLength={180}
+                maxLength={255}
                 required
                 aria-describedby="group-name-error"
               />
@@ -135,20 +136,32 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
                 </select>
                 <ClockIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
               </div>
+              <div
+                id="leaving-hour-error"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {state.errors?.leavingHourId &&
+                  state.errors.leavingHourId.map((error: string) => (
+                    <p className="mt-2 text-sm text-red-500" key={error}>
+                      {error}
+                    </p>
+                  ))}
+              </div>
             </div>
           ) : (
             <div>Najpierw wybierz trasę</div>
           )}
         </div>
 
-        {/* Email */}
+        {/* Requesting Person Email */}
         <div className="mb-4">
           <label
             htmlFor="requestingPersonEmail"
             className="mb-2 block text-sm font-medium"
           >
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Email zgłaszającego
+              Adres e-mail osoby zgłaszającej grupę
             </span>
           </label>
           <div className="relative mt-2 rounded-md">
@@ -159,6 +172,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
                 placeholder="Adres email"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 type="email"
+                maxLength={100}
                 required
                 aria-describedby="group-requesting-person-email-error"
               />
@@ -175,6 +189,48 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
                     {error}
                   </p>
                 ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Requesting Person Phone Number */}
+        <div className="mb-4">
+          <label
+            htmlFor="requestingPersonPhoneNumber"
+            className="mb-2 block text-sm font-medium"
+          >
+            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
+              Numer telefonu osoby zgłaszającej grupę
+            </span>
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="requestingPersonPhoneNumber"
+                name="requestingPersonPhoneNumber"
+                placeholder="Numer telefonu"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                type="tel"
+                minLength={5}
+                maxLength={20}
+                required
+                aria-describedby="group-requesting-person-phone-number-error"
+              />
+              <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            </div>
+            <div
+              id="group-requesting-person-phone-number-error"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {state.errors?.requestingPersonPhoneNumber &&
+                state.errors.requestingPersonPhoneNumber.map(
+                  (error: string) => (
+                    <p className="mt-2 text-sm text-red-500" key={error}>
+                      {error}
+                    </p>
+                  ),
+                )}
             </div>
           </div>
         </div>
