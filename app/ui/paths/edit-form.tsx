@@ -58,22 +58,19 @@ export default function EditPathForm({
           </label>
           <div className="relative mt-2 rounded-md">
             {leavingHours.map((leavingHour) => (
-              <div key={leavingHour.id}>
-                <div className="relative">
-                  <div>
-                    <input
-                      id={leavingHour.id}
-                      type="checkbox"
-                      name="leavingHours"
-                      value={leavingHour.id}
-                      defaultChecked={pathLeavingHours.includes(leavingHour.id)}
-                      className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
-                    />
-                  </div>
-                </div>
+              <div key={leavingHour.id} className="relative mt-2">
+                <input
+                  id={leavingHour.id}
+                  type="checkbox"
+                  name="leavingHours"
+                  value={leavingHour.id}
+                  defaultChecked={pathLeavingHours.includes(leavingHour.id)}
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                />
+
                 <label
                   htmlFor={leavingHour.id}
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                  className="ml-2 cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
                   {leavingHour.value}
                 </label>

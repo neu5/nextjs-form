@@ -2,22 +2,26 @@
 
 import { useFormState } from 'react-dom';
 import { useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import { GroupForm } from '@/app/lib/definitions';
 import {
   AtSymbolIcon,
   ClockIcon,
   GlobeEuropeAfricaIcon,
   FingerPrintIcon,
-  PhoneIcon,
 } from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
+import { Button, BUTTON_KINDS } from '@/app/ui/button';
 import { createGroup } from '@/app/lib/actions/groups';
+import GroupMember from './group-member';
 
 export default function Form({ paths }: { paths: GroupForm[] }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createGroup, initialState);
 
   const [pathId, setPathId] = useState('');
+  const [groupMembers, setGroupMembers] = useState([
+    { memberName: '', number: 1 },
+  ]);
 
   let leavingHours = null;
 
@@ -29,10 +33,66 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     }
   }
 
+  const saveMember = useDebouncedCallback(({ name, memberNumber, value }) => {
+    console.log({ name, memberNumber, value });
+
+    setGroupMembers(
+      groupMembers.map((member) => ({
+        ...member,
+        ...(member.number === memberNumber
+          ? {
+              [name]: value,
+            }
+          : {}),
+      })),
+    );
+
+    setTimeout(() => {
+      console.log('saveMember', { groupMembers });
+    }, 1000);
+  }, 300);
+
+  const addGroupMember = (number: number) => {
+    if (groupMembers.length >= 10) {
+      console.log(
+        'Nie można dodać więcej niż 100 uczestników do jednej grupy.',
+      );
+
+      return;
+    }
+
+    setGroupMembers([...groupMembers, { number }]);
+    setTimeout(() => {
+      console.log('dodanie', { groupMembers });
+    }, 500);
+  };
+
+  const removeMember = (memberNumber: number) => {
+    if (groupMembers.length <= 1) {
+      console.log('Nie można usunąć uczestnika.');
+
+      return;
+    }
+
+    console.log({ groupMembers, memberNumber });
+
+    const newGroupMembers = groupMembers.filter((groupMember) => {
+      return groupMember.number !== memberNumber;
+    });
+
+    console.log({ newGroupMembers });
+
+    setGroupMembers([...newGroupMembers]);
+
+    setTimeout(() => {
+      console.log('usuwanie', { groupMembers });
+    }, 500);
+  };
+
   return (
     <form action={dispatch}>
       <h2 className="my-8 text-3xl font-bold">Dodaj zgłoszenie</h2>
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+      <div className="rounded-md bg-gray-50 p-1 md:p-4 md:p-6">
         {/* Group Name */}
         <div className="mb-4">
           <label htmlFor="groupName" className="mb-2 block text-sm font-medium">
@@ -150,7 +210,17 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
               </div>
             </div>
           ) : (
-            <div>Najpierw wybierz trasę</div>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <input
+                  type="text"
+                  disabled
+                  placeholder="Najpierw wybierz trasę"
+                  className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                />
+                <ClockIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              </div>
+            </div>
           )}
         </div>
 
@@ -161,9 +231,13 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
             className="mb-2 block text-sm font-medium"
           >
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Adres e-mail osoby zgłaszającej grupę
+              Adres e-mail osoby zgłaszającej (do kontaktu ze zgłoszoną grupą)
             </span>
           </label>
+          <span className="text-xs">
+            Na podany adres e-mail wyślemy potwierdzenie zgłoszenia grupy oraz
+            dane do logowania do edycji zgłoszonej grupy.
+          </span>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
@@ -193,51 +267,32 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           </div>
         </div>
 
-        {/* Submitting Person Phone Number */}
-        <div className="mb-4">
-          <label
-            htmlFor="submittingPersonPhoneNumber"
-            className="mb-2 block text-sm font-medium"
-          >
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Numer telefonu osoby zgłaszającej grupę
-            </span>
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="submittingPersonPhoneNumber"
-                name="submittingPersonPhoneNumber"
-                placeholder="Numer telefonu"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                type="tel"
-                minLength={5}
-                maxLength={20}
-                required
-                aria-describedby="group-submitting-person-phone-number-error"
+        {/* Adding Group Members */}
+        <div className="mb-4 rounded-md bg-gray-100 p-1 md:p-4">
+          <h3>Dodaj uczestników grupy ({groupMembers.length})</h3>
+          {groupMembers.map((groupMember, i) => {
+            return (
+              <GroupMember
+                key={`group-member-${i}`}
+                memberNumber={i + 1}
+                removeMember={removeMember}
+                saveMember={saveMember}
+                state={state}
               />
-              <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-            </div>
-            <div
-              id="group-submitting-person-phone-number-error"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {state.errors?.submittingPersonPhoneNumber &&
-                state.errors.submittingPersonPhoneNumber.map(
-                  (error: string) => (
-                    <p className="mt-2 text-sm text-red-500" key={error}>
-                      {error}
-                    </p>
-                  ),
-                )}
-            </div>
-          </div>
+            );
+          })}
+          <Button
+            type="button"
+            kind={BUTTON_KINDS.ADD}
+            onClick={() => addGroupMember(groupMembers.length + 1)}
+          >
+            Dodaj uczestnika
+          </Button>
         </div>
       </div>
 
       <div className="mt-6 flex">
-        <Button type="submit">Dodaj zgłoszenie</Button>
+        <Button>Dodaj zgłoszenie</Button>
       </div>
     </form>
   );
