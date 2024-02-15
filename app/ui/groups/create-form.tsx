@@ -61,7 +61,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
       return;
     }
 
-    setGroupMembers([...groupMembers, { number }]);
+    setGroupMembers([...groupMembers, { memberName: '', number }]);
     setTimeout(() => {
       console.log('dodanie', { groupMembers });
     }, 500);
