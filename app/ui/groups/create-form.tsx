@@ -1,8 +1,8 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import { useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
+import { useEffect, useState } from 'react';
+import { useThrottledCallback } from 'use-debounce';
 import { GroupForm } from '@/app/lib/definitions';
 import {
   AtSymbolIcon,
@@ -12,16 +12,28 @@ import {
 } from '@heroicons/react/24/outline';
 import { Button, BUTTON_KINDS } from '@/app/ui/button';
 import { createGroup } from '@/app/lib/actions/groups';
-import GroupMember from './group-member';
+import GroupMember, { Member } from './group-member';
+
+let memberId = 0;
+
+const getMemberId = () => {
+  memberId += 1;
+  return `member-${memberId}`;
+};
+
+const getMemberDefault = () => ({
+  id: getMemberId(),
+  name: '',
+  birthdayDate: '',
+  PTTKCardNumber: '',
+});
 
 export default function Form({ paths }: { paths: GroupForm[] }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createGroup, initialState);
 
   const [pathId, setPathId] = useState('');
-  const [groupMembers, setGroupMembers] = useState([
-    { memberName: '', number: 1 },
-  ]);
+  const [groupMembers, setGroupMembers] = useState([getMemberDefault()]);
 
   let leavingHours = null;
 
@@ -33,26 +45,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     }
   }
 
-  const saveMember = useDebouncedCallback(({ name, memberNumber, value }) => {
-    console.log({ name, memberNumber, value });
-
-    setGroupMembers(
-      groupMembers.map((member) => ({
-        ...member,
-        ...(member.number === memberNumber
-          ? {
-              [name]: value,
-            }
-          : {}),
-      })),
-    );
-
-    setTimeout(() => {
-      console.log('saveMember', { groupMembers });
-    }, 1000);
-  }, 300);
-
-  const addGroupMember = (number: number) => {
+  const addMember = (data = {}) => {
     if (groupMembers.length >= 10) {
       console.log(
         'Nie można dodać więcej niż 100 uczestników do jednej grupy.',
@@ -61,32 +54,42 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
       return;
     }
 
-    setGroupMembers([...groupMembers, { memberName: '', number }]);
-    setTimeout(() => {
-      console.log('dodanie', { groupMembers });
-    }, 500);
+    setGroupMembers([...groupMembers, getMemberDefault()]);
   };
 
-  const removeMember = (memberNumber: number) => {
-    if (groupMembers.length <= 1) {
-      console.log('Nie można usunąć uczestnika.');
+  const saveMember = ({
+    id,
+    name,
+    value,
+  }: {
+    name: string;
+    id: string;
+    value: string;
+  }) => {
+    console.log({ name, value });
 
-      return;
-    }
+    setGroupMembers(
+      groupMembers.map((member) => ({
+        ...member,
+        ...(member.id === id
+          ? {
+              [name]: value,
+            }
+          : {}),
+      })),
+    );
+  };
 
-    console.log({ groupMembers, memberNumber });
+  const removeMember = (id: string) => {
+    setGroupMembers(
+      groupMembers.reduce((result: Array<Member>, member) => {
+        if (member.id !== id) {
+          result.push(member);
+        }
 
-    const newGroupMembers = groupMembers.filter((groupMember) => {
-      return groupMember.number !== memberNumber;
-    });
-
-    console.log({ newGroupMembers });
-
-    setGroupMembers([...newGroupMembers]);
-
-    setTimeout(() => {
-      console.log('usuwanie', { groupMembers });
-    }, 500);
+        return result;
+      }, []),
+    );
   };
 
   return (
@@ -270,21 +273,20 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
         {/* Adding Group Members */}
         <div className="mb-4 rounded-md bg-gray-100 p-1 md:p-4">
           <h3>Dodaj uczestników grupy ({groupMembers.length})</h3>
-          {groupMembers.map((groupMember, i) => {
-            return (
-              <GroupMember
-                key={`group-member-${i}`}
-                memberNumber={i + 1}
-                removeMember={removeMember}
-                saveMember={saveMember}
-                state={state}
-              />
-            );
-          })}
+          {groupMembers.map((groupMember, i) => (
+            <GroupMember
+              key={`group-member-${i}`}
+              memberNumber={i + 1}
+              removeMember={removeMember}
+              saveMember={saveMember}
+              state={state}
+              member={groupMember}
+            />
+          ))}
           <Button
             type="button"
             kind={BUTTON_KINDS.ADD}
-            onClick={() => addGroupMember(groupMembers.length + 1)}
+            onClick={() => addMember()}
           >
             Dodaj uczestnika
           </Button>
