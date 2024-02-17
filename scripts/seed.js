@@ -66,7 +66,7 @@ async function seedPaths(client) {
 
 async function seedLeavingHours(client) {
   try {
-    await client.sql`DROP TABLE IF EXISTS leaving_hours`;
+    // await client.sql`DROP TABLE IF EXISTS leaving_hours`;
 
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -80,20 +80,20 @@ async function seedLeavingHours(client) {
 
     console.log(`Created "leaving_hours" table`);
 
-    const insertedLeavingHours = await Promise.all(
-      leavingHours.map(
-        (leavingHour) => client.sql`
-          INSERT INTO leaving_hours (value)
-          VALUES (${leavingHour.value})
-        `,
-      ),
-    );
+    // const insertedLeavingHours = await Promise.all(
+    //   leavingHours.map(
+    //     (leavingHour) => client.sql`
+    //       INSERT INTO leaving_hours (value)
+    //       VALUES (${leavingHour.value})
+    //     `,
+    //   ),
+    // );
 
-    console.log(`Seeded ${insertedLeavingHours.length} leaving hours`);
+    // console.log(`Seeded ${insertedLeavingHours.length} leaving hours`);
 
     return {
       createTable,
-      leavingHours: insertedLeavingHours,
+      // leavingHours: insertedLeavingHours,
     };
   } catch (error) {
     console.error('Error seeding leaving_hours:', error);

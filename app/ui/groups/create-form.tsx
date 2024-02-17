@@ -1,23 +1,39 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useThrottledCallback } from 'use-debounce';
 import { GroupForm } from '@/app/lib/definitions';
 import {
   AtSymbolIcon,
   ClockIcon,
   GlobeEuropeAfricaIcon,
   FingerPrintIcon,
-  PhoneIcon,
 } from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
+import { Button, BUTTON_KINDS } from '@/app/ui/button';
 import { createGroup } from '@/app/lib/actions/groups';
+import GroupMember, { Member } from './group-member';
+
+let memberId = 0;
+
+const getMemberId = () => {
+  memberId += 1;
+  return `member-${memberId}`;
+};
+
+const getMemberDefault = () => ({
+  id: getMemberId(),
+  name: '',
+  birthdayDate: '',
+  PTTKCardNumber: '',
+});
 
 export default function Form({ paths }: { paths: GroupForm[] }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createGroup, initialState);
 
   const [pathId, setPathId] = useState('');
+  const [groupMembers, setGroupMembers] = useState([getMemberDefault()]);
 
   let leavingHours = null;
 
@@ -29,10 +45,57 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     }
   }
 
+  const addMember = (data = {}) => {
+    if (groupMembers.length >= 10) {
+      console.log(
+        'Nie można dodać więcej niż 100 uczestników do jednej grupy.',
+      );
+
+      return;
+    }
+
+    setGroupMembers([...groupMembers, getMemberDefault()]);
+  };
+
+  const saveMember = ({
+    id,
+    name,
+    value,
+  }: {
+    name: string;
+    id: string;
+    value: string;
+  }) => {
+    console.log({ name, value });
+
+    setGroupMembers(
+      groupMembers.map((member) => ({
+        ...member,
+        ...(member.id === id
+          ? {
+              [name]: value,
+            }
+          : {}),
+      })),
+    );
+  };
+
+  const removeMember = (id: string) => {
+    setGroupMembers(
+      groupMembers.reduce((result: Array<Member>, member) => {
+        if (member.id !== id) {
+          result.push(member);
+        }
+
+        return result;
+      }, []),
+    );
+  };
+
   return (
     <form action={dispatch}>
       <h2 className="my-8 text-3xl font-bold">Dodaj zgłoszenie</h2>
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+      <div className="rounded-md bg-gray-50 p-1 md:p-4 md:p-6">
         {/* Group Name */}
         <div className="mb-4">
           <label htmlFor="groupName" className="mb-2 block text-sm font-medium">
@@ -150,7 +213,17 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
               </div>
             </div>
           ) : (
-            <div>Najpierw wybierz trasę</div>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <input
+                  type="text"
+                  disabled
+                  placeholder="Najpierw wybierz trasę"
+                  className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                />
+                <ClockIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              </div>
+            </div>
           )}
         </div>
 
@@ -161,9 +234,13 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
             className="mb-2 block text-sm font-medium"
           >
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Adres e-mail osoby zgłaszającej grupę
+              Adres e-mail osoby zgłaszającej (do kontaktu ze zgłoszoną grupą)
             </span>
           </label>
+          <span className="text-xs">
+            Na podany adres e-mail wyślemy potwierdzenie zgłoszenia grupy oraz
+            dane do logowania do edycji zgłoszonej grupy.
+          </span>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
@@ -193,51 +270,31 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           </div>
         </div>
 
-        {/* Submitting Person Phone Number */}
-        <div className="mb-4">
-          <label
-            htmlFor="submittingPersonPhoneNumber"
-            className="mb-2 block text-sm font-medium"
+        {/* Adding Group Members */}
+        <div className="mb-4 rounded-md bg-gray-100 p-1 md:p-4">
+          <h3>Dodaj uczestników grupy ({groupMembers.length})</h3>
+          {groupMembers.map((groupMember, i) => (
+            <GroupMember
+              key={`group-member-${i}`}
+              memberNumber={i + 1}
+              removeMember={removeMember}
+              saveMember={saveMember}
+              state={state}
+              member={groupMember}
+            />
+          ))}
+          <Button
+            type="button"
+            kind={BUTTON_KINDS.ADD}
+            onClick={() => addMember()}
           >
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Numer telefonu osoby zgłaszającej grupę
-            </span>
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="submittingPersonPhoneNumber"
-                name="submittingPersonPhoneNumber"
-                placeholder="Numer telefonu"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                type="tel"
-                minLength={5}
-                maxLength={20}
-                required
-                aria-describedby="group-submitting-person-phone-number-error"
-              />
-              <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-            </div>
-            <div
-              id="group-submitting-person-phone-number-error"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {state.errors?.submittingPersonPhoneNumber &&
-                state.errors.submittingPersonPhoneNumber.map(
-                  (error: string) => (
-                    <p className="mt-2 text-sm text-red-500" key={error}>
-                      {error}
-                    </p>
-                  ),
-                )}
-            </div>
-          </div>
+            Dodaj uczestnika
+          </Button>
         </div>
       </div>
 
       <div className="mt-6 flex">
-        <Button type="submit">Dodaj zgłoszenie</Button>
+        <Button>Dodaj zgłoszenie</Button>
       </div>
     </form>
   );

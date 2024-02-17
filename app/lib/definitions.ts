@@ -50,3 +50,5 @@ export type LeavingHoursTable = {
 };
 
 export type LeavingHoursForm = LeavingHoursTable;
+
+export type ValueOf<T> = T[keyof T];
