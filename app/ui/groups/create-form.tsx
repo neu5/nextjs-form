@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useThrottledCallback } from 'use-debounce';
 import { GroupForm } from '@/app/lib/definitions';
 import {
@@ -28,17 +28,25 @@ const getMemberDefault = () => ({
   PTTKCardNumber: '',
 });
 
+const getGroupDefault = () => ({
+  name: '',
+  pathId: '',
+  leavingHourId: '',
+  submittingPersonEmail: '',
+  members: [],
+});
+
 export default function Form({ paths }: { paths: GroupForm[] }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createGroup, initialState);
 
-  const [pathId, setPathId] = useState('');
-  const [groupMembers, setGroupMembers] = useState([getMemberDefault()]);
+  // const [pathId, setPathId] = useState('');
+  const [group, setGroup] = useState(getGroupDefault());
 
   let leavingHours = null;
 
-  if (paths !== undefined && pathId !== '') {
-    const path = paths.find((path) => path.id === pathId);
+  if (paths !== undefined && group.pathId !== '') {
+    const path = paths.find((path) => path.id === group.pathId);
 
     if (path) {
       leavingHours = path.leavingHours;
@@ -46,15 +54,20 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
   }
 
   const addMember = (data = {}) => {
-    if (groupMembers.length >= 10) {
-      console.log(
-        'Nie można dodać więcej niż 100 uczestników do jednej grupy.',
-      );
+    // if (group.groupMembers.length >= 10) {
+    //   console.log(
+    //     'Nie można dodać więcej niż 100 uczestników do jednej grupy.',
+    //   );
+    //   return;
+    // }
+    // setGroup({ ...group });
+  };
 
-      return;
-    }
-
-    setGroupMembers([...groupMembers, getMemberDefault()]);
+  const saveGroup = ({ name, value }: { name: string; value: string }) => {
+    setGroup({
+      ...group,
+      [name]: value,
+    });
   };
 
   const saveMember = ({
@@ -66,39 +79,50 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     id: string;
     value: string;
   }) => {
-    console.log({ name, value });
-
-    setGroupMembers(
-      groupMembers.map((member) => ({
-        ...member,
-        ...(member.id === id
-          ? {
-              [name]: value,
-            }
-          : {}),
-      })),
-    );
+    // console.log({ name, value });
+    // setGroup(
+    //   groupMembers.map((member) => ({
+    //     ...member,
+    //     ...(member.id === id
+    //       ? {
+    //           [name]: value,
+    //         }
+    //       : {}),
+    //   })),
+    // );
   };
 
   const removeMember = (id: string) => {
-    setGroupMembers(
-      groupMembers.reduce((result: Array<Member>, member) => {
-        if (member.id !== id) {
-          result.push(member);
-        }
-
-        return result;
-      }, []),
-    );
+    // setGroup(
+    //   groupMembers.reduce((result: Array<Member>, member) => {
+    //     if (member.id !== id) {
+    //       result.push(member);
+    //     }
+    //     return result;
+    //   }, []),
+    // );
   };
 
+  async function onSubmit(event: FormEvent) {
+    event.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append('name', group.name);
+    formData.append('pathId', group.pathId);
+    formData.append('leavingHourId', group.leavingHourId);
+    formData.append('submittingPersonEmail', group.submittingPersonEmail);
+
+    dispatch(formData);
+  }
+
   return (
-    <form action={dispatch}>
+    <form onSubmit={onSubmit}>
       <h2 className="my-8 text-3xl font-bold">Dodaj zgłoszenie</h2>
       <div className="rounded-md bg-gray-50 p-1 md:p-4 md:p-6">
         {/* Group Name */}
         <div className="mb-4">
-          <label htmlFor="groupName" className="mb-2 block text-sm font-medium">
+          <label htmlFor="name" className="mb-2 block text-sm font-medium">
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
               Nazwa drużyny
             </span>{' '}
@@ -107,20 +131,27 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
-                id="groupName"
-                name="groupName"
+                id="name"
+                name="name"
                 placeholder="Nazwa drużyny"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 minLength={2}
                 maxLength={255}
-                required
+                value={group.name}
+                onChange={(ev) =>
+                  saveGroup({
+                    name: 'name',
+                    value: ev.target.value,
+                  })
+                }
+                // required
                 aria-describedby="group-name-error"
               />
               <FingerPrintIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
             </div>
             <div id="group-name-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.groupName &&
-                state.errors.groupName.map((error: string) => (
+              {state.errors?.name &&
+                state.errors.name.map((error: string) => (
                   <p className="mt-2 text-sm text-red-500" key={error}>
                     {error}
                   </p>
@@ -142,9 +173,14 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
                 id="path"
                 name="pathId"
                 className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                defaultValue=""
                 aria-describedby="path-error"
-                onChange={(event) => setPathId(event.target.value)}
+                value={group.pathId}
+                onChange={(ev) =>
+                  saveGroup({
+                    name: 'pathId',
+                    value: ev.target.value,
+                  })
+                }
               >
                 <option value="" disabled>
                   Wybierz trasę
@@ -185,8 +221,14 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
                   id="leavingHour"
                   name="leavingHourId"
                   className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  defaultValue=""
                   aria-describedby="leaving-hour-error"
+                  value={group.leavingHourId}
+                  onChange={(ev) =>
+                    saveGroup({
+                      name: 'leavingHourId',
+                      value: ev.target.value,
+                    })
+                  }
                 >
                   <option value="" disabled>
                     Wybierz godzinę
@@ -250,7 +292,14 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 type="email"
                 maxLength={100}
-                required
+                value={group.submittingPersonEmail}
+                onChange={(ev) =>
+                  saveGroup({
+                    name: 'submittingPersonEmail',
+                    value: ev.target.value,
+                  })
+                }
+                // required
                 aria-describedby="group-submitting-person-email-error"
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
@@ -272,8 +321,8 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
 
         {/* Adding Group Members */}
         <div className="mb-4 rounded-md bg-gray-100 p-1 md:p-4">
-          <h3>Dodaj uczestników grupy ({groupMembers.length})</h3>
-          {groupMembers.map((groupMember, i) => (
+          {/* <h3>Dodaj uczestników grupy ({group.groupMembers.length})</h3>
+          {group.groupMembers.map((groupMember, i) => (
             <GroupMember
               key={`group-member-${i}`}
               memberNumber={i + 1}
@@ -282,7 +331,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
               state={state}
               member={groupMember}
             />
-          ))}
+          ))} */}
           <Button
             type="button"
             kind={BUTTON_KINDS.ADD}
