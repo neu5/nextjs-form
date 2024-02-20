@@ -15,6 +15,7 @@ import { createGroup } from '@/app/lib/actions/groups';
 import GroupMember, { Member } from './group-member';
 
 let memberId = 0;
+const MAX_MEMBERS_NUM = 2;
 
 const getMemberId = () => {
   memberId += 1;
@@ -33,7 +34,7 @@ const getGroupDefault = () => ({
   pathId: '',
   leavingHourId: '',
   submittingPersonEmail: '',
-  members: [],
+  members: [getMemberDefault()],
 });
 
 export default function Form({ paths }: { paths: GroupForm[] }) {
@@ -54,13 +55,14 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
   }
 
   const addMember = (data = {}) => {
-    // if (group.groupMembers.length >= 10) {
-    //   console.log(
-    //     'Nie można dodać więcej niż 100 uczestników do jednej grupy.',
-    //   );
-    //   return;
-    // }
-    // setGroup({ ...group });
+    if (group.members.length >= MAX_MEMBERS_NUM) {
+      console.log(
+        `Nie można dodać więcej niż ${MAX_MEMBERS_NUM} uczestników do jednej grupy.`,
+      );
+      return;
+    }
+
+    setGroup({ ...group, members: [...group.members, getMemberDefault()] });
   };
 
   const saveGroup = ({ name, value }: { name: string; value: string }) => {
@@ -79,28 +81,29 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     id: string;
     value: string;
   }) => {
-    // console.log({ name, value });
-    // setGroup(
-    //   groupMembers.map((member) => ({
-    //     ...member,
-    //     ...(member.id === id
-    //       ? {
-    //           [name]: value,
-    //         }
-    //       : {}),
-    //   })),
-    // );
+    setGroup({
+      ...group,
+      members: group.members.map((member) => ({
+        ...member,
+        ...(member.id === id
+          ? {
+              [name]: value,
+            }
+          : {}),
+      })),
+    });
   };
 
   const removeMember = (id: string) => {
-    // setGroup(
-    //   groupMembers.reduce((result: Array<Member>, member) => {
-    //     if (member.id !== id) {
-    //       result.push(member);
-    //     }
-    //     return result;
-    //   }, []),
-    // );
+    setGroup({
+      ...group,
+      members: group.members.reduce((result: Array<Member>, member) => {
+        if (member.id !== id) {
+          result.push(member);
+        }
+        return result;
+      }, []),
+    });
   };
 
   async function onSubmit(event: FormEvent) {
@@ -112,6 +115,10 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     formData.append('pathId', group.pathId);
     formData.append('leavingHourId', group.leavingHourId);
     formData.append('submittingPersonEmail', group.submittingPersonEmail);
+
+    group.members.forEach((member) => {
+      formData.append('members', JSON.stringify(member));
+    });
 
     dispatch(formData);
   }
@@ -321,17 +328,30 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
 
         {/* Adding Group Members */}
         <div className="mb-4 rounded-md bg-gray-100 p-1 md:p-4">
-          {/* <h3>Dodaj uczestników grupy ({group.groupMembers.length})</h3>
-          {group.groupMembers.map((groupMember, i) => (
+          <h3>Dodaj uczestników grupy ({group.members.length})</h3>
+          {group.members.map((member, i) => (
             <GroupMember
               key={`group-member-${i}`}
               memberNumber={i + 1}
               removeMember={removeMember}
               saveMember={saveMember}
-              state={state}
-              member={groupMember}
+              member={member}
+              memberErrors={state.errors?.members?.reduce(
+                (result, membersErrors) => {
+                  const error = JSON.parse(membersErrors);
+
+                  if (error.id === member.id) {
+                    Object.assign(result, {
+                      [error.field]: [error.message],
+                    });
+                  }
+
+                  return result;
+                },
+                {},
+              )}
             />
-          ))} */}
+          ))}
           <Button
             type="button"
             kind={BUTTON_KINDS.ADD}

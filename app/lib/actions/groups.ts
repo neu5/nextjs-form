@@ -26,6 +26,7 @@ const FormGroupSchema = z.object({
     .string()
     .max(100, { message: 'Adres email nie może mieć więcej niż 100 znaków' })
     .email({ message: 'Niepoprawny adres email' }),
+
   // submittingPersonPhoneNumber: z
   //   .string()
   //   .regex(/^[+0-9]*$/, {
@@ -33,6 +34,66 @@ const FormGroupSchema = z.object({
   //   })
   //   .min(5, { message: 'Numer telefonu musi mieć co najmniej 5 znaków' })
   //   .max(20, { message: 'Numer telefonu nie może mieć więcej niż 20 znaków' }).optional(),
+
+  members: z.array(z.string()).transform((val, ctx) => {
+    const members = val.map((member) => JSON.parse(member));
+
+    members.forEach((member) => {
+      const name = member.name.trim();
+
+      if (name.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: JSON.stringify({
+            id: member.id,
+            field: 'name',
+            message: 'Imię i nazwisko jest wymagane',
+          }),
+        });
+
+        return z.NEVER;
+      }
+
+      if (name.length < 5) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: JSON.stringify({
+            id: member.id,
+            field: 'name',
+            message: 'Imię i nazwisko powinno być dłuższe niż 5 znaków',
+          }),
+        });
+
+        return z.NEVER;
+      }
+
+      if (name.length < 5) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: JSON.stringify({
+            id: member.id,
+            field: 'name',
+            message: 'Imię i nazwisko powinno być dłuższe niż 5 znaków',
+          }),
+        });
+
+        return z.NEVER;
+      }
+
+      if (member.name.length >= 20) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: JSON.stringify({
+            id: member.id,
+            field: 'name',
+            message: 'Imię i nazwisko powinno być krótsze niż 20 znaków',
+          }),
+        });
+      }
+    });
+
+    return members;
+  }),
   datetime: z.string(),
 });
 
@@ -43,8 +104,7 @@ export type GroupState = {
     leavingHourId?: string[];
     submittingPersonEmail?: string[];
     submittingPersonPhoneNumber?: string[];
-    membersIds?: string[];
-    membersNames?: string[];
+    members?: string[];
   };
   message?: string | null;
 };
@@ -58,6 +118,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     pathId: formData.get('pathId'),
     leavingHourId: formData.get('leavingHourId'),
     submittingPersonEmail: formData.get('submittingPersonEmail'),
+    members: formData.getAll('members'),
     // submittingPersonPhoneNumber: formData.get('submittingPersonPhoneNumber'),
   });
 
@@ -78,10 +139,11 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     leavingHourId,
     submittingPersonEmail,
     submittingPersonPhoneNumber,
+    members,
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
 
-  console.log({ name });
+  console.log({ name, members });
 
   return {};
 

@@ -22,7 +22,7 @@ export default function GroupMember({
   memberNumber,
   removeMember,
   saveMember,
-  state,
+  memberErrors,
 }: {
   member: Member;
   memberNumber: number;
@@ -36,7 +36,7 @@ export default function GroupMember({
     name: string;
     value: string;
   }) => void;
-  state: GroupState;
+  memberErrors: any;
 }) {
   const [groupChief, setGroupChief] = useState('');
 
@@ -83,12 +83,12 @@ export default function GroupMember({
             aria-live="polite"
             aria-atomic="true"
           >
-            {/* {state.errors?.memberName[memberNumber] &&
-              state.errors.memberName[memberNumber].map((error: string) => (
+            {memberErrors?.name &&
+              memberErrors.name.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
-              ))} */}
+              ))}
           </div>
         </div>
       </div>
