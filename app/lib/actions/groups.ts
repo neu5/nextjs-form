@@ -26,20 +26,19 @@ const FormGroupSchema = z.object({
     .string()
     .max(100, { message: 'Adres email nie może mieć więcej niż 100 znaków' })
     .email({ message: 'Niepoprawny adres email' }),
-
-  // submittingPersonPhoneNumber: z
-  //   .string()
-  //   .regex(/^[+0-9]*$/, {
-  //     message: 'Można wpisać tylko cyfry i opcjonalnie + na początku',
-  //   })
-  //   .min(5, { message: 'Numer telefonu musi mieć co najmniej 5 znaków' })
-  //   .max(20, { message: 'Numer telefonu nie może mieć więcej niż 20 znaków' }).optional(),
-
+  chefGroupPhoneNumber: z
+    .string()
+    .regex(/^[+0-9]*$/, {
+      message: 'Można wpisać tylko cyfry i opcjonalnie + na początku',
+    })
+    .min(5, { message: 'Numer telefonu musi mieć co najmniej 5 znaków' })
+    .max(20, { message: 'Numer telefonu nie może mieć więcej niż 20 znaków' }),
   members: z.array(z.string()).transform((val, ctx) => {
     const members = val.map((member) => JSON.parse(member));
 
     members.forEach((member) => {
       const name = member.name.trim();
+      const groupChef = true;
 
       if (name.length === 0) {
         ctx.addIssue({
@@ -89,6 +88,20 @@ const FormGroupSchema = z.object({
             message: 'Imię i nazwisko powinno być krótsze niż 20 znaków',
           }),
         });
+
+        return z.NEVER;
+      }
+
+      if (groupChef) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: JSON.stringify({
+            field: 'isGroupChef',
+            message: 'Kierownik grupy nie został zaznaczony',
+          }),
+        });
+
+        return z.NEVER;
       }
     });
 
@@ -103,7 +116,7 @@ export type GroupState = {
     pathId?: string[];
     leavingHourId?: string[];
     submittingPersonEmail?: string[];
-    submittingPersonPhoneNumber?: string[];
+    chefGroupPhoneNumber?: string[];
     members?: string[];
   };
   message?: string | null;
@@ -118,8 +131,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     pathId: formData.get('pathId'),
     leavingHourId: formData.get('leavingHourId'),
     submittingPersonEmail: formData.get('submittingPersonEmail'),
+    chefGroupPhoneNumber: formData.get('chefGroupPhoneNumber'),
     members: formData.getAll('members'),
-    // submittingPersonPhoneNumber: formData.get('submittingPersonPhoneNumber'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
@@ -138,12 +151,10 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     pathId,
     leavingHourId,
     submittingPersonEmail,
-    submittingPersonPhoneNumber,
+    chefGroupPhoneNumber,
     members,
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
-
-  console.log({ name, members });
 
   return {};
 

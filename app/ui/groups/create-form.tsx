@@ -9,6 +9,7 @@ import {
   ClockIcon,
   GlobeEuropeAfricaIcon,
   FingerPrintIcon,
+  PhoneIcon,
 } from '@heroicons/react/24/outline';
 import { Button, BUTTON_KINDS } from '@/app/ui/button';
 import { createGroup } from '@/app/lib/actions/groups';
@@ -34,6 +35,8 @@ const getGroupDefault = () => ({
   pathId: '',
   leavingHourId: '',
   submittingPersonEmail: '',
+  chefGroupId: '',
+  chefGroupPhoneNumber: '',
   members: [getMemberDefault()],
 });
 
@@ -41,7 +44,6 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createGroup, initialState);
 
-  // const [pathId, setPathId] = useState('');
   const [group, setGroup] = useState(getGroupDefault());
 
   let leavingHours = null;
@@ -54,7 +56,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     }
   }
 
-  const addMember = (data = {}) => {
+  const addMember = () => {
     if (group.members.length >= MAX_MEMBERS_NUM) {
       console.log(
         `Nie można dodać więcej niż ${MAX_MEMBERS_NUM} uczestników do jednej grupy.`,
@@ -83,20 +85,26 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
   }) => {
     setGroup({
       ...group,
-      members: group.members.map((member) => ({
-        ...member,
-        ...(member.id === id
-          ? {
-              [name]: value,
-            }
-          : {}),
-      })),
+      members: group.members
+        .map((member) => ({
+          ...member,
+          isGroupChef: false,
+        }))
+        .map((member) => ({
+          ...member,
+          ...(member.id === id
+            ? {
+                [name]: value,
+              }
+            : {}),
+        })),
     });
   };
 
   const removeMember = (id: string) => {
     setGroup({
       ...group,
+      chefGroupId: '',
       members: group.members.reduce((result: Array<Member>, member) => {
         if (member.id !== id) {
           result.push(member);
@@ -115,6 +123,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     formData.append('pathId', group.pathId);
     formData.append('leavingHourId', group.leavingHourId);
     formData.append('submittingPersonEmail', group.submittingPersonEmail);
+    formData.append('chefGroupPhoneNumber', group.chefGroupPhoneNumber);
 
     group.members.forEach((member) => {
       formData.append('members', JSON.stringify(member));
@@ -326,6 +335,54 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
           </div>
         </div>
 
+        {/* Group chef phone number */}
+
+        <div className="mb-4">
+          <label
+            htmlFor="chefGroupPhoneNumber"
+            className="mb-2 block text-sm font-medium"
+          >
+            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
+              Numer telefonu <span className="font-bold">kierownika grupy</span>
+            </span>
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="chefGroupPhoneNumber"
+                name="chefGroupPhoneNumber"
+                placeholder="Numer telefonu"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                type="tel"
+                minLength={5}
+                maxLength={20}
+                value={group.chefGroupPhoneNumber}
+                onChange={(ev) =>
+                  saveGroup({
+                    name: 'chefGroupPhoneNumber',
+                    value: ev.target.value,
+                  })
+                }
+                // required
+                aria-describedby="group-chef-phone-number-error"
+              />
+              <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            </div>
+            <div
+              id="group-chef-phone-number-error"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {state.errors?.chefGroupPhoneNumber &&
+                state.errors.chefGroupPhoneNumber.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
+
         {/* Adding Group Members */}
         <div className="mb-4 rounded-md bg-gray-100 p-1 md:p-4">
           <h3>Dodaj uczestników grupy ({group.members.length})</h3>
@@ -334,6 +391,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
               key={`group-member-${i}`}
               memberNumber={i + 1}
               removeMember={removeMember}
+              saveGroup={saveGroup}
               saveMember={saveMember}
               member={member}
               memberErrors={state.errors?.members?.reduce(
@@ -352,11 +410,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
               )}
             />
           ))}
-          <Button
-            type="button"
-            kind={BUTTON_KINDS.ADD}
-            onClick={() => addMember()}
-          >
+          <Button type="button" kind={BUTTON_KINDS.ADD} onClick={addMember}>
             Dodaj uczestnika
           </Button>
         </div>
