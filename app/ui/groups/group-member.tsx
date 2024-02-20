@@ -4,10 +4,8 @@ import { useState } from 'react';
 import {
   CalendarDaysIcon,
   CreditCardIcon,
-  PhoneIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
-import type { GroupState } from '@/app/lib/actions/groups';
 import { Button, BUTTON_KINDS } from '@/app/ui/button';
 
 export type Member = {
@@ -22,7 +20,8 @@ export default function GroupMember({
   memberNumber,
   removeMember,
   saveMember,
-  state,
+  saveGroup,
+  memberErrors,
 }: {
   member: Member;
   memberNumber: number;
@@ -36,14 +35,16 @@ export default function GroupMember({
     name: string;
     value: string;
   }) => void;
-  state: GroupState;
+  saveGroup: ({ name, value }: { name: string; value: string }) => void;
+  memberErrors: any;
 }) {
-  const [groupChief, setGroupChief] = useState('');
+  // const [groupChief, setGroupChief] = useState('');
 
   const { id, name, birthdayDate, PTTKCardNumber } = member;
 
   return (
     <div className="mb-8">
+      <input type="hidden" name="membersIds" value={id} />
       {/* Member Name */}
       <div className="mb-4 mt-4">
         <label
@@ -62,8 +63,8 @@ export default function GroupMember({
               placeholder="Imię i nazwisko"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               type="text"
-              minLength={5}
-              maxLength={20}
+              // minLength={5}
+              // maxLength={20}
               value={name}
               onChange={(ev) =>
                 saveMember({
@@ -72,7 +73,7 @@ export default function GroupMember({
                   value: ev.target.value,
                 })
               }
-              required
+              // required
               aria-describedby={`group-member-name-${id}-error`}
             />
             <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
@@ -82,12 +83,12 @@ export default function GroupMember({
             aria-live="polite"
             aria-atomic="true"
           >
-            {/* {state.errors?.memberName[memberNumber] &&
-              state.errors.memberName[memberNumber].map((error: string) => (
+            {memberErrors?.name &&
+              memberErrors.name.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
-              ))} */}
+              ))}
           </div>
         </div>
       </div>
@@ -118,7 +119,7 @@ export default function GroupMember({
                   value: ev.target.value,
                 })
               }
-              required
+              // required
               aria-describedby="group-birthday-date-error"
             />
             <CalendarDaysIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
@@ -127,14 +128,7 @@ export default function GroupMember({
             id="group-birthday-date-error"
             aria-live="polite"
             aria-atomic="true"
-          >
-            {/* {state.errors?.submittingPersonPhoneNumber &&
-              state.errors.submittingPersonPhoneNumber.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))} */}
-          </div>
+          ></div>
         </div>
       </div>
       {/* Member PTTK card */}
@@ -174,27 +168,24 @@ export default function GroupMember({
             id="group-pttk-card-number-error"
             aria-live="polite"
             aria-atomic="true"
-          >
-            {/* {state.errors?.submittingPersonPhoneNumber &&
-              state.errors.submittingPersonPhoneNumber.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))} */}
-          </div>
+          ></div>
         </div>
       </div>
       {/* Group chef */}
       <div className="mb-4 mt-4">
         <label className="mb-2 block flex text-sm font-medium">
           <input
-            name="groupChef"
+            name="chefGroupId"
             className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
-            // onChange={(event) =>
-            //   setGroupChief(event.target.checked ? event.target.value : '')
-            // }
+            // checked={}
+            value={id}
+            onChange={() =>
+              saveGroup({
+                name: 'chefGroupId',
+                value: id,
+              })
+            }
             type="radio"
-            aria-describedby="group-submitting-person-phone-number-error"
           />
           <span className="after:ml-0.5 after:text-red-500">
             Ten uczestnik jest{' '}
@@ -202,49 +193,6 @@ export default function GroupMember({
           </span>
         </label>
       </div>
-      {/* Group chef phone number */}
-      {groupChief && (
-        <div className="mb-4">
-          <label
-            htmlFor="submittingPersonPhoneNumber"
-            className="mb-2 block text-sm font-medium"
-          >
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Numer telefonu
-            </span>
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="submittingPersonPhoneNumber"
-                name="submittingPersonPhoneNumber"
-                placeholder="Numer telefonu"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                type="tel"
-                minLength={5}
-                maxLength={20}
-                required
-                aria-describedby="group-submitting-person-phone-number-error"
-              />
-              <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-            </div>
-            <div
-              id="group-submitting-person-phone-number-error"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {state.errors?.submittingPersonPhoneNumber &&
-                state.errors.submittingPersonPhoneNumber.map(
-                  (error: string) => (
-                    <p className="mt-2 text-sm text-red-500" key={error}>
-                      {error}
-                    </p>
-                  ),
-                )}
-            </div>
-          </div>
-        </div>
-      )}
       <Button
         type="button"
         kind={BUTTON_KINDS.REMOVE}
