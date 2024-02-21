@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   CalendarDaysIcon,
   CreditCardIcon,
@@ -13,6 +12,7 @@ export type Member = {
   name: string;
   birthdayDate: string;
   PTTKCardNumber: string;
+  chefGroupId: string;
 };
 
 export default function GroupMember({
@@ -20,7 +20,6 @@ export default function GroupMember({
   memberNumber,
   removeMember,
   saveMember,
-  saveGroup,
   memberErrors,
 }: {
   member: Member;
@@ -35,11 +34,8 @@ export default function GroupMember({
     name: string;
     value: string;
   }) => void;
-  saveGroup: ({ name, value }: { name: string; value: string }) => void;
   memberErrors: any;
 }) {
-  // const [groupChief, setGroupChief] = useState('');
-
   const { id, name, birthdayDate, PTTKCardNumber } = member;
 
   return (
@@ -177,10 +173,10 @@ export default function GroupMember({
           <input
             name="chefGroupId"
             className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
-            // checked={}
             value={id}
             onChange={() =>
-              saveGroup({
+              saveMember({
+                id,
                 name: 'chefGroupId',
                 value: id,
               })
