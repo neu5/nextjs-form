@@ -153,6 +153,31 @@ async function seedGroups(client) {
   }
 }
 
+async function seedMembers(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+        CREATE TABLE IF NOT EXISTS members (
+          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          birthday_date VARCHAR(12) NOT NULL,
+          pttk_card_number VARCHAR(6),
+          is_group_chef BOOLEAN DEFAULT FALSE
+        );
+      `;
+
+    console.log(`Created "members" table`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding members:', error);
+    throw error;
+  }
+}
+
 async function main() {
   const client = await db.connect();
 
@@ -162,6 +187,7 @@ async function main() {
   await seedLeavingHoursToPaths(client);
 
   await seedGroups(client);
+  await seedMembers(client);
 
   await client.end();
 }
