@@ -38,7 +38,6 @@ const FormGroupSchema = z.object({
 
     members.forEach((member) => {
       const name = member.name.trim();
-      const groupChef = true;
 
       if (name.length === 0) {
         ctx.addIssue({
@@ -91,19 +90,23 @@ const FormGroupSchema = z.object({
 
         return z.NEVER;
       }
-
-      if (groupChef) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: JSON.stringify({
-            field: 'isGroupChef',
-            message: 'Kierownik grupy nie został zaznaczony',
-          }),
-        });
-
-        return z.NEVER;
-      }
     });
+
+    const showMissingChefError = !members.some(
+      (member) => member.chefGroupId.length > 0,
+    );
+
+    if (showMissingChefError) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: JSON.stringify({
+          field: 'chefGroupId',
+          message: 'Kierownik grupy nie został wybrany',
+        }),
+      });
+
+      return z.NEVER;
+    }
 
     return members;
   }),

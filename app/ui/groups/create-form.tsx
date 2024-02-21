@@ -16,7 +16,7 @@ import { createGroup } from '@/app/lib/actions/groups';
 import GroupMember, { Member } from './group-member';
 
 let memberId = 0;
-const MAX_MEMBERS_NUM = 2;
+const MAX_MEMBERS_NUM = 4;
 
 const getMemberId = () => {
   memberId += 1;
@@ -28,6 +28,7 @@ const getMemberDefault = () => ({
   name: '',
   birthdayDate: '',
   PTTKCardNumber: '',
+  chefGroupId: '',
 });
 
 const getGroupDefault = () => ({
@@ -35,7 +36,6 @@ const getGroupDefault = () => ({
   pathId: '',
   leavingHourId: '',
   submittingPersonEmail: '',
-  chefGroupId: '',
   chefGroupPhoneNumber: '',
   members: [getMemberDefault()],
 });
@@ -88,7 +88,11 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
       members: group.members
         .map((member) => ({
           ...member,
-          isGroupChef: false,
+          ...(name === ''
+            ? {
+                chefGroupId: '',
+              }
+            : {}),
         }))
         .map((member) => ({
           ...member,
@@ -104,7 +108,6 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
   const removeMember = (id: string) => {
     setGroup({
       ...group,
-      chefGroupId: '',
       members: group.members.reduce((result: Array<Member>, member) => {
         if (member.id !== id) {
           result.push(member);
@@ -131,6 +134,19 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
 
     dispatch(formData);
   }
+
+  const formErrors = state.errors?.members?.reduce(
+    (result: Array<string>, membersErrors) => {
+      const error = JSON.parse(membersErrors);
+
+      if (error.field === 'chefGroupId') {
+        result.push(error.message);
+      }
+
+      return result;
+    },
+    [],
+  );
 
   return (
     <form onSubmit={onSubmit}>
@@ -391,7 +407,6 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
               key={`group-member-${i}`}
               memberNumber={i + 1}
               removeMember={removeMember}
-              saveGroup={saveGroup}
               saveMember={saveMember}
               member={member}
               memberErrors={state.errors?.members?.reduce(
@@ -414,6 +429,13 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
             Dodaj uczestnika
           </Button>
         </div>
+      </div>
+      <div aria-live="polite" aria-atomic="true">
+        {formErrors?.map((error: string) => (
+          <p className="mt-2 text-sm text-red-500" key={error}>
+            {error}
+          </p>
+        ))}
       </div>
 
       <div className="mt-6 flex">
