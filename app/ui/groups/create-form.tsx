@@ -38,6 +38,8 @@ const getGroupDefault = () => ({
   submittingPersonEmail: '',
   chefGroupPhoneNumber: '',
   remarks: '',
+  termsAndConditions: '',
+  rodo: '',
   members: [getMemberDefault()],
 });
 
@@ -129,6 +131,8 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     formData.append('submittingPersonEmail', group.submittingPersonEmail);
     formData.append('chefGroupPhoneNumber', group.chefGroupPhoneNumber);
     formData.append('remarks', group.remarks);
+    formData.append('termsAndConditions', group.termsAndConditions);
+    formData.append('rodo', group.rodo);
 
     group.members.forEach((member) => {
       formData.append('members', JSON.stringify(member));
@@ -461,6 +465,86 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
                   </p>
                 ))}
             </div>
+          </div>
+        </div>
+
+        {/* Terms and conditions */}
+        <div className="mb-4">
+          <label className="mb-2 block flex text-sm font-medium">
+            <input
+              name="termsAndConditions"
+              className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
+              type="checkbox"
+              onChange={(ev) =>
+                saveGroup({
+                  name: 'termsAndConditions',
+                  value: ev.target.checked ? 'true' : '',
+                })
+              }
+            />
+            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
+              Akceptuję{' '}
+              <a
+                href="http://www.emeryk.pttk.pl/images/Emeryk_2023_regulamin.pdf"
+                target="_blank"
+                className="text-blue-600 underline"
+              >
+                regulamin
+              </a>{' '}
+              Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali
+              się z regulaminem Rajdu.
+            </span>
+          </label>
+          <div id="group-remarks-error" aria-live="polite" aria-atomic="true">
+            {state.errors?.termsAndConditions &&
+              state.errors.termsAndConditions.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
+        </div>
+
+        {/* Rodo */}
+        <div className="mb-4">
+          <label className="mb-2 block flex text-sm font-medium">
+            <input
+              name="rodo"
+              className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
+              type="checkbox"
+              onChange={(ev) =>
+                saveGroup({
+                  name: 'rodo',
+                  value: ev.target.checked ? 'true' : '',
+                })
+              }
+            />
+            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
+              Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę
+              na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a)
+              rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27
+              kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z
+              przetwarzaniem danych osobowych i w sprawie swobodnego przepływu
+              takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach
+              niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św.
+              Emeryka organizowanego przez Oddział Międzyszkolny PTTK w
+              Starachowicach.{' '}
+              <a
+                href="http://www.emeryk.pttk.pl/images/rodo.pdf"
+                target="_blank"
+                className="text-blue-600 underline"
+              >
+                Klauzula informacyjna ochrony danych osobowych
+              </a>
+            </span>
+          </label>
+          <div id="group-remarks-error" aria-live="polite" aria-atomic="true">
+            {state.errors?.rodo &&
+              state.errors.rodo.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
           </div>
         </div>
 

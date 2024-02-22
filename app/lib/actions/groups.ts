@@ -37,6 +37,10 @@ const FormGroupSchema = z.object({
   remarks: z
     .string()
     .max(1000, { message: 'Uwagi nie mogą być dłuższe niż 1000 znaków' }),
+  termsAndConditions: z
+    .string()
+    .min(4, { message: 'Akceptacja regulaminu jest wymagana' }),
+  rodo: z.string().min(4, { message: 'Akceptacja jest wymagana' }),
   members: z.array(z.string()).transform((val, ctx) => {
     const members = val.map((member) => JSON.parse(member));
 
@@ -73,6 +77,8 @@ export type GroupState = {
     chefGroupPhoneNumber?: string[];
     members?: string[];
     remarks?: string[];
+    termsAndConditions?: string[];
+    rodo?: string[];
   };
   message?: string | null;
 };
@@ -87,8 +93,10 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     leavingHourId: formData.get('leavingHourId'),
     submittingPersonEmail: formData.get('submittingPersonEmail'),
     chefGroupPhoneNumber: formData.get('chefGroupPhoneNumber'),
-    remarks: formData.get('remarks'),
     members: formData.getAll('members'),
+    remarks: formData.get('remarks'),
+    termsAndConditions: formData.get('termsAndConditions'),
+    rodo: formData.get('rodo'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
