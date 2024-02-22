@@ -433,10 +433,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
 
         {/* Group Remarks */}
         <div className="mb-4">
-          <label
-            htmlFor="submittingPersonEmail"
-            className="mb-2 block text-sm font-medium"
-          >
+          <label htmlFor="remarks" className="mb-2 block text-sm font-medium">
             Dodatkowe uwagi
           </label>
           <div className="relative mt-2 rounded-md">
