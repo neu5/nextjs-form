@@ -138,6 +138,7 @@ async function seedGroups(client) {
           leaving_hour_id UUID NOT NULL,
           submitting_person_email VARCHAR(100) NOT NULL,
           chef_group_phone_number VARCHAR(20) NOT NULL,
+          remarks VARCHAR(1000),
           datetime VARCHAR(20) NOT NULL
         );
       `;

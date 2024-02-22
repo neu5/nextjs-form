@@ -34,6 +34,9 @@ const FormGroupSchema = z.object({
     })
     .min(5, { message: 'Numer telefonu musi mieć co najmniej 5 znaków' })
     .max(20, { message: 'Numer telefonu nie może mieć więcej niż 20 znaków' }),
+  remarks: z
+    .string()
+    .max(1000, { message: 'Uwagi nie mogą być dłuższe niż 1000 znaków' }),
   members: z.array(z.string()).transform((val, ctx) => {
     const members = val.map((member) => JSON.parse(member));
 
@@ -69,6 +72,7 @@ export type GroupState = {
     submittingPersonEmail?: string[];
     chefGroupPhoneNumber?: string[];
     members?: string[];
+    remarks?: string[];
   };
   message?: string | null;
 };
@@ -83,6 +87,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     leavingHourId: formData.get('leavingHourId'),
     submittingPersonEmail: formData.get('submittingPersonEmail'),
     chefGroupPhoneNumber: formData.get('chefGroupPhoneNumber'),
+    remarks: formData.get('remarks'),
     members: formData.getAll('members'),
   });
 
@@ -104,6 +109,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     submittingPersonEmail,
     chefGroupPhoneNumber,
     members,
+    remarks,
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
 
@@ -116,6 +122,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           leaving_hour_id,
           submitting_person_email,
           chef_group_phone_number,
+          remarks,
           datetime
         )
         VALUES (
@@ -124,6 +131,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           ${leavingHourId},
           ${submittingPersonEmail},
           ${chefGroupPhoneNumber},
+          ${remarks},
           ${datetime})
         RETURNING id
       `;
@@ -153,14 +161,14 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
       );
     } catch (error) {
       console.log(error);
-      // If a database error occurs, return a more specific error.
+
       return {
         message: 'Błąd bazy danych: nie udało się dodać uczestników do grupy.',
       };
     }
   } catch (error) {
     console.log(error);
-    // If a database error occurs, return a more specific error.
+
     return {
       message: 'Błąd bazy danych: nie udało się dodać grupy.',
     };
