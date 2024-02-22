@@ -37,6 +37,7 @@ const getGroupDefault = () => ({
   leavingHourId: '',
   submittingPersonEmail: '',
   chefGroupPhoneNumber: '',
+  remarks: '',
   members: [getMemberDefault()],
 });
 
@@ -127,6 +128,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     formData.append('leavingHourId', group.leavingHourId);
     formData.append('submittingPersonEmail', group.submittingPersonEmail);
     formData.append('chefGroupPhoneNumber', group.chefGroupPhoneNumber);
+    formData.append('remarks', group.remarks);
 
     group.members.forEach((member) => {
       formData.append('members', JSON.stringify(member));
@@ -352,7 +354,6 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
         </div>
 
         {/* Group chef phone number */}
-
         <div className="mb-4">
           <label
             htmlFor="chefGroupPhoneNumber"
@@ -429,13 +430,47 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
             Dodaj uczestnika
           </Button>
         </div>
-      </div>
-      <div aria-live="polite" aria-atomic="true">
-        {formErrors?.map((error: string) => (
-          <p className="mt-2 text-sm text-red-500" key={error}>
-            {error}
-          </p>
-        ))}
+
+        {/* Group Remarks */}
+        <div className="mb-4">
+          <label htmlFor="remarks" className="mb-2 block text-sm font-medium">
+            Dodatkowe uwagi
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <textarea
+                id="remarks"
+                name="remarks"
+                className="peer block w-full rounded-md border border-gray-200 py-2 text-sm outline-2 placeholder:text-gray-500"
+                value={group.remarks}
+                maxLength={1000}
+                aria-describedby="group-remarks-error"
+                onChange={(ev) =>
+                  saveGroup({
+                    name: 'remarks',
+                    value: ev.target.value,
+                  })
+                }
+              ></textarea>
+            </div>
+            <div id="group-remarks-error" aria-live="polite" aria-atomic="true">
+              {state.errors?.remarks &&
+                state.errors.remarks.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        <div aria-live="polite" aria-atomic="true">
+          {formErrors?.map((error: string) => (
+            <p className="mt-2 text-sm text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
+        </div>
       </div>
 
       <div className="mt-6 flex">
