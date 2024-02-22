@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { redirect } from 'next/navigation';
+import { birthDayValidation, nameValidation } from './validation';
 
 const FormGroupSchema = z.object({
   id: z.string(),
@@ -37,59 +38,8 @@ const FormGroupSchema = z.object({
     const members = val.map((member) => JSON.parse(member));
 
     members.forEach((member) => {
-      const name = member.name.trim();
-
-      if (name.length === 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: JSON.stringify({
-            id: member.id,
-            field: 'name',
-            message: 'Imię i nazwisko jest wymagane',
-          }),
-        });
-
-        return z.NEVER;
-      }
-
-      if (name.length < 5) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: JSON.stringify({
-            id: member.id,
-            field: 'name',
-            message: 'Imię i nazwisko powinno być dłuższe niż 5 znaków',
-          }),
-        });
-
-        return z.NEVER;
-      }
-
-      if (name.length < 5) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: JSON.stringify({
-            id: member.id,
-            field: 'name',
-            message: 'Imię i nazwisko powinno być dłuższe niż 5 znaków',
-          }),
-        });
-
-        return z.NEVER;
-      }
-
-      if (member.name.length >= 20) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: JSON.stringify({
-            id: member.id,
-            field: 'name',
-            message: 'Imię i nazwisko powinno być krótsze niż 20 znaków',
-          }),
-        });
-
-        return z.NEVER;
-      }
+      nameValidation({ ctx, member });
+      birthDayValidation({ ctx, member });
     });
 
     const showMissingChefError = !members.some(
@@ -104,8 +54,6 @@ const FormGroupSchema = z.object({
           message: 'Kierownik grupy nie został wybrany',
         }),
       });
-
-      return z.NEVER;
     }
 
     return members;
