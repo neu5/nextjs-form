@@ -95,17 +95,19 @@ export async function updatePath(prevState: PathState, formData: FormData) {
     await sql`DELETE FROM paths_leaving_hours WHERE path_id = ${id}`;
   } catch (error) {}
 
-  leavingHours.forEach(async (leavingHourId) => {
-    try {
-      await sql`
-        INSERT INTO paths_leaving_hours (path_id,leaving_hour_id) VALUES (${id},${leavingHourId});
-      `;
-    } catch (error) {
-      return {
-        message: 'Database Error: Failed to Update paths_leaving_hours.',
-      };
-    }
-  });
+  if (leavingHours) {
+    leavingHours.forEach(async (leavingHourId) => {
+      try {
+        await sql`
+          INSERT INTO paths_leaving_hours (path_id,leaving_hour_id) VALUES (${id},${leavingHourId});
+        `;
+      } catch (error) {
+        return {
+          message: 'Database Error: Failed to Update paths_leaving_hours.',
+        };
+      }
+    });
+  }
 
   revalidatePath('/dashboard/paths');
   redirect('/dashboard/paths');
