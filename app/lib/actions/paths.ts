@@ -11,7 +11,7 @@ const FormPathsSchema = z.object({
     .string({ required_error: 'Name is required' })
     .min(2, { message: 'Nazwa musi mieć co najmniej 2 znaki' })
     .max(255, { message: 'Nazwa nie może mieć więcej niż 255 znaków' }),
-  leavingHours: z.array(z.string()),
+  leavingHours: z.array(z.string()).optional(),
   date: z.string(),
 });
 
@@ -33,6 +33,8 @@ export async function createPath(prevState: PathState, formData: FormData) {
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
+
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Nie udało się dodać trasy. Uzupełnij brakujące pola.',
@@ -50,6 +52,7 @@ export async function createPath(prevState: PathState, formData: FormData) {
       VALUES (${name}, ${date})
     `;
   } catch (error) {
+    console.log(error);
     // If a database error occurs, return a more specific error.
     return {
       message: 'Błąd bazy danych: nie udało się dodać trasy.',
@@ -92,17 +95,19 @@ export async function updatePath(prevState: PathState, formData: FormData) {
     await sql`DELETE FROM paths_leaving_hours WHERE path_id = ${id}`;
   } catch (error) {}
 
-  leavingHours.forEach(async (leavingHourId) => {
-    try {
-      await sql`
-        INSERT INTO paths_leaving_hours (path_id,leaving_hour_id) VALUES (${id},${leavingHourId});
-      `;
-    } catch (error) {
-      return {
-        message: 'Database Error: Failed to Update paths_leaving_hours.',
-      };
-    }
-  });
+  if (leavingHours) {
+    leavingHours.forEach(async (leavingHourId) => {
+      try {
+        await sql`
+          INSERT INTO paths_leaving_hours (path_id,leaving_hour_id) VALUES (${id},${leavingHourId});
+        `;
+      } catch (error) {
+        return {
+          message: 'Database Error: Failed to Update paths_leaving_hours.',
+        };
+      }
+    });
+  }
 
   revalidatePath('/dashboard/paths');
   redirect('/dashboard/paths');
