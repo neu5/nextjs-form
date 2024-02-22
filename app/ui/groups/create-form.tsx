@@ -70,13 +70,7 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
     setGroup({ ...group, members: [...group.members, getMemberDefault()] });
   };
 
-  const saveGroup = ({
-    name,
-    value,
-  }: {
-    name: string;
-    value: string | boolean;
-  }) => {
+  const saveGroup = ({ name, value }: { name: string; value: string }) => {
     setGroup({
       ...group,
       [name]: value,
