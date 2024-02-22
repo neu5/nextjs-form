@@ -159,34 +159,64 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
 
-  return {};
-
   // Insert data into the database
-  // try {
-  //   await sql`
-  //       INSERT INTO groups (
-  //         name,
-  //         path_id,
-  //         leaving_hour_id,
-  //         submitting_person_email,
-  //         submitting_person_phone_number,
-  //         datetime
-  //       )
-  //       VALUES (
-  //         ${groupName},
-  //         ${pathId},
-  //         ${leavingHourId},
-  //         ${submittingPersonEmail},
-  //         ${submittingPersonPhoneNumber},
-  //         ${datetime})
-  //     `;
-  // } catch (error) {
-  //   console.log(error);
-  //   // If a database error occurs, return a more specific error.
-  //   return {
-  //     message: 'Błąd bazy danych: nie udało się dodać grupy.',
-  //   };
-  // }
+  try {
+    const group = await sql`
+        INSERT INTO groups (
+          name,
+          path_id,
+          leaving_hour_id,
+          submitting_person_email,
+          chef_group_phone_number,
+          datetime
+        )
+        VALUES (
+          ${name},
+          ${pathId},
+          ${leavingHourId},
+          ${submittingPersonEmail},
+          ${chefGroupPhoneNumber},
+          ${datetime})
+        RETURNING id
+      `;
 
-  // redirect('/success');
+    const groupId = group.rows[0].id;
+
+    try {
+      await Promise.all(
+        members.map(
+          ({ name, birthdayDate, PTTKCardNumber, chefGroupId }) => sql`
+                INSERT INTO members (
+                  group_id,
+                  name,
+                  birthday_date,
+                  pttk_card_number,
+                  is_group_chef
+                )
+                VALUES (
+                  ${groupId},
+                  ${name},
+                  ${birthdayDate},
+                  ${PTTKCardNumber},
+                  ${chefGroupId.length > 0 ? 'TRUE' : 'FALSE'}
+                  )
+              `,
+        ),
+      );
+    } catch (error) {
+      console.log(error);
+      // If a database error occurs, return a more specific error.
+      return {
+        message: 'Błąd bazy danych: nie udało się dodać uczestników do grupy.',
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    // If a database error occurs, return a more specific error.
+    return {
+      message: 'Błąd bazy danych: nie udało się dodać grupy.',
+    };
+  }
+
+  redirect('/success');
 }

@@ -137,7 +137,7 @@ async function seedGroups(client) {
           path_id UUID NOT NULL,
           leaving_hour_id UUID NOT NULL,
           submitting_person_email VARCHAR(100) NOT NULL,
-          submitting_person_phone_number VARCHAR(20) NOT NULL,
+          chef_group_phone_number VARCHAR(20) NOT NULL,
           datetime VARCHAR(20) NOT NULL
         );
       `;
@@ -160,6 +160,7 @@ async function seedMembers(client) {
     const createTable = await client.sql`
         CREATE TABLE IF NOT EXISTS members (
           id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+          group_id UUID NOT NULL,
           name VARCHAR(255) NOT NULL,
           birthday_date VARCHAR(12) NOT NULL,
           pttk_card_number VARCHAR(6),
