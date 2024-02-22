@@ -116,15 +116,22 @@ export default function GroupMember({
                 })
               }
               // required
-              aria-describedby="group-birthday-date-error"
+              aria-describedby={`group-member-birthday-date-${id}-error`}
             />
             <CalendarDaysIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
           <div
-            id="group-birthday-date-error"
+            id={`group-member-birthday-date-${id}-error`}
             aria-live="polite"
             aria-atomic="true"
-          ></div>
+          >
+            {memberErrors?.birthdayDate &&
+              memberErrors.birthdayDate.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
         </div>
       </div>
       {/* Member PTTK card */}
