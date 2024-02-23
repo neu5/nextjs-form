@@ -1,5 +1,10 @@
 const { db } = require('@vercel/postgres');
-const { leavingHours, users } = require('../app/lib/placeholder-data.js');
+const {
+  leavingHours,
+  shirtsTypes,
+  shirtsSizes,
+  users,
+} = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
 async function seedUsers(client) {
@@ -180,6 +185,78 @@ async function seedMembers(client) {
   }
 }
 
+async function seedShirtTypes(client) {
+  try {
+    // await client.sql`DROP TABLE IF EXISTS shirts_types`;
+
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+        CREATE TABLE IF NOT EXISTS shirts_types (
+          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+          value VARCHAR(20) NOT NULL
+        );
+      `;
+
+    console.log(`Created "shirts_types" table`);
+
+    // const insertedShirtTypes = await Promise.all(
+    //   shirtsTypes.map(
+    //     (type) => client.sql`
+    //       INSERT INTO shirts_types (value)
+    //       VALUES (${type.value})
+    //     `,
+    //   ),
+    // );
+
+    // console.log(`Seeded ${insertedShirtTypes.length} shirts types`);
+
+    return {
+      createTable,
+      // insertedShirtTypes,
+    };
+  } catch (error) {
+    console.error('Error seeding shirts_types:', error);
+    throw error;
+  }
+}
+
+async function seedShirtSizes(client) {
+  try {
+    // await client.sql`DROP TABLE IF EXISTS shirts_sizes`;
+
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+        CREATE TABLE IF NOT EXISTS shirts_sizes (
+          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+          value VARCHAR(20) NOT NULL
+        );
+      `;
+
+    console.log(`Created "shirts_sizes" table`);
+
+    // const insertedShirtSizes = await Promise.all(
+    //   shirtsSizes.map(
+    //     (size) => client.sql`
+    //       INSERT INTO shirts_sizes (value)
+    //       VALUES (${size.value})
+    //     `,
+    //   ),
+    // );
+
+    // console.log(`Seeded ${insertedShirtSizes.length} shirts sizes`);
+
+    return {
+      createTable,
+      // insertedShirtSizes,
+    };
+  } catch (error) {
+    console.error('Error seeding shirts_sizes:', error);
+    throw error;
+  }
+}
+
 async function main() {
   const client = await db.connect();
 
@@ -187,6 +264,8 @@ async function main() {
   await seedPaths(client);
   await seedLeavingHours(client);
   await seedLeavingHoursToPaths(client);
+  await seedShirtTypes(client);
+  await seedShirtSizes(client);
 
   await seedGroups(client);
   await seedMembers(client);

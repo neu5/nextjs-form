@@ -13,7 +13,7 @@ export default async function Page() {
   const paths = await fetchPathsWithItsLeavingHours();
 
   return (
-    <main className="sx:mx-8 sx:p-6 mx-1 my-8 flex-grow bg-white p-1 md:overflow-y-auto md:p-10">
+    <main className="sx:mx-8 sx:p-6 mx-1 mx-auto my-8 max-w-screen-xl flex-grow bg-white p-1 md:overflow-y-auto md:p-10">
       <div className="flex justify-end gap-4">
         <Link
           href="/login"
