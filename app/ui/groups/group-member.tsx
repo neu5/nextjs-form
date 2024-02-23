@@ -24,16 +24,8 @@ export default function GroupMember({
 }: {
   member: Member;
   memberNumber: number;
-  removeMember: (id: string) => void;
-  saveMember: ({
-    id,
-    name,
-    value,
-  }: {
-    id: string;
-    name: string;
-    value: string;
-  }) => void;
+  removeMember: Function;
+  saveMember: Function;
   memberErrors: any;
 }) {
   const { id, name, birthdayDate, PTTKCardNumber } = member;

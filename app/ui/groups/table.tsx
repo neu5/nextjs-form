@@ -1,7 +1,7 @@
-import Image from 'next/image';
+// import Image from 'next/image';
 import { fetchGroups } from '@/app/lib/data';
 // import { UpdateInvoice, DeleteInvoice } from '@/app/ui/invoices/buttons';
-import { formatDateToLocal } from '@/app/lib/utils';
+// import { formatDateToLocal } from '@/app/lib/utils';
 
 export default async function GroupsTable() {
   const groups = await fetchGroups();
