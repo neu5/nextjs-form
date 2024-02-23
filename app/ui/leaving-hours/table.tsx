@@ -1,6 +1,6 @@
 import { fetchLeavingHours } from '@/app/lib/data';
 // import { UpdatePath } from '@/app/ui/paths/buttons';
-import { formatDateToLocal } from '@/app/lib/utils';
+// import { formatDateToLocal } from '@/app/lib/utils';
 
 export default async function PathsTable() {
   const leavingHours = await fetchLeavingHours();

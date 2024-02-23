@@ -93,7 +93,9 @@ export async function updatePath(prevState: PathState, formData: FormData) {
 
   try {
     await sql`DELETE FROM paths_leaving_hours WHERE path_id = ${id}`;
-  } catch (error) {}
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Paths.' };
+  }
 
   if (leavingHours) {
     leavingHours.forEach(async (leavingHourId) => {
