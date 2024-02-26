@@ -126,8 +126,8 @@ export default async function Page() {
           </strong>
         </li>
       </ul>
-      {/* @ts-ignore */}
       <CreateGroup
+        /* @ts-ignore */
         paths={paths}
         shirtsSizes={shirtsSizes}
         shirtsTypes={shirtsTypes}
