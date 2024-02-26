@@ -49,6 +49,13 @@ export type LeavingHoursTable = {
   is_deleted: boolean;
 };
 
+export type ShirtsTypesList = {
+  id: string;
+  value: string;
+};
+
+export type ShirtsSizesList = ShirtsTypesList;
+
 export type LeavingHoursForm = LeavingHoursTable;
 
 export type ValueOf<T> = T[keyof T];
