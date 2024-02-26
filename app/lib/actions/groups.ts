@@ -149,20 +149,31 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     try {
       await Promise.all(
         members.map(
-          ({ name, birthdayDate, PTTKCardNumber, chefGroupId }) => sql`
+          ({
+            name,
+            birthdayDate,
+            PTTKCardNumber,
+            chefGroupId,
+            shirtTypeId,
+            shirtSizeId,
+          }) => sql`
                 INSERT INTO members (
                   group_id,
                   name,
                   birthday_date,
                   pttk_card_number,
-                  is_group_chef
+                  is_group_chef,
+                  shirt_size_id,
+                  shirt_type_id
                 )
                 VALUES (
                   ${groupId},
                   ${name},
                   ${birthdayDate},
                   ${PTTKCardNumber},
-                  ${chefGroupId.length > 0 ? 'TRUE' : 'FALSE'}
+                  ${chefGroupId.length > 0 ? 'TRUE' : 'FALSE'},
+                  ${shirtSizeId},
+                  ${shirtTypeId}
                   )
               `,
         ),

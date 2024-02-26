@@ -7,6 +7,8 @@ import {
   PathForm,
   LeavingHoursTable,
   LeavingHoursPathForm,
+  ShirtsSizesList,
+  ShirtsTypesList,
 } from './definitions';
 
 export async function getUser(email: string) {
@@ -146,4 +148,30 @@ export async function fetchPathsWithItsLeavingHours() {
         ),
       ),
   }));
+}
+
+export async function fetchShirtsTypes() {
+  noStore();
+
+  try {
+    const data = await sql<ShirtsTypesList>`SELECT id, value FROM shirts_types`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch paths data.');
+  }
+}
+
+export async function fetchShirtsSizes() {
+  noStore();
+
+  try {
+    const data = await sql<ShirtsSizesList>`SELECT id, value FROM shirts_sizes`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch paths data.');
+  }
 }

@@ -3,7 +3,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata } from 'next';
 import CreateGroup from '@/app/ui/groups/create-form';
-import { fetchPathsWithItsLeavingHours } from '@/app/lib/data';
+import {
+  fetchPathsWithItsLeavingHours,
+  fetchShirtsSizes,
+  fetchShirtsTypes,
+} from '@/app/lib/data';
 
 export const metadata: Metadata = {
   title: 'Rajd Świętego Emeryka | Formularz',
@@ -11,6 +15,8 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const paths = await fetchPathsWithItsLeavingHours();
+  const shirtsTypes = await fetchShirtsTypes();
+  const shirtsSizes = await fetchShirtsSizes();
 
   return (
     <main className="sx:mx-8 sx:p-6 mx-1 mx-auto my-8 max-w-screen-xl flex-grow bg-white p-1 md:overflow-y-auto md:p-10">
@@ -120,8 +126,12 @@ export default async function Page() {
           </strong>
         </li>
       </ul>
-      {/* @ts-ignore */}
-      <CreateGroup paths={paths} />
+      <CreateGroup
+        /* @ts-ignore */
+        paths={paths}
+        shirtsSizes={shirtsSizes}
+        shirtsTypes={shirtsTypes}
+      />
     </main>
   );
 }

@@ -28,6 +28,8 @@ const getMemberDefault = () => ({
   birthdayDate: '',
   PTTKCardNumber: '',
   chefGroupId: '',
+  shirtType: '',
+  shirtSize: '',
 });
 
 const getGroupDefault = () => ({
@@ -42,7 +44,15 @@ const getGroupDefault = () => ({
   members: [getMemberDefault()],
 });
 
-export default function Form({ paths }: { paths: GroupForm[] }) {
+export default function Form({
+  paths,
+  shirtsSizes,
+  shirtsTypes,
+}: {
+  paths: GroupForm[];
+  shirtsSizes: Array<{ id: string; value: string }>;
+  shirtsTypes: Array<{ id: string; value: string }>;
+}) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createGroup, initialState);
 
@@ -412,6 +422,8 @@ export default function Form({ paths }: { paths: GroupForm[] }) {
               memberNumber={i + 1}
               removeMember={removeMember}
               saveMember={saveMember}
+              shirtsSizes={shirtsSizes}
+              shirtsTypes={shirtsTypes}
               member={member}
               memberErrors={state.errors?.members?.reduce(
                 (result, membersErrors) => {
