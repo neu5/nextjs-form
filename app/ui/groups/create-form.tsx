@@ -28,8 +28,8 @@ const getMemberDefault = () => ({
   birthdayDate: '',
   PTTKCardNumber: '',
   chefGroupId: '',
-  shirtType: '',
-  shirtSize: '',
+  shirtTypeId: '',
+  shirtSizeId: '',
 });
 
 const getGroupDefault = () => ({

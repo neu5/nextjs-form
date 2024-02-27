@@ -175,3 +175,33 @@ export async function fetchShirtsSizes() {
     throw new Error('Failed to fetch paths data.');
   }
 }
+
+export async function fetchGroupById(id: string) {
+  noStore();
+
+  try {
+    const data = await sql<PathForm>`
+      SELECT
+        groups.name,
+        groups.submitting_person_email,
+        groups.chef_group_phone_number,
+        groups.remarks,
+        members.name as memberName,
+        members.group_id as groupId,
+        members.id as memberId,
+        members.shirt_size_id,
+        members.shirt_type_id,
+        members.birthday_date,
+        members.pttk_card_number,
+        members.is_group_chef
+      FROM groups
+      JOIN members ON groups.id = members.group_id
+      WHERE groups.id = ${id}
+    `;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch group.');
+  }
+}

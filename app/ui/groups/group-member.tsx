@@ -13,8 +13,8 @@ export type Member = {
   birthdayDate: string;
   PTTKCardNumber: string;
   chefGroupId: string;
-  shirtType: string;
-  shirtSize: string;
+  shirtTypeId: string;
+  shirtSizeId: string;
 };
 
 export default function GroupMember({
@@ -34,7 +34,7 @@ export default function GroupMember({
   shirtsTypes: Array<{ id: string; value: string }>;
   memberErrors: any;
 }) {
-  const { id, name, birthdayDate, PTTKCardNumber, shirtType, shirtSize } =
+  const { id, name, birthdayDate, PTTKCardNumber, shirtTypeId, shirtSizeId } =
     member;
 
   return (
@@ -188,14 +188,14 @@ export default function GroupMember({
           <div className="relative">
             <select
               id={`shirt-type-${id}`}
-              name="shirtType"
+              name="shirtTypeId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               aria-describedby="shirt-type-error"
-              value={shirtType}
+              value={shirtTypeId}
               onChange={(ev) =>
                 saveMember({
                   id,
-                  name: 'shirtType',
+                  name: 'shirtTypeId',
                   value: ev.target.value,
                 })
               }
@@ -225,14 +225,14 @@ export default function GroupMember({
           <div className="relative">
             <select
               id={`shirt-type-${id}`}
-              name="shirtSize"
+              name="shirtSizeId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               aria-describedby="shirt-type-error"
-              value={shirtSize}
+              value={shirtSizeId}
               onChange={(ev) =>
                 saveMember({
                   id,
-                  name: 'shirtSize',
+                  name: 'shirtSizeId',
                   value: ev.target.value,
                 })
               }
