@@ -5,10 +5,13 @@ import {
   GroupsTable,
   PathsTable,
   PathForm,
-  LeavingHoursTable,
   LeavingHoursPathForm,
+  LeavingHoursTable,
+  LeavingHoursTransportForm,
   ShirtsSizesList,
   ShirtsTypesList,
+  TransportForm,
+  TransportsTable,
 } from './definitions';
 
 export async function getUser(email: string) {
@@ -203,5 +206,61 @@ export async function fetchGroupById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch group.');
+  }
+}
+
+export async function fetchTransports() {
+  noStore();
+
+  try {
+    const data = await sql<TransportsTable>`SELECT id, name FROM transports`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch transports data.');
+  }
+}
+
+export async function fetchTransportById(id: string) {
+  noStore();
+
+  try {
+    const data = await sql<TransportForm>`
+      SELECT
+        transports.id,
+        transports.name
+      FROM transports
+      WHERE transports.id = ${id};
+    `;
+
+    return data.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch transport.');
+  }
+}
+
+export async function fetchTransportLeavingHours(id: string) {
+  noStore();
+
+  try {
+    const data = await sql<LeavingHoursTransportForm>`
+      SELECT
+        leaving_hour_id
+      FROM transports_leaving_hours
+      WHERE transport_id = ${id};
+    `;
+
+    return data.rows.reduce((result: Array<string>, row) => {
+      if (row.leaving_hour_id) {
+        result.push(row.leaving_hour_id);
+      }
+
+      return result;
+    }, []);
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch transport leaving hours.');
   }
 }

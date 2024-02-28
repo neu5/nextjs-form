@@ -108,7 +108,7 @@ async function seedLeavingHours(client) {
 
 async function seedLeavingHoursToPaths(client) {
   try {
-    await client.sql`DROP TABLE IF EXISTS paths_leaving_hours`;
+    // await client.sql`DROP TABLE IF EXISTS paths_leaving_hours`;
 
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -259,6 +259,51 @@ async function seedShirtSizes(client) {
   }
 }
 
+async function seedTransports(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+        CREATE TABLE IF NOT EXISTS transports (
+          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+          name VARCHAR(200) NOT NULL
+        );
+      `;
+
+    console.log(`Created "transports" table`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding transports:', error);
+    throw error;
+  }
+}
+
+async function seedLeavingHoursToTransports(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS transports_leaving_hours (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        transport_id UUID NOT NULL,
+        leaving_hour_id UUID NOT NULL
+      );
+    `;
+
+    console.log(`Created "transports_leaving_hours" table`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding transports_leaving_hours:', error);
+    throw error;
+  }
+}
+
 async function main() {
   const client = await db.connect();
 
@@ -268,6 +313,8 @@ async function main() {
   await seedLeavingHoursToPaths(client);
   await seedShirtTypes(client);
   await seedShirtSizes(client);
+  await seedTransports(client);
+  await seedLeavingHoursToTransports(client);
 
   await seedGroups(client);
   await seedMembers(client);
