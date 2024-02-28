@@ -248,6 +248,36 @@ export default function GroupMember({
         </div>
       </div>
 
+      {/* Transport */}
+      <div className="mb-4 mt-4">
+        <label
+          htmlFor={`shirt-size-${id}`}
+          className="mb-2 block text-sm font-medium"
+        >
+          <span className="after:ml-0.5 after:text-red-500">
+            Czy jest potrzebny transport z mety rajdu?
+          </span>
+        </label>
+        <div className="relative mt-2 rounded-md">
+          <div className="relative"></div>
+        </div>
+      </div>
+
+      {/* Transport leaving hour */}
+      <div className="mb-4 mt-4">
+        <label
+          htmlFor={`shirt-size-${id}`}
+          className="mb-2 block text-sm font-medium"
+        >
+          <span className="after:ml-0.5 after:text-red-500">
+            Godzina odjazdu transportu z mety
+          </span>
+        </label>
+        <div className="relative mt-2 rounded-md">
+          <div className="relative"></div>
+        </div>
+      </div>
+
       {/* Group chef */}
       <div className="mb-4 mt-4">
         <label className="mb-2 block flex text-sm font-medium">

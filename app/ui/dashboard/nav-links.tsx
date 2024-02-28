@@ -4,8 +4,8 @@ import {
   UserGroupIcon,
   HomeIcon,
   GlobeEuropeAfricaIcon,
-  DocumentDuplicateIcon,
   ClockIcon,
+  TruckIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,16 +16,12 @@ import clsx from 'clsx';
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
   { name: 'Grupy', href: '/dashboard/groups', icon: UserGroupIcon },
-  { name: 'Trasy', href: '/dashboard/paths', icon: ClockIcon },
+  { name: 'Trasy', href: '/dashboard/paths', icon: GlobeEuropeAfricaIcon },
+  { name: 'Transport', href: '/dashboard/transports', icon: TruckIcon },
   {
     name: 'Godziny startów',
     href: '/dashboard/leaving-hours',
-    icon: GlobeEuropeAfricaIcon,
-  },
-  {
-    name: 'Invoices - do usunięcia',
-    href: '/dashboard/invoices',
-    icon: DocumentDuplicateIcon,
+    icon: ClockIcon,
   },
 ];
 

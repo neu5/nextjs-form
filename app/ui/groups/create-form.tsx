@@ -48,10 +48,12 @@ export default function Form({
   paths,
   shirtsSizes,
   shirtsTypes,
+  transports,
 }: {
   paths: GroupForm[];
   shirtsSizes: Array<{ id: string; value: string }>;
   shirtsTypes: Array<{ id: string; value: string }>;
+  transports: Array<{ id: string; name: string }>;
 }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createGroup, initialState);
@@ -67,6 +69,8 @@ export default function Form({
       leavingHours = path.leavingHours;
     }
   }
+
+  console.log({ transports });
 
   const addMember = () => {
     if (group.members.length >= MAX_MEMBERS_NUM) {

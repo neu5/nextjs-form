@@ -25,6 +25,22 @@ export type PathsTable = {
   date: string;
 };
 
+export type TransportsTable = {
+  id: string;
+  name: string;
+};
+
+export type TransportForm = {
+  id: string;
+  name: string;
+};
+
+export type LeavingHoursTransportForm = {
+  id: string;
+  transport_id: string;
+  leaving_hour_id: string;
+};
+
 export type PathForm = {
   id: string;
   name: string;
