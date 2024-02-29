@@ -7,7 +7,7 @@ import {
   fetchPathsWithItsLeavingHours,
   fetchShirtsSizes,
   fetchShirtsTypes,
-  fetchTransports,
+  fetchTransportsWithItsLeavingHours,
 } from '@/app/lib/data';
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default async function Page() {
   const paths = await fetchPathsWithItsLeavingHours();
   const shirtsTypes = await fetchShirtsTypes();
   const shirtsSizes = await fetchShirtsSizes();
-  const transports = await fetchTransports();
+  const transports = await fetchTransportsWithItsLeavingHours();
 
   return (
     <main className="sx:mx-8 sx:p-6 mx-1 mx-auto my-8 max-w-screen-xl flex-grow bg-white p-1 md:overflow-y-auto md:p-10">

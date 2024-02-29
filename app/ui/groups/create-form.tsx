@@ -30,6 +30,8 @@ const getMemberDefault = () => ({
   chefGroupId: '',
   shirtTypeId: '',
   shirtSizeId: '',
+  transportId: '',
+  transportLeavingHourId: '',
 });
 
 const getGroupDefault = () => ({
@@ -69,8 +71,6 @@ export default function Form({
       leavingHours = path.leavingHours;
     }
   }
-
-  console.log({ transports });
 
   const addMember = () => {
     if (group.members.length >= MAX_MEMBERS_NUM) {
@@ -115,6 +115,11 @@ export default function Form({
           ...(member.id === id
             ? {
                 [name]: value,
+                ...(name === 'transportId'
+                  ? {
+                      transportLeavingHourId: '',
+                    }
+                  : {}),
               }
             : {}),
         })),
@@ -428,6 +433,7 @@ export default function Form({
               saveMember={saveMember}
               shirtsSizes={shirtsSizes}
               shirtsTypes={shirtsTypes}
+              transports={transports}
               member={member}
               memberErrors={state.errors?.members?.reduce(
                 (result, membersErrors) => {

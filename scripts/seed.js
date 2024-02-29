@@ -169,6 +169,8 @@ async function seedMembers(client) {
           group_id UUID NOT NULL,
           shirt_size_id UUID,
           shirt_type_id UUID,
+          transport_id UUID,
+          transport_leaving_hour_id UUID,
           name VARCHAR(255) NOT NULL,
           birthday_date VARCHAR(12) NOT NULL,
           pttk_card_number VARCHAR(6),

@@ -264,3 +264,46 @@ export async function fetchTransportLeavingHours(id: string) {
     throw new Error('Failed to fetch transport leaving hours.');
   }
 }
+
+export async function fetchTransportsLeavingHours() {
+  noStore();
+
+  try {
+    const data = await sql<LeavingHoursTransportForm>`
+      SELECT
+        transports_leaving_hours.transport_id,
+        transports_leaving_hours.leaving_hour_id
+      FROM transports_leaving_hours
+    `;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch transports leaving hours.');
+  }
+}
+
+export async function fetchTransportsWithItsLeavingHours() {
+  noStore();
+
+  const [transports, leavingHours, transportsLeavingHours] = await Promise.all([
+    fetchTransports(),
+    fetchLeavingHours(),
+    fetchTransportsLeavingHours(),
+  ]);
+
+  return transports.map((transport) => ({
+    ...transport,
+    leavingHours: transportsLeavingHours
+      .filter(
+        (transportsLeavingHour) =>
+          transportsLeavingHour.transport_id === transport.id,
+      )
+      .map((transportsLeavingHour) =>
+        leavingHours.find(
+          (leavingHour) =>
+            leavingHour.id === transportsLeavingHour.leaving_hour_id,
+        ),
+      ),
+  }));
+}
