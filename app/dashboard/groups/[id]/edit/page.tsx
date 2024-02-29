@@ -17,8 +17,6 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
 
-  console.log({ group });
-
   return (
     <main>
       <Breadcrumbs

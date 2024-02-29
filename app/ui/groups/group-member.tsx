@@ -2,7 +2,9 @@
 
 import {
   CalendarDaysIcon,
+  ClockIcon,
   CreditCardIcon,
+  TruckIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
 import { Button, BUTTON_KINDS } from '@/app/ui/button';
@@ -15,6 +17,8 @@ export type Member = {
   chefGroupId: string;
   shirtTypeId: string;
   shirtSizeId: string;
+  transportId: string;
+  transportLeavingHourId: string;
 };
 
 export default function GroupMember({
@@ -24,6 +28,7 @@ export default function GroupMember({
   saveMember,
   shirtsSizes,
   shirtsTypes,
+  transports,
   memberErrors,
 }: {
   member: Member;
@@ -32,10 +37,23 @@ export default function GroupMember({
   saveMember: Function;
   shirtsSizes: Array<{ id: string; value: string }>;
   shirtsTypes: Array<{ id: string; value: string }>;
+  transports: Array<{
+    id: string;
+    name: string;
+    leavingHours: Array<{ id: string; value: string }>;
+  }>;
   memberErrors: any;
 }) {
-  const { id, name, birthdayDate, PTTKCardNumber, shirtTypeId, shirtSizeId } =
-    member;
+  const {
+    id,
+    name,
+    birthdayDate,
+    PTTKCardNumber,
+    shirtTypeId,
+    shirtSizeId,
+    transportId,
+    transportLeavingHourId,
+  } = member;
 
   return (
     <div className="mb-8">
@@ -259,7 +277,30 @@ export default function GroupMember({
           </span>
         </label>
         <div className="relative mt-2 rounded-md">
-          <div className="relative"></div>
+          <div className="relative">
+            <select
+              id={`transport-${id}`}
+              name="transportId"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              aria-describedby="transport-id-error"
+              value={transportId}
+              onChange={(ev) =>
+                saveMember({
+                  id,
+                  name: 'transportId',
+                  value: ev.target.value,
+                })
+              }
+            >
+              <option value="">Gdzie chcesz dojechać</option>
+              {transports.map((transport) => (
+                <option key={transport.id} value={transport.id}>
+                  {transport.name}
+                </option>
+              ))}
+            </select>
+            <TruckIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
         </div>
       </div>
 
@@ -274,7 +315,36 @@ export default function GroupMember({
           </span>
         </label>
         <div className="relative mt-2 rounded-md">
-          <div className="relative"></div>
+          <div className="relative">
+            <select
+              id={`transport-leaving-hour-${id}`}
+              name="transportLeavingHourId"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              aria-describedby="transport-leaving-hour-id-error"
+              value={transportLeavingHourId}
+              onChange={(ev) =>
+                saveMember({
+                  id,
+                  name: 'transportLeavingHourId',
+                  value: ev.target.value,
+                })
+              }
+            >
+              <option value="">Wybierz godzinę</option>
+              {transportId &&
+                transports
+                  .find((transport) => transport.id === transportId)
+                  ?.leavingHours.map((transportLeavingHour) => (
+                    <option
+                      key={transportLeavingHour.id}
+                      value={transportLeavingHour.id}
+                    >
+                      {transportLeavingHour.value}
+                    </option>
+                  ))}
+            </select>
+            <ClockIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
         </div>
       </div>
 
