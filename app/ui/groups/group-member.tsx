@@ -19,7 +19,6 @@ export type Member = {
   shirtSizeId: string;
   transportId: string;
   transportLeavingHourId: string;
-  // transports: Array<{ id: string; name: string; leavingHours: Array<any> }>;
 };
 
 export default function GroupMember({
