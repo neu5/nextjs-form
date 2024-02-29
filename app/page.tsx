@@ -133,6 +133,7 @@ export default async function Page() {
         paths={paths}
         shirtsSizes={shirtsSizes}
         shirtsTypes={shirtsTypes}
+        /* @ts-ignore */
         transports={transports}
       />
     </main>

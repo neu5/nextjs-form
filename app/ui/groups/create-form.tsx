@@ -55,7 +55,11 @@ export default function Form({
   paths: GroupForm[];
   shirtsSizes: Array<{ id: string; value: string }>;
   shirtsTypes: Array<{ id: string; value: string }>;
-  transports: Array<{ id: string; name: string }>;
+  transports: Array<{
+    id: string;
+    name: string;
+    leavingHours: Array<{ id: string; value: string }>;
+  }>;
 }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createGroup, initialState);

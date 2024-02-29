@@ -38,7 +38,11 @@ export default function GroupMember({
   saveMember: Function;
   shirtsSizes: Array<{ id: string; value: string }>;
   shirtsTypes: Array<{ id: string; value: string }>;
-  transports: Array<{ id: string; name: string; leavingHours: Array<any> }>;
+  transports: Array<{
+    id: string;
+    name: string;
+    leavingHours: Array<{ id: string; value: string }>;
+  }>;
   memberErrors: any;
 }) {
   const {
