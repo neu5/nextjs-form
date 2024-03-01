@@ -20,7 +20,7 @@ export default async function PathsTable() {
                     <div className="mb-2 flex items-center">
                       <p>{path.name}</p>
                     </div>
-                    {/* <p className="text-sm text-gray-500">{invoice.email}</p> */}
+                    <p className="text-sm text-gray-500">{path.type}</p>
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
@@ -42,6 +42,9 @@ export default async function PathsTable() {
                   Nazwa trasy
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
+                  Rodzaj trasy
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
                   Data dodania trasy
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -60,6 +63,7 @@ export default async function PathsTable() {
                       <p>{path.name}</p>
                     </div>
                   </td>
+                  <td className="whitespace-nowrap px-3 py-3">{path.type}</td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatDateToLocal(path.date)}
                   </td>

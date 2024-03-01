@@ -8,6 +8,7 @@ import {
   UserIcon,
 } from '@heroicons/react/24/outline';
 import { Button, BUTTON_KINDS } from '@/app/ui/button';
+import { ShirtsSizesList, ShirtsTypesList } from '@/app/lib/definitions';
 
 export type Member = {
   id: string;
@@ -15,8 +16,8 @@ export type Member = {
   birthdayDate: string;
   PTTKCardNumber: string;
   chefGroupId: string;
-  shirtTypeId: string;
-  shirtSizeId: string;
+  shirtType: string;
+  shirtSize: string;
   transportId: string;
   transportLeavingHourId: string;
 };
@@ -35,8 +36,8 @@ export default function GroupMember({
   memberNumber: number;
   removeMember: Function;
   saveMember: Function;
-  shirtsSizes: Array<{ id: string; value: string }>;
-  shirtsTypes: Array<{ id: string; value: string }>;
+  shirtsSizes: Array<ShirtsSizesList>;
+  shirtsTypes: Array<ShirtsTypesList>;
   transports: Array<{
     id: string;
     name: string;
@@ -49,8 +50,8 @@ export default function GroupMember({
     name,
     birthdayDate,
     PTTKCardNumber,
-    shirtTypeId,
-    shirtSizeId,
+    shirtType,
+    shirtSize,
     transportId,
     transportLeavingHourId,
   } = member;
@@ -206,22 +207,22 @@ export default function GroupMember({
           <div className="relative">
             <select
               id={`shirt-type-${id}`}
-              name="shirtTypeId"
+              name="shirtType"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               aria-describedby="shirt-type-error"
-              value={shirtTypeId}
+              value={shirtType}
               onChange={(ev) =>
                 saveMember({
                   id,
-                  name: 'shirtTypeId',
+                  name: 'shirtType',
                   value: ev.target.value,
                 })
               }
             >
               <option value="">Wybierz rodzaj koszulki</option>
-              {shirtsTypes.map((type) => (
-                <option key={type.id} value={type.id}>
-                  {type.value}
+              {shirtsTypes.map(({ type }) => (
+                <option key={type} value={type}>
+                  {type}
                 </option>
               ))}
             </select>
@@ -243,22 +244,22 @@ export default function GroupMember({
           <div className="relative">
             <select
               id={`shirt-type-${id}`}
-              name="shirtSizeId"
+              name="shirtSize"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               aria-describedby="shirt-type-error"
-              value={shirtSizeId}
+              value={shirtSize}
               onChange={(ev) =>
                 saveMember({
                   id,
-                  name: 'shirtSizeId',
+                  name: 'shirtSize',
                   value: ev.target.value,
                 })
               }
             >
               <option value="">Wybierz rozmiar koszulki</option>
-              {shirtsSizes.map((size) => (
-                <option key={size.id} value={size.id}>
-                  {size.value}
+              {shirtsSizes.map(({ size }) => (
+                <option key={size} value={size}>
+                  {size}
                 </option>
               ))}
             </select>

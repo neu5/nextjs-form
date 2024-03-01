@@ -154,8 +154,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
             birthdayDate,
             PTTKCardNumber,
             chefGroupId,
-            shirtTypeId,
-            shirtSizeId,
+            shirtType,
+            shirtSize,
             transportId,
             transportLeavingHourId,
           }) => sql`
@@ -165,8 +165,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
                   birthday_date,
                   pttk_card_number,
                   is_group_chef,
-                  shirt_size_id,
-                  shirt_type_id,
+                  shirt_size,
+                  shirt_type,
                   transport_id,
                   transport_leaving_hour_id
                 )
@@ -176,8 +176,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
                   ${birthdayDate},
                   ${PTTKCardNumber},
                   ${chefGroupId.length > 0 ? 'TRUE' : 'FALSE'},
-                  ${shirtSizeId},
-                  ${shirtTypeId},
+                  ${shirtSize},
+                  ${shirtType},
                   ${transportId},
                   ${transportLeavingHourId}
                   )

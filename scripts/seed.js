@@ -1,6 +1,7 @@
 const { db } = require('@vercel/postgres');
 const {
   leavingHours,
+  pathsTypes,
   shirtsTypes,
   shirtsSizes,
   users,
@@ -46,6 +47,39 @@ async function seedUsers(client) {
   }
 }
 
+async function seedPathsTypes(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+        CREATE TABLE IF NOT EXISTS paths_types (
+          type VARCHAR(50) NOT NULL
+        );
+      `;
+
+    console.log(`Created "paths_types" table`);
+
+    const insertedPathsTypes = await Promise.all(
+      pathsTypes.map(
+        (pathType) => client.sql`
+          INSERT INTO paths_types (type)
+          VALUES (${pathType});
+        `,
+      ),
+    );
+
+    console.log(`Seeded ${insertedPathsTypes.length} paths_types`);
+
+    return {
+      createTable,
+      insertedPathsTypes,
+    };
+  } catch (error) {
+    console.error('Error seeding paths_types:', error);
+    throw error;
+  }
+}
+
 async function seedPaths(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -53,6 +87,7 @@ async function seedPaths(client) {
     const createTable = await client.sql`
         CREATE TABLE IF NOT EXISTS paths (
           id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+          type VARCHAR(50),
           name VARCHAR(255) NOT NULL,
           date DATE NOT NULL
         );
@@ -85,20 +120,20 @@ async function seedLeavingHours(client) {
 
     console.log(`Created "leaving_hours" table`);
 
-    // const insertedLeavingHours = await Promise.all(
-    //   leavingHours.map(
-    //     (leavingHour) => client.sql`
-    //       INSERT INTO leaving_hours (value)
-    //       VALUES (${leavingHour.value})
-    //     `,
-    //   ),
-    // );
+    const insertedLeavingHours = await Promise.all(
+      leavingHours.map(
+        (leavingHour) => client.sql`
+          INSERT INTO leaving_hours (value)
+          VALUES (${leavingHour.value})
+        `,
+      ),
+    );
 
-    // console.log(`Seeded ${insertedLeavingHours.length} leaving hours`);
+    console.log(`Seeded ${insertedLeavingHours.length} leaving hours`);
 
     return {
       createTable,
-      // leavingHours: insertedLeavingHours,
+      leavingHours: insertedLeavingHours,
     };
   } catch (error) {
     console.error('Error seeding leaving_hours:', error);
@@ -167,8 +202,8 @@ async function seedMembers(client) {
         CREATE TABLE IF NOT EXISTS members (
           id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
           group_id UUID NOT NULL,
-          shirt_size_id UUID,
-          shirt_type_id UUID,
+          shirt_size VARCHAR(5),
+          shirt_type VARCHAR(20),
           transport_id UUID,
           transport_leaving_hour_id UUID,
           name VARCHAR(255) NOT NULL,
@@ -197,27 +232,26 @@ async function seedShirtTypes(client) {
 
     const createTable = await client.sql`
         CREATE TABLE IF NOT EXISTS shirts_types (
-          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-          value VARCHAR(20) NOT NULL
+          type VARCHAR(20) NOT NULL
         );
       `;
 
     console.log(`Created "shirts_types" table`);
 
-    // const insertedShirtTypes = await Promise.all(
-    //   shirtsTypes.map(
-    //     (type) => client.sql`
-    //       INSERT INTO shirts_types (value)
-    //       VALUES (${type.value})
-    //     `,
-    //   ),
-    // );
+    const insertedShirtTypes = await Promise.all(
+      shirtsTypes.map(
+        (shirtType) => client.sql`
+          INSERT INTO shirts_types (type)
+          VALUES (${shirtType});
+        `,
+      ),
+    );
 
-    // console.log(`Seeded ${insertedShirtTypes.length} shirts types`);
+    console.log(`Seeded ${insertedShirtTypes.length} shirts types`);
 
     return {
       createTable,
-      // insertedShirtTypes,
+      insertedShirtTypes,
     };
   } catch (error) {
     console.error('Error seeding shirts_types:', error);
@@ -233,27 +267,26 @@ async function seedShirtSizes(client) {
 
     const createTable = await client.sql`
         CREATE TABLE IF NOT EXISTS shirts_sizes (
-          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-          value VARCHAR(20) NOT NULL
+          size VARCHAR(5) NOT NULL
         );
       `;
 
     console.log(`Created "shirts_sizes" table`);
 
-    // const insertedShirtSizes = await Promise.all(
-    //   shirtsSizes.map(
-    //     (size) => client.sql`
-    //       INSERT INTO shirts_sizes (value)
-    //       VALUES (${size.value})
-    //     `,
-    //   ),
-    // );
+    const insertedShirtSizes = await Promise.all(
+      shirtsSizes.map(
+        (shirtSize) => client.sql`
+          INSERT INTO shirts_sizes (size)
+          VALUES (${shirtSize});
+        `,
+      ),
+    );
 
-    // console.log(`Seeded ${insertedShirtSizes.length} shirts sizes`);
+    console.log(`Seeded ${insertedShirtSizes.length} shirts sizes`);
 
     return {
       createTable,
-      // insertedShirtSizes,
+      insertedShirtSizes,
     };
   } catch (error) {
     console.error('Error seeding shirts_sizes:', error);
@@ -306,20 +339,49 @@ async function seedLeavingHoursToTransports(client) {
   }
 }
 
+async function dropTables(client) {
+  try {
+    const createTable = await client.sql`
+      DROP TABLE IF EXISTS paths_types;
+      DROP TABLE IF EXISTS paths;
+      DROP TABLE IF EXISTS leaving_hours;
+      DROP TABLE IF EXISTS paths_leaving_hours;
+      DROP TABLE IF EXISTS groups;
+      DROP TABLE IF EXISTS members;
+      DROP TABLE IF EXISTS shirts_types;
+      DROP TABLE IF EXISTS shirts_sizes;
+      DROP TABLE IF EXISTS transports;
+      DROP TABLE IF EXISTS transports_leaving_hours;
+    `;
+
+    console.log(`Dropped tables`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error dropping tables', error);
+    throw error;
+  }
+}
+
 async function main() {
   const client = await db.connect();
 
-  await seedUsers(client);
-  await seedPaths(client);
-  await seedLeavingHours(client);
-  await seedLeavingHoursToPaths(client);
-  await seedShirtTypes(client);
-  await seedShirtSizes(client);
-  await seedTransports(client);
-  await seedLeavingHoursToTransports(client);
+  // await dropTables(client);
 
-  await seedGroups(client);
-  await seedMembers(client);
+  // await seedUsers(client);
+  // await seedPathsTypes(client);
+  // await seedPaths(client);
+  // await seedLeavingHours(client);
+  // await seedLeavingHoursToPaths(client);
+  // await seedShirtTypes(client);
+  // await seedShirtSizes(client);
+  // await seedTransports(client);
+  // await seedLeavingHoursToTransports(client);
+
+  // await seedGroups(client);
+  // await seedMembers(client);
 
   await client.end();
 }

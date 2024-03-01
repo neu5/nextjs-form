@@ -15,13 +15,19 @@ export type GroupsTable = {
 export type GroupForm = {
   id: string;
   name: string;
+  type: string;
   date: string;
   leavingHours: Array<{ id: string; value: string }>;
+};
+
+export type PathsTypes = {
+  type: string;
 };
 
 export type PathsTable = {
   id: string;
   name: string;
+  type: string;
   date: string;
 };
 
@@ -44,6 +50,7 @@ export type LeavingHoursTransportForm = {
 export type PathForm = {
   id: string;
   name: string;
+  type: string;
 };
 
 export type LeavingHoursPathForm = {
@@ -66,11 +73,12 @@ export type LeavingHoursTable = {
 };
 
 export type ShirtsTypesList = {
-  id: string;
-  value: string;
+  type: string;
 };
 
-export type ShirtsSizesList = ShirtsTypesList;
+export type ShirtsSizesList = {
+  size: string;
+};
 
 export type LeavingHoursForm = LeavingHoursTable;
 

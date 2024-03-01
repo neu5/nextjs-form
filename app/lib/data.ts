@@ -4,6 +4,7 @@ import {
   User,
   GroupsTable,
   PathsTable,
+  PathsTypes,
   PathForm,
   LeavingHoursPathForm,
   LeavingHoursTable,
@@ -45,6 +46,19 @@ export async function fetchGroups() {
   }
 }
 
+export async function fetchPathsTypes() {
+  noStore();
+
+  try {
+    const data = await sql<PathsTypes>`SELECT type FROM paths_types`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch paths_types data.');
+  }
+}
+
 export async function fetchPaths() {
   noStore();
 
@@ -65,7 +79,8 @@ export async function fetchPathById(id: string) {
     const data = await sql<PathForm>`
       SELECT
         paths.id,
-        paths.name
+        paths.name,
+        paths.type
       FROM paths
       WHERE paths.id = ${id};
     `;
@@ -157,7 +172,7 @@ export async function fetchShirtsTypes() {
   noStore();
 
   try {
-    const data = await sql<ShirtsTypesList>`SELECT id, value FROM shirts_types`;
+    const data = await sql<ShirtsTypesList>`SELECT type FROM shirts_types`;
 
     return data.rows;
   } catch (error) {
@@ -170,7 +185,7 @@ export async function fetchShirtsSizes() {
   noStore();
 
   try {
-    const data = await sql<ShirtsSizesList>`SELECT id, value FROM shirts_sizes`;
+    const data = await sql<ShirtsSizesList>`SELECT size FROM shirts_sizes`;
 
     return data.rows;
   } catch (error) {

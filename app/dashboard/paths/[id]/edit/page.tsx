@@ -4,12 +4,14 @@ import {
   fetchLeavingHours,
   fetchPathById,
   fetchPathLeavingHours,
+  fetchPathsTypes,
 } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
   const path = await fetchPathById(id);
+  const pathsTypes = await fetchPathsTypes();
   const leavingHours = await fetchLeavingHours();
   const pathLeavingHours = await fetchPathLeavingHours(id);
 
@@ -32,6 +34,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <Form
         leavingHours={leavingHours}
         path={path}
+        pathsTypes={pathsTypes}
         pathLeavingHours={pathLeavingHours}
       />
     </main>
