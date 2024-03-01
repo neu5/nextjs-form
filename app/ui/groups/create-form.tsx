@@ -44,6 +44,7 @@ const getGroupDefault = () => ({
   leavingHourId: '',
   submittingPersonEmail: '',
   chefGroupPhoneNumber: '',
+  isInstitution: '',
   remarks: '',
   termsAndConditions: '',
   rodo: '',
@@ -158,6 +159,7 @@ export default function Form({
     formData.append('chefGroupPhoneNumber', group.chefGroupPhoneNumber);
     formData.append('remarks', group.remarks);
     formData.append('termsAndConditions', group.termsAndConditions);
+    formData.append('isInstitution', group.isInstitution);
     formData.append('rodo', group.rodo);
 
     group.members.forEach((member) => {
@@ -331,6 +333,29 @@ export default function Form({
               </div>
             </div>
           )}
+        </div>
+
+        {/* Is group from intitution */}
+        <div className="my-8">
+          <label className="mb-2 block flex text-sm font-medium">
+            <input
+              name="isInstitution"
+              id="isInstitution"
+              className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
+              type="checkbox"
+              onChange={(ev) =>
+                saveGroup({
+                  name: 'isInstitution',
+                  value: ev.target.checked ? 'true' : '',
+                })
+              }
+            />
+            <span>Czy grupa jest z intytucji (np. szkoły)?</span>
+          </label>
+          <span className="text-xs">
+            W przypadku grup np. szkolnych 1 opiekun na 10 niepełnoletnich nie
+            płaci.
+          </span>
         </div>
 
         {/* Submitting Person Email */}
