@@ -34,6 +34,7 @@ const FormGroupSchema = z.object({
     })
     .min(5, { message: 'Numer telefonu musi mieć co najmniej 5 znaków' })
     .max(20, { message: 'Numer telefonu nie może mieć więcej niż 20 znaków' }),
+  isInstitution: z.string().optional(),
   remarks: z
     .string()
     .max(1000, { message: 'Uwagi nie mogą być dłuższe niż 1000 znaków' }),
@@ -93,6 +94,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     leavingHourId: formData.get('leavingHourId'),
     submittingPersonEmail: formData.get('submittingPersonEmail'),
     chefGroupPhoneNumber: formData.get('chefGroupPhoneNumber'),
+    isInstitution: formData.get('isInstitution'),
     members: formData.getAll('members'),
     remarks: formData.get('remarks'),
     termsAndConditions: formData.get('termsAndConditions'),
@@ -116,6 +118,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     leavingHourId,
     submittingPersonEmail,
     chefGroupPhoneNumber,
+    isInstitution,
     members,
     remarks,
   } = validatedFields.data;
@@ -130,6 +133,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           leaving_hour_id,
           submitting_person_email,
           chef_group_phone_number,
+          is_institution,
           remarks,
           datetime
         )
@@ -139,6 +143,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           ${leavingHourId},
           ${submittingPersonEmail},
           ${chefGroupPhoneNumber},
+          ${isInstitution && isInstitution.length > 0 ? 'TRUE' : 'FALSE'},
           ${remarks},
           ${datetime})
         RETURNING id
