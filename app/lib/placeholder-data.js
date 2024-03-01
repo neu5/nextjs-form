@@ -48,36 +48,16 @@ const leavingHours = [
   },
 ];
 
-const shirtsTypes = [
-  {
-    value: 'damska',
-  },
-  {
-    value: 'męska',
-  },
-];
+const pathsTypes = ['piesza', 'rowerowa'];
 
-const shirtsSizes = [
-  {
-    value: 'S',
-  },
-  {
-    value: 'M',
-  },
-  {
-    value: 'L',
-  },
-  {
-    value: 'XL',
-  },
-  {
-    value: 'XXL',
-  },
-];
+const shirtsTypes = ['damska', 'męska'];
+
+const shirtsSizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
 module.exports = {
   users,
   leavingHours,
+  pathsTypes,
   shirtsTypes,
   shirtsSizes,
 };

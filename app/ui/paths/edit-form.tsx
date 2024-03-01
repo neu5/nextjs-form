@@ -9,10 +9,12 @@ import { updatePath } from '@/app/lib/actions/paths';
 
 export default function EditPathForm({
   path,
+  pathsTypes,
   leavingHours,
   pathLeavingHours,
 }: {
   path: PathForm;
+  pathsTypes: Array<{ type: string }>;
   leavingHours: Array<LeavingHoursForm>;
   pathLeavingHours: Array<string>;
 }) {
@@ -51,9 +53,33 @@ export default function EditPathForm({
           </div>
         </div>
 
+        {/* Path type */}
+        <div className="mb-4">
+          <label htmlFor="pathType" className="mb-2 block text-sm font-medium">
+            Rodzaj trasy
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <select
+              id="pathType"
+              name="pathType"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            >
+              <option value="">Wybierz rodzaj trasy</option>
+              {pathsTypes.map(({ type }) => (
+                <option key={type} value={type} selected={path.type === type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
         {/* Leaving hours */}
         <div className="mb-4">
-          <label htmlFor="name" className="mb-2 block text-sm font-medium">
+          <label
+            htmlFor="leavingHours"
+            className="mb-2 block text-sm font-medium"
+          >
             Godziny startu
           </label>
           <div className="relative mt-2 rounded-md">

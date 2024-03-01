@@ -12,6 +12,7 @@ const FormPathsSchema = z.object({
     .min(2, { message: 'Nazwa musi mieć co najmniej 2 znaki' })
     .max(255, { message: 'Nazwa nie może mieć więcej niż 255 znaków' }),
   leavingHours: z.array(z.string()).optional(),
+  pathType: z.string().optional(),
   date: z.string(),
 });
 
@@ -68,6 +69,7 @@ export async function updatePath(prevState: PathState, formData: FormData) {
   const validatedFields = UpdatePath.safeParse({
     id: formData.get('id'),
     name: formData.get('name'),
+    pathType: formData.get('pathType'),
     leavingHours: formData.getAll('leavingHours'),
   });
 
@@ -79,12 +81,12 @@ export async function updatePath(prevState: PathState, formData: FormData) {
     };
   }
 
-  const { id, name, leavingHours } = validatedFields.data;
+  const { id, name, leavingHours, pathType } = validatedFields.data;
 
   try {
     await sql`
       UPDATE paths
-      SET name = ${name}
+      SET name = ${name}, type = ${pathType}
       WHERE id = ${id}
     `;
   } catch (error) {

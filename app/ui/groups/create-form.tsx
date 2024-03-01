@@ -2,7 +2,11 @@
 
 import { useFormState } from 'react-dom';
 import { FormEvent, useState } from 'react';
-import { GroupForm } from '@/app/lib/definitions';
+import {
+  GroupForm,
+  ShirtsSizesList,
+  ShirtsTypesList,
+} from '@/app/lib/definitions';
 import {
   AtSymbolIcon,
   ClockIcon,
@@ -28,8 +32,8 @@ const getMemberDefault = () => ({
   birthdayDate: '',
   PTTKCardNumber: '',
   chefGroupId: '',
-  shirtTypeId: '',
-  shirtSizeId: '',
+  shirtType: '',
+  shirtSize: '',
   transportId: '',
   transportLeavingHourId: '',
 });
@@ -53,8 +57,8 @@ export default function Form({
   transports,
 }: {
   paths: GroupForm[];
-  shirtsSizes: Array<{ id: string; value: string }>;
-  shirtsTypes: Array<{ id: string; value: string }>;
+  shirtsSizes: Array<ShirtsSizesList>;
+  shirtsTypes: Array<ShirtsTypesList>;
   transports: Array<{
     id: string;
     name: string;
@@ -247,7 +251,7 @@ export default function Form({
                 </option>
                 {paths.map((path) => (
                   <option key={path.id} value={path.id}>
-                    {path.name}
+                    {path.name} {path.type ? `(${path.type})` : ''}
                   </option>
                 ))}
               </select>
