@@ -247,7 +247,7 @@ export default function GroupMember({
         <div className="relative mt-2 rounded-md">
           <div className="relative">
             <select
-              id={`shirt-type-${id}`}
+              id={`shirt-size-${id}`}
               name="shirtSize"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               aria-describedby="shirt-type-error"
@@ -274,7 +274,7 @@ export default function GroupMember({
       {/* Transport */}
       <div className="mb-4 mt-4">
         <label
-          htmlFor={`shirt-size-${id}`}
+          htmlFor={`transport-${id}`}
           className="mb-2 block text-sm font-medium"
         >
           <span className="after:ml-0.5 after:text-red-500">
@@ -312,7 +312,7 @@ export default function GroupMember({
       {/* Transport leaving hour */}
       <div className="mb-4 mt-4">
         <label
-          htmlFor={`shirt-size-${id}`}
+          htmlFor={`transport-leaving-hour-${id}`}
           className="mb-2 block text-sm font-medium"
         >
           <span className="after:ml-0.5 after:text-red-500">
