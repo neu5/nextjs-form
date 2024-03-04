@@ -18,13 +18,21 @@ import { Button, BUTTON_KINDS } from '@/app/ui/button';
 import { createGroup } from '@/app/lib/actions/groups';
 import GroupMember, { Member } from './group-member';
 
-let memberId = 0;
 const MAX_MEMBERS_NUM = 4;
+const TRIP_STARTING_DATE = new Date('2024-05-25');
+
+let memberId = 0;
+
+let wasSubmitClicked = false;
 
 const getMemberId = () => {
   memberId += 1;
   return `member-${memberId}`;
 };
+
+const isAdult = (eventDate: Date = TRIP_STARTING_DATE, birthDate: string) =>
+  /* @ts-ignore */
+  Math.floor((eventDate - new Date(birthDate).getTime()) / 3.15576e10) >= 18;
 
 const getMemberDefault = () => ({
   id: getMemberId(),
@@ -38,6 +46,7 @@ const getMemberDefault = () => ({
   transportLeavingHourId: '',
   guardianName: '',
   isGuardian: '',
+  isAdult: false,
 });
 
 const getGroupDefault = () => ({
@@ -115,7 +124,7 @@ export default function Form({
       members: group.members
         .map((member) => ({
           ...member,
-          ...(name === ''
+          ...(name === 'chefGroupId'
             ? {
                 chefGroupId: '',
               }
@@ -129,6 +138,12 @@ export default function Form({
                 ...(name === 'transportId'
                   ? {
                       transportLeavingHourId: '',
+                    }
+                  : {}),
+                ...(name === 'birthdayDate'
+                  ? {
+                      isGuardian: '',
+                      isAdult: isAdult(TRIP_STARTING_DATE, value),
                     }
                   : {}),
               }
@@ -151,6 +166,8 @@ export default function Form({
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
+
+    wasSubmitClicked = true;
 
     const formData = new FormData();
 
@@ -183,6 +200,22 @@ export default function Form({
     },
     [],
   );
+
+  if (wasSubmitClicked && state.errors && Object.keys(state.errors).length) {
+    wasSubmitClicked = false;
+
+    setTimeout(() => {
+      const main = document.getElementsByTagName('main');
+      const errorsElements = main[0].getElementsByClassName('text-red-500');
+
+      if (errorsElements.length) {
+        errorsElements[0].scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    }, 500);
+  }
 
   return (
     <form onSubmit={onSubmit}>

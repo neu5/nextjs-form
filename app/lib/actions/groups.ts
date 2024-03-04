@@ -165,6 +165,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
             transportLeavingHourId,
             guardianName,
             isGuardian,
+            isAdult,
           }) => sql`
                 INSERT INTO members (
                   group_id,
@@ -177,7 +178,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
                   transport_id,
                   transport_leaving_hour_id,
                   guardian_name,
-                  is_guardian
+                  is_guardian,
+                  is_adult
                 )
                 VALUES (
                   ${groupId},
@@ -194,7 +196,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
                       : null
                   },
                   ${guardianName},
-                  ${isGuardian.length > 0 ? 'TRUE' : 'FALSE'}
+                  ${isGuardian.length > 0 ? 'TRUE' : 'FALSE'},
+                  ${isAdult ? 'TRUE' : 'FALSE'}
                   )
               `,
         ),

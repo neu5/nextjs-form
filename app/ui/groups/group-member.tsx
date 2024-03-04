@@ -7,6 +7,7 @@ import {
   TruckIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
 import { Button, BUTTON_KINDS } from '@/app/ui/button';
 import { ShirtsSizesList, ShirtsTypesList } from '@/app/lib/definitions';
 
@@ -22,6 +23,7 @@ export type Member = {
   transportLeavingHourId: string;
   guardianName: string;
   isGuardian: string;
+  isAdult: boolean;
 };
 
 export default function GroupMember({
@@ -60,6 +62,7 @@ export default function GroupMember({
     transportLeavingHourId,
     guardianName,
     isGuardian,
+    isAdult,
   } = member;
 
   return (
@@ -119,8 +122,19 @@ export default function GroupMember({
           className="mb-2 block text-sm font-medium"
         >
           <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-            Data urodzenia
+            Data urodzenia{' '}
           </span>
+          {birthdayDate ? (
+            isAdult ? (
+              <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                pełnoletni
+              </span>
+            ) : (
+              <span className="ml-2 inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
+                niepełnoletni
+              </span>
+            )
+          ) : null}
         </label>
         <div className="relative mt-2 rounded-md">
           <span className="text-xs">
@@ -169,9 +183,16 @@ export default function GroupMember({
             <input
               name="isGuardian"
               id="isGuardian"
-              className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
+              className={clsx(
+                'peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500',
+                {
+                  'opacity-25': !isAdult,
+                },
+              )}
               type="checkbox"
+              checked={!!isGuardian}
               value={isGuardian}
+              disabled={!isAdult}
               onChange={(ev) =>
                 saveMember({
                   id,
@@ -182,7 +203,8 @@ export default function GroupMember({
             />
             <span>
               Zaznacz jeśli ta osoba{' '}
-              <span className="font-bold">jest opiekunem</span>
+              <span className="font-bold">jest opiekunem</span> (opiekun musi
+              być pełnoletni)
             </span>
           </label>
         </div>
