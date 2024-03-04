@@ -36,6 +36,8 @@ const getMemberDefault = () => ({
   shirtSize: '',
   transportId: '',
   transportLeavingHourId: '',
+  guardianName: '',
+  isGuardian: '',
 });
 
 const getGroupDefault = () => ({
@@ -467,6 +469,7 @@ export default function Form({
               shirtsSizes={shirtsSizes}
               shirtsTypes={shirtsTypes}
               transports={transports}
+              isInstitution={group.isInstitution}
               member={member}
               memberErrors={state.errors?.members?.reduce(
                 (result, membersErrors) => {

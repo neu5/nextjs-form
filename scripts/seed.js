@@ -210,7 +210,10 @@ async function seedMembers(client) {
           name VARCHAR(255) NOT NULL,
           birthday_date VARCHAR(12) NOT NULL,
           pttk_card_number VARCHAR(6),
-          is_group_chef BOOLEAN DEFAULT FALSE
+          guardian_name VARCHAR(255),
+          is_adult BOOLEAN DEFAULT FALSE,
+          is_group_chef BOOLEAN DEFAULT FALSE,
+          is_guardian BOOLEAN DEFAULT FALSE
         );
       `;
 
