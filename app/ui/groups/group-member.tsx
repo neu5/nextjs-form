@@ -20,11 +20,14 @@ export type Member = {
   shirtSize: string;
   transportId: string;
   transportLeavingHourId: string;
+  guardianName: string;
+  isGuardian: string;
 };
 
 export default function GroupMember({
   member,
   memberNumber,
+  isInstitution,
   removeMember,
   saveMember,
   shirtsSizes,
@@ -34,6 +37,7 @@ export default function GroupMember({
 }: {
   member: Member;
   memberNumber: number;
+  isInstitution: string;
   removeMember: Function;
   saveMember: Function;
   shirtsSizes: Array<ShirtsSizesList>;
@@ -54,6 +58,8 @@ export default function GroupMember({
     shirtSize,
     transportId,
     transportLeavingHourId,
+    guardianName,
+    isGuardian,
   } = member;
 
   return (
@@ -156,6 +162,62 @@ export default function GroupMember({
         </div>
       </div>
 
+      {/* Member guardian */}
+      {isInstitution ? (
+        <div className="my-8">
+          <label className="mb-2 block flex text-sm font-medium">
+            <input
+              name="isGuardian"
+              id="isGuardian"
+              className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
+              type="checkbox"
+              value={isGuardian}
+              onChange={(ev) =>
+                saveMember({
+                  id,
+                  name: 'isGuardian',
+                  value: ev.target.checked ? 'true' : '',
+                })
+              }
+            />
+            <span>
+              Zaznacz jeśli ta osoba{' '}
+              <span className="font-bold">jest opiekunem</span>
+            </span>
+          </label>
+        </div>
+      ) : (
+        <div className="mb-4 mt-4">
+          <label
+            htmlFor={`guardian-name-${id}`}
+            className="mb-2 block text-sm font-medium"
+          >
+            <span>Opiekun</span>
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id={`guardian-name-${id}`}
+                name="guardianName"
+                placeholder="Imię i nazwisko opiekuna"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                type="text"
+                value={guardianName}
+                onChange={(ev) =>
+                  saveMember({
+                    id,
+                    name: 'guardianName',
+                    value: ev.target.value,
+                  })
+                }
+                aria-describedby="group-guardian-name-error"
+              />
+              <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Member PTTK card */}
       <div className="mb-4 mt-4">
         <label
@@ -189,11 +251,6 @@ export default function GroupMember({
             />
             <CreditCardIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
-          <div
-            id="group-pttk-card-number-error"
-            aria-live="polite"
-            aria-atomic="true"
-          ></div>
         </div>
       </div>
 
