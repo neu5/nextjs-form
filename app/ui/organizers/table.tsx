@@ -1,10 +1,8 @@
 import { fetchOrganizers } from '@/app/lib/data';
-import { UpdateTransport } from '@/app/ui/organizers/buttons';
+import { DeleteOrganizer, UpdateOrganizer } from '@/app/ui/organizers/buttons';
 
 export default async function OrganizersTable() {
   const organizers = await fetchOrganizers();
-
-  console.log({ organizers });
 
   return (
     <div className="mt-6 flow-root">
@@ -28,8 +26,8 @@ export default async function OrganizersTable() {
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div className="flex justify-end gap-2">
-                    <UpdateTransport id={organizer.id} />
-                    {/* <DeleteInvoice id={invoice.id} /> */}
+                    <UpdateOrganizer id={organizer.id} />
+                    <DeleteOrganizer id={organizer.id} />
                   </div>
                 </div>
               </div>
@@ -71,8 +69,8 @@ export default async function OrganizersTable() {
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateTransport id={organizer.id} />
-                      {/* <DeleteInvoice id={invoice.id} /> */}
+                      <UpdateOrganizer id={organizer.id} />
+                      <DeleteOrganizer id={organizer.id} />
                     </div>
                   </td>
                 </tr>

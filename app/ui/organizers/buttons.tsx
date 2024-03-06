@@ -1,6 +1,6 @@
-import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-// import { deleteInvoice } from '@/app/lib/invoices_TO_REMOVE/actions';
+import { deleteOrganizer } from '@/app/lib/actions/organizers';
 
 export function CreateOrganizer() {
   return (
@@ -14,7 +14,7 @@ export function CreateOrganizer() {
   );
 }
 
-export function UpdateTransport({ id }: { id: string }) {
+export function UpdateOrganizer({ id }: { id: string }) {
   return (
     <Link
       href={`/dashboard/organizers/${id}/edit`}
@@ -25,14 +25,15 @@ export function UpdateTransport({ id }: { id: string }) {
   );
 }
 
-// export function DeleteInvoice({ id }: { id: string }) {
-//   const deleteInvoiceWithId = deleteInvoice.bind(null, id);
-//   return (
-//     <form action={deleteInvoiceWithId}>
-//       <button className="rounded-md border p-2 hover:bg-gray-100">
-//         <span className="sr-only">Delete</span>
-//         <TrashIcon className="w-5" />
-//       </button>
-//     </form>
-//   );
-// }
+export function DeleteOrganizer({ id }: { id: string }) {
+  const deleteOrganizerWithId = deleteOrganizer.bind(null, id);
+
+  return (
+    <form action={deleteOrganizerWithId}>
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Usuń</span>
+        <TrashIcon className="w-5" />
+      </button>
+    </form>
+  );
+}

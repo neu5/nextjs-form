@@ -22,15 +22,15 @@ export type OrganizersState = {
   message?: string | null;
 };
 
-const CreateTransport = FormOrganizersSchema.omit({ id: true });
-const UpdateTransport = FormOrganizersSchema;
+const CreateOrganizer = FormOrganizersSchema.omit({ id: true });
+const UpdateOrganizer = FormOrganizersSchema;
 
 export async function createOrganizer(
   prevState: OrganizersState,
   formData: FormData,
 ) {
   // Validate form using Zod
-  const validatedFields = CreateTransport.safeParse({
+  const validatedFields = CreateOrganizer.safeParse({
     name: formData.get('name'),
     shirtSize: formData.get('shirtSize'),
     shirtType: formData.get('shirtType'),
@@ -73,7 +73,7 @@ export async function updateOrganizer(
   prevState: OrganizersState,
   formData: FormData,
 ) {
-  const validatedFields = UpdateTransport.safeParse({
+  const validatedFields = UpdateOrganizer.safeParse({
     id: formData.get('id'),
     name: formData.get('name'),
     shirtSize: formData.get('shirtSize'),
@@ -102,4 +102,14 @@ export async function updateOrganizer(
 
   revalidatePath('/dashboard/organizers');
   redirect('/dashboard/organizers');
+}
+
+export async function deleteOrganizer(id: string) {
+  try {
+    await sql`DELETE FROM organizers WHERE id = ${id}`;
+    revalidatePath('/dashboard/organizers');
+    return { message: 'Deleted Organizer.' };
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Organizer.' };
+  }
 }

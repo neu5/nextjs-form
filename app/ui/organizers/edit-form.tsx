@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updateOrganizer } from '@/app/lib/actions/organizers';
 
-export default function EditTransportForm({
+export default function EditOrganizerForm({
   organizer,
   shirtsSizes,
   shirtsTypes,
@@ -22,8 +22,6 @@ export default function EditTransportForm({
 }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(updateOrganizer, initialState);
-
-  console.log(organizer);
 
   return (
     <form action={dispatch}>
