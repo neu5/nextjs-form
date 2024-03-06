@@ -31,6 +31,13 @@ export type PathsTable = {
   date: string;
 };
 
+export type OrganizersTable = {
+  id: string;
+  name: string;
+  shirt_size?: string;
+  shirt_type?: string;
+};
+
 export type TransportsTable = {
   id: string;
   name: string;

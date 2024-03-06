@@ -343,6 +343,30 @@ async function seedLeavingHoursToTransports(client) {
   }
 }
 
+async function seedOrganizers(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    const createTable = await client.sql`
+        CREATE TABLE IF NOT EXISTS organizers (
+          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          shirt_size VARCHAR(5),
+          shirt_type VARCHAR(20)
+        );
+      `;
+
+    console.log(`Created "organizers" table`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding organizers:', error);
+    throw error;
+  }
+}
+
 async function dropTables(client) {
   try {
     const createTable = await client.sql`
@@ -383,6 +407,7 @@ async function main() {
   // await seedShirtSizes(client);
   // await seedTransports(client);
   // await seedLeavingHoursToTransports(client);
+  // await seedOrganizers(client);
 
   // await seedGroups(client);
   // await seedMembers(client);
