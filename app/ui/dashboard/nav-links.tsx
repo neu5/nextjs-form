@@ -6,6 +6,7 @@ import {
   GlobeEuropeAfricaIcon,
   ClockIcon,
   TruckIcon,
+  TrophyIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -22,6 +23,11 @@ const links = [
     name: 'Godziny startów',
     href: '/dashboard/leaving-hours',
     icon: ClockIcon,
+  },
+  {
+    name: 'Organizatorzy',
+    href: '/dashboard/organizers',
+    icon: TrophyIcon,
   },
 ];
 

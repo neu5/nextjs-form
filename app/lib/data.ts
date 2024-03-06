@@ -9,6 +9,7 @@ import {
   LeavingHoursPathForm,
   LeavingHoursTable,
   LeavingHoursTransportForm,
+  OrganizersTable,
   ShirtsSizesList,
   ShirtsTypesList,
   TransportForm,
@@ -221,6 +222,46 @@ export async function fetchGroupById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch group.');
+  }
+}
+
+export async function fetchOrganizers() {
+  noStore();
+
+  try {
+    const data = await sql<OrganizersTable>`
+        SELECT
+          id,
+          name,
+          shirt_size,
+          shirt_type
+        FROM organizers`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch organizers data.');
+  }
+}
+
+export async function fetchOrganizerById(id: string) {
+  noStore();
+
+  try {
+    const data = await sql<OrganizersTable>`
+      SELECT
+        id,
+        name,
+        shirt_size,
+        shirt_type
+      FROM organizers
+      WHERE organizers.id = ${id};
+    `;
+
+    return data.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch organizer.');
   }
 }
 
