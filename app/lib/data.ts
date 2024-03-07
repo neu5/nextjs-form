@@ -1,6 +1,7 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
 import {
+  Configuration,
   User,
   GroupsTable,
   PathsTable,
@@ -24,6 +25,34 @@ export async function getUser(email: string) {
   } catch (error) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
+  }
+}
+
+export async function fetchConfiguration() {
+  noStore();
+
+  try {
+    const data = await sql`SELECT 
+      is_form_enabled, is_editing_for_users_enabled, is_mailing_enabled
+    FROM configuration`;
+
+    return data.rows[0] as Configuration;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch configuration.');
+  }
+}
+
+export async function fetchFormConfiguration() {
+  noStore();
+
+  try {
+    const data = await sql`SELECT is_form_enabled FROM configuration`;
+
+    return data.rows[0].is_form_enabled as boolean;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch configuration.');
   }
 }
 

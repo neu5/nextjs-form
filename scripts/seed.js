@@ -1,5 +1,6 @@
 const { db } = require('@vercel/postgres');
 const {
+  configuration,
   leavingHours,
   pathsTypes,
   shirtsTypes,
@@ -7,6 +8,43 @@ const {
   users,
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
+
+async function seedConfiguration(client) {
+  try {
+    const createTable = await client.sql`
+        CREATE TABLE IF NOT EXISTS configuration (
+          is_form_enabled BOOLEAN DEFAULT FALSE,
+          is_editing_for_users_enabled BOOLEAN DEFAULT FALSE,
+          is_mailing_enabled BOOLEAN DEFAULT FALSE
+        );
+      `;
+
+    console.log(`Created "configuration" table`);
+
+    const insertedConfig = await Promise.all(
+      configuration.map(
+        ({
+          is_form_enabled,
+          is_editing_for_users_enabled,
+          is_mailing_enabled,
+        }) => client.sql`
+          INSERT INTO configuration (is_form_enabled, is_editing_for_users_enabled, is_mailing_enabled)
+          VALUES (${is_form_enabled}, ${is_editing_for_users_enabled}, ${is_mailing_enabled});
+        `,
+      ),
+    );
+
+    console.log(`Seeded ${insertedConfig.length} configuration`);
+
+    return {
+      createTable,
+      insertedConfig,
+    };
+  } catch (error) {
+    console.error('Error seeding configuration:', error);
+    throw error;
+  }
+}
 
 async function seedUsers(client) {
   try {
@@ -397,6 +435,8 @@ async function main() {
   const client = await db.connect();
 
   // await dropTables(client);
+
+  // await seedConfiguration(client);
 
   // await seedUsers(client);
   // await seedPathsTypes(client);

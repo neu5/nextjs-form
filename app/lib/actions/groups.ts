@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { redirect } from 'next/navigation';
+import { fetchFormConfiguration } from '@/app/lib/data';
 import { birthDayValidation, nameValidation } from './validation';
 
 const FormGroupSchema = z.object({
@@ -87,6 +88,12 @@ export type GroupState = {
 const CreateGroup = FormGroupSchema.omit({ id: true, datetime: true });
 
 export async function createGroup(prevState: GroupState, formData: FormData) {
+  const isFormEnabled = await fetchFormConfiguration();
+
+  if (!isFormEnabled) {
+    redirect('/form-disabled');
+  }
+
   // Validate form using Zod
   const validatedFields = CreateGroup.safeParse({
     name: formData.get('name'),
