@@ -9,6 +9,14 @@ const users = [
   },
 ];
 
+const configuration = [
+  {
+    is_form_enabled: false,
+    is_editing_for_users_enabled: false,
+    is_mailing_enabled: false,
+  },
+];
+
 const leavingHours = [
   {
     value: '5:00',
@@ -55,6 +63,7 @@ const shirtsTypes = ['damska', 'męska'];
 const shirtsSizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
 module.exports = {
+  configuration,
   users,
   leavingHours,
   pathsTypes,

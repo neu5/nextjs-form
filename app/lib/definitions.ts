@@ -5,6 +5,12 @@ export type User = {
   password: string;
 };
 
+export type Configuration = {
+  is_form_enabled: boolean;
+  is_editing_for_users_enabled: boolean;
+  is_mailing_enabled: boolean;
+};
+
 export type GroupsTable = {
   id: string;
   name: string;

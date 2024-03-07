@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Metadata } from 'next';
 import CreateGroup from '@/app/ui/groups/create-form';
 import {
+  fetchFormConfiguration,
   fetchPathsWithItsLeavingHours,
   fetchShirtsSizes,
   fetchShirtsTypes,
@@ -14,11 +15,34 @@ export const metadata: Metadata = {
   title: 'Rajd Świętego Emeryka | Formularz',
 };
 
-export default async function Page() {
+async function CreateGroupWrapper({
+  isFormEnabled,
+}: {
+  isFormEnabled: boolean;
+}) {
+  if (!isFormEnabled) {
+    return null;
+  }
+
   const paths = await fetchPathsWithItsLeavingHours();
   const shirtsTypes = await fetchShirtsTypes();
   const shirtsSizes = await fetchShirtsSizes();
   const transports = await fetchTransportsWithItsLeavingHours();
+
+  return (
+    <CreateGroup
+      /* @ts-ignore */
+      paths={paths}
+      shirtsSizes={shirtsSizes}
+      shirtsTypes={shirtsTypes}
+      /* @ts-ignore */
+      transports={transports}
+    />
+  );
+}
+
+export default async function Page() {
+  const isFormEnabled = await fetchFormConfiguration();
 
   return (
     <main className="sx:mx-8 sx:p-6 mx-1 mx-auto my-8 max-w-screen-xl flex-grow bg-white p-1 md:overflow-y-auto md:p-10">
@@ -128,14 +152,7 @@ export default async function Page() {
           </strong>
         </li>
       </ul>
-      <CreateGroup
-        /* @ts-ignore */
-        paths={paths}
-        shirtsSizes={shirtsSizes}
-        shirtsTypes={shirtsTypes}
-        /* @ts-ignore */
-        transports={transports}
-      />
+      <CreateGroupWrapper isFormEnabled={isFormEnabled} />
     </main>
   );
 }
