@@ -12,6 +12,7 @@ export default function EditConfigurationForm({
   configuration: Configuration;
 }) {
   const initialState = { message: null, errors: {} };
+  // eslint-disable-next-line
   const [state, dispatch] = useFormState(updateConfiguration, initialState);
 
   return (
