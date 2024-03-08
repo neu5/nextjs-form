@@ -1,17 +1,12 @@
-// import Form from '@/app/ui/paths/edit-form';
+import Form from '@/app/ui/groups/edit-form';
 import Breadcrumbs from '@/app/ui/breadcrumbs';
-import {
-  // fetchLeavingHours,
-  fetchGroupById,
-  // fetchPathLeavingHours,
-} from '@/app/lib/data';
+import { fetchGroupById, fetchPathsWithItsLeavingHours } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
   const group = await fetchGroupById(id);
-  // const leavingHours = await fetchLeavingHours();
-  // const pathLeavingHours = await fetchPathLeavingHours(id);
+  const paths = await fetchPathsWithItsLeavingHours();
 
   if (!group) {
     notFound();
@@ -29,11 +24,11 @@ export default async function Page({ params }: { params: { id: string } }) {
           },
         ]}
       />
-      {/* <Form
-        // leavingHours={leavingHours}
-        path={path}
-        // pathLeavingHours={pathLeavingHours}
-      /> */}
+      <Form
+        fetchedGroup={group}
+        /* @ts-ignore */
+        paths={paths}
+      />
     </main>
   );
 }

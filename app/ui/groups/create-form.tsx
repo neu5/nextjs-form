@@ -7,19 +7,13 @@ import {
   ShirtsSizesList,
   ShirtsTypesList,
 } from '@/app/lib/definitions';
-import {
-  AtSymbolIcon,
-  ClockIcon,
-  GlobeEuropeAfricaIcon,
-  FingerPrintIcon,
-  PhoneIcon,
-} from '@heroicons/react/24/outline';
 import { Button, BUTTON_KINDS } from '@/app/ui/button';
 import { createGroup } from '@/app/lib/actions/groups';
+import { isAdult } from '@/app/lib/utils';
+import GroupDetails from './group-details';
 import GroupMember, { Member } from './group-member';
 
 const MAX_MEMBERS_NUM = 4;
-const TRIP_STARTING_DATE = new Date('2024-05-25');
 
 let memberId = 0;
 
@@ -29,10 +23,6 @@ const getMemberId = () => {
   memberId += 1;
   return `member-${memberId}`;
 };
-
-const isAdult = (eventDate: Date = TRIP_STARTING_DATE, birthDate: string) =>
-  /* @ts-ignore */
-  Math.floor((eventDate - new Date(birthDate).getTime()) / 3.15576e10) >= 18;
 
 const getMemberDefault = () => ({
   id: getMemberId(),
@@ -69,8 +59,8 @@ export default function Form({
   transports,
 }: {
   paths: GroupForm[];
-  shirtsSizes: Array<ShirtsSizesList>;
-  shirtsTypes: Array<ShirtsTypesList>;
+  shirtsSizes: ShirtsSizesList[];
+  shirtsTypes: ShirtsTypesList[];
   transports: Array<{
     id: string;
     name: string;
@@ -143,7 +133,7 @@ export default function Form({
                 ...(name === 'birthdayDate'
                   ? {
                       isGuardian: '',
-                      isAdult: isAdult(TRIP_STARTING_DATE, value),
+                      isAdult: isAdult({ birthDate: value }),
                     }
                   : {}),
               }
@@ -221,274 +211,13 @@ export default function Form({
     <form onSubmit={onSubmit}>
       <h2 className="my-8 text-3xl font-bold">Dodaj zgłoszenie</h2>
       <div className="rounded-md bg-gray-50 p-1 md:p-4 md:p-6">
-        {/* Group Name */}
-        <div className="mb-4">
-          <label htmlFor="name" className="mb-2 block text-sm font-medium">
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Nazwa drużyny
-            </span>{' '}
-            (min 2 znaki, max 255 znaków)
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="name"
-                name="name"
-                placeholder="Nazwa drużyny"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                minLength={2}
-                maxLength={255}
-                value={group.name}
-                onChange={(ev) =>
-                  saveGroup({
-                    name: 'name',
-                    value: ev.target.value,
-                  })
-                }
-                // required
-                aria-describedby="group-name-error"
-              />
-              <FingerPrintIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-            </div>
-            <div id="group-name-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.name &&
-                state.errors.name.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Path Name */}
-        <div className="mb-4">
-          <label htmlFor="path" className="mb-2 block text-sm font-medium">
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Trasa
-            </span>
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <select
-                id="path"
-                name="pathId"
-                className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                aria-describedby="path-error"
-                value={group.pathId}
-                onChange={(ev) =>
-                  saveGroup({
-                    name: 'pathId',
-                    value: ev.target.value,
-                  })
-                }
-              >
-                <option value="" disabled>
-                  Wybierz trasę
-                </option>
-                {paths.map((path) => (
-                  <option key={path.id} value={path.id}>
-                    {path.name} {path.type ? `(${path.type})` : ''}
-                  </option>
-                ))}
-              </select>
-              <GlobeEuropeAfricaIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-            </div>
-            <div id="path-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.pathId &&
-                state.errors.pathId.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Leaving Hour */}
-        <div className="mb-4">
-          <label
-            htmlFor="leavingHour"
-            className="mb-2 block text-sm font-medium"
-          >
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Planowana godzina startu
-            </span>
-          </label>
-          {leavingHours ? (
-            <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <select
-                  id="leavingHour"
-                  name="leavingHourId"
-                  className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  aria-describedby="leaving-hour-error"
-                  value={group.leavingHourId}
-                  onChange={(ev) =>
-                    saveGroup({
-                      name: 'leavingHourId',
-                      value: ev.target.value,
-                    })
-                  }
-                >
-                  <option value="" disabled>
-                    Wybierz godzinę
-                  </option>
-                  {leavingHours.map((leavingHour) => (
-                    <option key={leavingHour.id} value={leavingHour.id}>
-                      {leavingHour.value}
-                    </option>
-                  ))}
-                </select>
-                <ClockIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-              </div>
-              <div
-                id="leaving-hour-error"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                {state.errors?.leavingHourId &&
-                  state.errors.leavingHourId.map((error: string) => (
-                    <p className="mt-2 text-sm text-red-500" key={error}>
-                      {error}
-                    </p>
-                  ))}
-              </div>
-            </div>
-          ) : (
-            <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <input
-                  type="text"
-                  disabled
-                  placeholder="Najpierw wybierz trasę"
-                  className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                />
-                <ClockIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Is group from intitution */}
-        <div className="my-8">
-          <label className="mb-2 block flex text-sm font-medium">
-            <input
-              name="isInstitution"
-              id="isInstitution"
-              className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
-              type="checkbox"
-              onChange={(ev) =>
-                saveGroup({
-                  name: 'isInstitution',
-                  value: ev.target.checked ? 'true' : '',
-                })
-              }
-            />
-            <span>Czy grupa jest z intytucji (np. szkoły)?</span>
-          </label>
-          <span className="text-xs">
-            W przypadku grup np. szkolnych 1 opiekun na 10 niepełnoletnich nie
-            płaci.
-          </span>
-        </div>
-
-        {/* Submitting Person Email */}
-        <div className="mb-4">
-          <label
-            htmlFor="submittingPersonEmail"
-            className="mb-2 block text-sm font-medium"
-          >
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Adres e-mail osoby zgłaszającej (do kontaktu ze zgłoszoną grupą)
-            </span>
-          </label>
-          <span className="text-xs">
-            Na podany adres e-mail wyślemy potwierdzenie zgłoszenia grupy oraz
-            dane do logowania do edycji zgłoszonej grupy.
-          </span>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="submittingPersonEmail"
-                name="submittingPersonEmail"
-                placeholder="Adres email"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                type="email"
-                maxLength={100}
-                value={group.submittingPersonEmail}
-                onChange={(ev) =>
-                  saveGroup({
-                    name: 'submittingPersonEmail',
-                    value: ev.target.value,
-                  })
-                }
-                // required
-                aria-describedby="group-submitting-person-email-error"
-              />
-              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-            </div>
-            <div
-              id="group-submitting-person-email-error"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {state.errors?.submittingPersonEmail &&
-                state.errors.submittingPersonEmail.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Group chef phone number */}
-        <div className="mb-4">
-          <label
-            htmlFor="chefGroupPhoneNumber"
-            className="mb-2 block text-sm font-medium"
-          >
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Numer telefonu <span className="font-bold">kierownika grupy</span>
-            </span>
-          </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative">
-              <input
-                id="chefGroupPhoneNumber"
-                name="chefGroupPhoneNumber"
-                placeholder="Numer telefonu"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                type="tel"
-                minLength={5}
-                maxLength={20}
-                value={group.chefGroupPhoneNumber}
-                onChange={(ev) =>
-                  saveGroup({
-                    name: 'chefGroupPhoneNumber',
-                    value: ev.target.value,
-                  })
-                }
-                // required
-                aria-describedby="group-chef-phone-number-error"
-              />
-              <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-            </div>
-            <div
-              id="group-chef-phone-number-error"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {state.errors?.chefGroupPhoneNumber &&
-                state.errors.chefGroupPhoneNumber.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
-          </div>
-        </div>
+        <GroupDetails
+          leavingHours={leavingHours}
+          group={group}
+          paths={paths}
+          state={state}
+          saveGroup={saveGroup}
+        />
 
         {/* Adding Group Members */}
         <div className="mb-4 rounded-md bg-gray-100 p-1 md:p-4">
@@ -571,6 +300,7 @@ export default function Form({
                   value: ev.target.checked ? 'true' : '',
                 })
               }
+              aria-describedby="group-terms-and-conditions-error"
             />
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
               Akceptuję{' '}
@@ -585,7 +315,11 @@ export default function Form({
               się z regulaminem Rajdu.
             </span>
           </label>
-          <div id="group-remarks-error" aria-live="polite" aria-atomic="true">
+          <div
+            id="group-terms-and-conditions-error"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {state.errors?.termsAndConditions &&
               state.errors.termsAndConditions.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
@@ -608,6 +342,7 @@ export default function Form({
                   value: ev.target.checked ? 'true' : '',
                 })
               }
+              aria-describedby="group-rodo-error"
             />
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
               Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę
@@ -628,7 +363,7 @@ export default function Form({
               </a>
             </span>
           </label>
-          <div id="group-remarks-error" aria-live="polite" aria-atomic="true">
+          <div id="group-rodo-error" aria-live="polite" aria-atomic="true">
             {state.errors?.rodo &&
               state.errors.rodo.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>

@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { fetchFormConfiguration } from '@/app/lib/data';
 import { birthDayValidation, nameValidation } from './validation';
 
@@ -86,6 +87,12 @@ export type GroupState = {
 };
 
 const CreateGroup = FormGroupSchema.omit({ id: true, datetime: true });
+const UpdateGroup = FormGroupSchema.omit({
+  datetime: true,
+  rodo: true,
+  termsAndConditions: true,
+  members: true,
+});
 
 export async function createGroup(prevState: GroupState, formData: FormData) {
   const isFormEnabled = await fetchFormConfiguration();
@@ -225,4 +232,59 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
   }
 
   redirect('/success');
+}
+
+export async function updateGroup(prevState: GroupState, formData: FormData) {
+  const validatedFields = UpdateGroup.safeParse({
+    id: formData.get('id'),
+    name: formData.get('name'),
+    pathId: formData.get('pathId'),
+    leavingHourId: formData.get('leavingHourId'),
+    submittingPersonEmail: formData.get('submittingPersonEmail'),
+    chefGroupPhoneNumber: formData.get('chefGroupPhoneNumber'),
+    isInstitution: formData.get('isInstitution'),
+    remarks: formData.get('remarks'),
+  });
+
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Nie udało się edytować grupy. Uzupełnij brakujące pola.',
+    };
+  }
+
+  const {
+    id,
+    name,
+    isInstitution,
+    pathId,
+    leavingHourId,
+    submittingPersonEmail,
+    chefGroupPhoneNumber,
+    remarks,
+  } = validatedFields.data;
+
+  try {
+    await sql`
+      UPDATE groups
+      SET 
+        name = ${name},
+        path_id = ${pathId},
+        leaving_hour_id = ${leavingHourId},
+        submitting_person_email = ${submittingPersonEmail},
+        chef_group_phone_number = ${chefGroupPhoneNumber},
+        is_institution = ${
+          isInstitution && isInstitution.length > 0 ? 'TRUE' : 'FALSE'
+        },
+        remarks = ${remarks}
+      WHERE id = ${id}
+    `;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Update Group.' };
+  }
+
+  revalidatePath('/dashboard/groups');
+  redirect('/dashboard/groups');
 }

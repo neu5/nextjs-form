@@ -32,11 +32,11 @@ export async function fetchConfiguration() {
   noStore();
 
   try {
-    const data = await sql`SELECT 
+    const data = await sql<Configuration>`SELECT 
       is_form_enabled, is_editing_for_users_enabled, is_mailing_enabled
     FROM configuration`;
 
-    return data.rows[0] as Configuration;
+    return data.rows[0];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch configuration.');
@@ -230,15 +230,18 @@ export async function fetchGroupById(id: string) {
   try {
     const data = await sql<PathForm>`
       SELECT
+        groups.id as id,
         groups.name,
+        groups.leaving_hour_id,
         groups.submitting_person_email,
         groups.chef_group_phone_number,
         groups.remarks,
+        groups.is_institution,
+        groups.path_id as path_id,
         members.name as memberName,
-        members.group_id as groupId,
-        members.id as memberId,
-        members.shirt_size_id,
-        members.shirt_type_id,
+        members.id as member_id,
+        members.shirt_size,
+        members.shirt_type,
         members.birthday_date,
         members.pttk_card_number,
         members.is_group_chef
