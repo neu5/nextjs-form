@@ -53,16 +53,17 @@ export default function GroupMember({
 }) {
   const {
     id,
-    name,
     birthdayDate,
+    chefGroupId,
+    guardianName,
+    isGuardian,
+    isAdult,
+    name,
     PTTKCardNumber,
     shirtType,
     shirtSize,
     transportId,
     transportLeavingHourId,
-    guardianName,
-    isGuardian,
-    isAdult,
   } = member;
 
   return (
@@ -439,6 +440,8 @@ export default function GroupMember({
             name="chefGroupId"
             className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
             value={id}
+            defaultChecked={id === chefGroupId}
+            type="radio"
             onChange={() =>
               saveMember({
                 id,
@@ -446,7 +449,6 @@ export default function GroupMember({
                 value: id,
               })
             }
-            type="radio"
           />
           <span className="after:ml-0.5 after:text-red-500">
             Ten uczestnik jest{' '}

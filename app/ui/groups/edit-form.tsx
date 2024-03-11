@@ -7,21 +7,24 @@ import {
   ShirtsSizesList,
   ShirtsTypesList,
 } from '@/app/lib/definitions';
+import Link from 'next/link';
 import { Button, BUTTON_KINDS } from '@/app/ui/button';
-import { createGroup } from '@/app/lib/actions/groups';
+import { updateGroup } from '@/app/lib/actions/groups';
 import { isAdult } from '@/app/lib/utils';
 import GroupDetails from './group-details';
 import GroupMember, { Member } from './group-member';
-import { MAX_MEMBERS_NUM, getMemberDefault, getGroupDefault } from './utils';
+import { MAX_MEMBERS_NUM, getMemberDefault, getMemberId } from './utils';
 
 let wasSubmitClicked = false;
 
-export default function Form({
+export default function EditGroupForm({
+  fetchedGroup,
   paths,
   shirtsSizes,
   shirtsTypes,
   transports,
 }: {
+  fetchedGroup: any;
   paths: GroupForm[];
   shirtsSizes: ShirtsSizesList[];
   shirtsTypes: ShirtsTypesList[];
@@ -32,9 +35,70 @@ export default function Form({
   }>;
 }) {
   const initialState = { message: null, errors: {} };
-  const [state, dispatch] = useFormState(createGroup, initialState);
+  const [state, dispatch] = useFormState(updateGroup, initialState);
 
-  const [group, setGroup] = useState(getGroupDefault());
+  const {
+    id,
+    chef_group_phone_number,
+    is_institution,
+    leaving_hour_id,
+    name,
+    path_id,
+    remarks,
+    submitting_person_email,
+  } = fetchedGroup[0];
+
+  const [group, setGroup] = useState({
+    chefGroupPhoneNumber: chef_group_phone_number,
+    isInstitution: is_institution,
+    leavingHourId: leaving_hour_id,
+    name,
+    pathId: path_id,
+    remarks,
+    submittingPersonEmail: submitting_person_email,
+    members: fetchedGroup.map(
+      ({
+        birthday_date,
+        guardian_name,
+        is_group_chef,
+        is_guardian,
+        member_name,
+        pttk_card_number,
+        shirt_size,
+        shirt_type,
+        transport_id,
+        transport_leaving_hour_id,
+      }: {
+        birthday_date: string;
+        guardian_name: string;
+        is_group_chef: boolean;
+        is_guardian: string;
+        member_name: string;
+        pttk_card_number: string;
+        shirt_size: string;
+        shirt_type: string;
+        transport_id: string;
+        transport_leaving_hour_id: string;
+      }) => {
+        const memberId = getMemberId();
+
+        return {
+          birthdayDate: birthday_date,
+          chefGroupId: is_group_chef ? memberId : '',
+          guardianName: guardian_name,
+          id: memberId,
+          isAdult: isAdult({ birthDate: birthday_date }),
+          isGuardian: is_guardian,
+          name: member_name,
+          PTTKCardNumber: pttk_card_number,
+          shirtSize: shirt_size,
+          shirtType: shirt_type,
+          transportId: transport_id,
+          transportLeavingHourId: transport_leaving_hour_id,
+        };
+      },
+    ),
+  });
 
   let leavingHours = null;
 
@@ -76,7 +140,7 @@ export default function Form({
     setGroup({
       ...group,
       members: group.members
-        .map((member) => ({
+        .map((member: Member) => ({
           ...member,
           ...(name === 'chefGroupId'
             ? {
@@ -84,7 +148,7 @@ export default function Form({
               }
             : {}),
         }))
-        .map((member) => ({
+        .map((member: Member) => ({
           ...member,
           ...(member.id === id
             ? {
@@ -109,7 +173,7 @@ export default function Form({
   const removeMember = (id: string) => {
     setGroup({
       ...group,
-      members: group.members.reduce((result: Array<Member>, member) => {
+      members: group.members.reduce((result: Array<Member>, member: Member) => {
         if (member.id !== id) {
           result.push(member);
         }
@@ -125,17 +189,16 @@ export default function Form({
 
     const formData = new FormData();
 
+    formData.append('id', id);
     formData.append('name', group.name);
     formData.append('pathId', group.pathId);
     formData.append('leavingHourId', group.leavingHourId);
     formData.append('submittingPersonEmail', group.submittingPersonEmail);
     formData.append('chefGroupPhoneNumber', group.chefGroupPhoneNumber);
     formData.append('remarks', group.remarks);
-    formData.append('termsAndConditions', group.termsAndConditions);
     formData.append('isInstitution', group.isInstitution);
-    formData.append('rodo', group.rodo);
 
-    group.members.forEach((member) => {
+    group.members.forEach((member: Member) => {
       formData.append('members', JSON.stringify(member));
     });
 
@@ -173,11 +236,13 @@ export default function Form({
 
   return (
     <form onSubmit={onSubmit}>
-      <h2 className="my-8 text-3xl font-bold">Dodaj zgłoszenie</h2>
-      <div className="rounded-md bg-gray-50 p-1 md:p-4 md:p-6">
+      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        <input type="hidden" name="id" value={id} />
+
         <GroupDetails
-          leavingHours={leavingHours}
+          mode="EDIT"
           group={group}
+          leavingHours={leavingHours}
           paths={paths}
           state={state}
           saveGroup={saveGroup}
@@ -185,8 +250,8 @@ export default function Form({
 
         {/* Adding Group Members */}
         <div className="mb-4 rounded-md bg-gray-100 p-1 md:p-4">
-          <h3>Dodaj uczestników grupy ({group.members.length})</h3>
-          {group.members.map((member, i) => (
+          <h3>Uczestnicy grupy ({group.members.length})</h3>
+          {group.members.map((member: Member, i: number) => (
             <GroupMember
               key={`group-member-${i}`}
               memberNumber={i + 1}
@@ -251,92 +316,6 @@ export default function Form({
           </div>
         </div>
 
-        {/* Terms and conditions */}
-        <div className="mb-4">
-          <label className="mb-2 block flex text-sm font-medium">
-            <input
-              name="termsAndConditions"
-              className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
-              type="checkbox"
-              onChange={(ev) =>
-                saveGroup({
-                  name: 'termsAndConditions',
-                  value: ev.target.checked ? 'true' : '',
-                })
-              }
-              aria-describedby="group-terms-and-conditions-error"
-            />
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Akceptuję{' '}
-              <a
-                href="http://www.emeryk.pttk.pl/images/Emeryk_2023_regulamin.pdf"
-                target="_blank"
-                className="text-blue-600 underline"
-              >
-                regulamin
-              </a>{' '}
-              Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali
-              się z regulaminem Rajdu.
-            </span>
-          </label>
-          <div
-            id="group-terms-and-conditions-error"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {state.errors?.termsAndConditions &&
-              state.errors.termsAndConditions.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
-        </div>
-
-        {/* Rodo */}
-        <div className="mb-4">
-          <label className="mb-2 block flex text-sm font-medium">
-            <input
-              name="rodo"
-              className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
-              type="checkbox"
-              onChange={(ev) =>
-                saveGroup({
-                  name: 'rodo',
-                  value: ev.target.checked ? 'true' : '',
-                })
-              }
-              aria-describedby="group-rodo-error"
-            />
-            <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
-              Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę
-              na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a)
-              rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27
-              kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z
-              przetwarzaniem danych osobowych i w sprawie swobodnego przepływu
-              takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach
-              niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św.
-              Emeryka organizowanego przez Oddział Międzyszkolny PTTK w
-              Starachowicach.{' '}
-              <a
-                href="http://www.emeryk.pttk.pl/images/rodo.pdf"
-                target="_blank"
-                className="text-blue-600 underline"
-              >
-                Klauzula informacyjna ochrony danych osobowych
-              </a>
-            </span>
-          </label>
-          <div id="group-rodo-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.rodo &&
-              state.errors.rodo.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
-        </div>
-
         <div aria-live="polite" aria-atomic="true">
           {formErrors?.map((error: string) => (
             <p className="mt-2 text-sm text-red-500" key={error}>
@@ -345,9 +324,14 @@ export default function Form({
           ))}
         </div>
       </div>
-
-      <div className="mt-6 flex">
-        <Button>Dodaj zgłoszenie</Button>
+      <div className="mt-6 flex justify-end gap-4">
+        <Link
+          href="/dashboard/groups"
+          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+        >
+          Anuluj
+        </Link>
+        <Button type="submit">Edytuj grupę</Button>
       </div>
     </form>
   );

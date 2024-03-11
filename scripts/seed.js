@@ -218,7 +218,8 @@ async function seedGroups(client) {
           chef_group_phone_number VARCHAR(20) NOT NULL,
           is_institution BOOLEAN DEFAULT FALSE,
           remarks VARCHAR(1000),
-          datetime VARCHAR(20) NOT NULL
+          creation_datetime VARCHAR(20) NOT NULL,
+          last_edition_datetime VARCHAR(20) NOT NULL
         );
       `;
 

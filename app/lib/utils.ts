@@ -1,3 +1,15 @@
+const TRIP_STARTING_DATE = new Date('2024-05-25');
+
+export const isAdult = ({
+  eventDate = TRIP_STARTING_DATE,
+  birthDate,
+}: {
+  birthDate: string;
+  eventDate?: Date;
+}) =>
+  /* @ts-ignore */
+  Math.floor((eventDate - new Date(birthDate).getTime()) / 3.15576e10) >= 18;
+
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
     style: 'currency',
