@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState } from 'react-dom';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import {
   GroupForm,
   ShirtsSizesList,
@@ -170,6 +170,17 @@ export default function Form({
       }
     }, 500);
   }
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  const handleBeforeUnload = (ev: Event) => {
+    ev.preventDefault();
+  };
 
   return (
     <form onSubmit={onSubmit}>
