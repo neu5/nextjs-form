@@ -64,7 +64,8 @@ export async function fetchGroups() {
         SELECT 
           groups.id, 
           groups.name, 
-          groups.datetime, 
+          groups.creation_datetime,
+          groups.last_edition_datetime,
           paths.name AS pathName 
         FROM groups 
         JOIN paths ON groups.path_id = paths.id`;
@@ -238,13 +239,17 @@ export async function fetchGroupById(id: string) {
         groups.remarks,
         groups.is_institution,
         groups.path_id as path_id,
-        members.name as memberName,
+        members.birthday_date,
         members.id as member_id,
+        members.is_group_chef,
+        members.is_guardian,        
+        members.guardian_name,
+        members.name as member_name,
+        members.pttk_card_number,
         members.shirt_size,
         members.shirt_type,
-        members.birthday_date,
-        members.pttk_card_number,
-        members.is_group_chef
+        members.transport_id,
+        members.transport_leaving_hour_id
       FROM groups
       JOIN members ON groups.id = members.group_id
       WHERE groups.id = ${id}

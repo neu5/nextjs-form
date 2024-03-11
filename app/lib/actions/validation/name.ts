@@ -28,26 +28,26 @@ export const nameValidation = ({
     hasNameError = true;
   }
 
-  if (name.length < 5 && !hasNameError) {
+  if (name.length < 3 && !hasNameError) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: JSON.stringify({
         id: member.id,
         field: 'name',
-        message: 'Imię i nazwisko powinno być dłuższe niż 5 znaków',
+        message: 'Imię i nazwisko powinno być dłuższe niż 3 znaki',
       }),
     });
 
     hasNameError = true;
   }
 
-  if (member.name.length >= 20 && !hasNameError) {
+  if (member.name.length >= 200 && !hasNameError) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: JSON.stringify({
         id: member.id,
         field: 'name',
-        message: 'Imię i nazwisko powinno być krótsze niż 20 znaków',
+        message: 'Imię i nazwisko powinno być krótsze niż 200 znaków',
       }),
     });
   }

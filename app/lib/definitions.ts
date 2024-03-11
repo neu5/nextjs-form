@@ -15,7 +15,8 @@ export type GroupsTable = {
   id: string;
   name: string;
   pathname: string;
-  datetime: string;
+  creation_datetime: string;
+  last_edition_datetime: string;
 };
 
 export type GroupForm = {

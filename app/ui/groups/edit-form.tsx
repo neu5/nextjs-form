@@ -2,18 +2,37 @@
 
 import { useFormState } from 'react-dom';
 import { FormEvent, useState } from 'react';
-import { GroupForm } from '@/app/lib/definitions';
+import {
+  GroupForm,
+  ShirtsSizesList,
+  ShirtsTypesList,
+} from '@/app/lib/definitions';
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
+import { Button, BUTTON_KINDS } from '@/app/ui/button';
 import { updateGroup } from '@/app/lib/actions/groups';
+import { isAdult } from '@/app/lib/utils';
 import GroupDetails from './group-details';
+import GroupMember, { Member } from './group-member';
+import { MAX_MEMBERS_NUM, getMemberDefault, getMemberId } from './utils';
 
-export default function EditPathForm({
+let wasSubmitClicked = false;
+
+export default function EditGroupForm({
   fetchedGroup,
   paths,
+  shirtsSizes,
+  shirtsTypes,
+  transports,
 }: {
   fetchedGroup: any;
   paths: GroupForm[];
+  shirtsSizes: ShirtsSizesList[];
+  shirtsTypes: ShirtsTypesList[];
+  transports: Array<{
+    id: string;
+    name: string;
+    leavingHours: Array<{ id: string; value: string }>;
+  }>;
 }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(updateGroup, initialState);
@@ -37,6 +56,48 @@ export default function EditPathForm({
     pathId: path_id,
     remarks,
     submittingPersonEmail: submitting_person_email,
+    members: fetchedGroup.map(
+      ({
+        birthday_date,
+        guardian_name,
+        is_group_chef,
+        is_guardian,
+        member_name,
+        pttk_card_number,
+        shirt_size,
+        shirt_type,
+        transport_id,
+        transport_leaving_hour_id,
+      }: {
+        birthday_date: string;
+        guardian_name: string;
+        is_group_chef: boolean;
+        is_guardian: string;
+        member_name: string;
+        pttk_card_number: string;
+        shirt_size: string;
+        shirt_type: string;
+        transport_id: string;
+        transport_leaving_hour_id: string;
+      }) => {
+        const memberId = getMemberId();
+
+        return {
+          birthdayDate: birthday_date,
+          chefGroupId: is_group_chef ? memberId : '',
+          guardianName: guardian_name,
+          id: memberId,
+          isAdult: isAdult({ birthDate: birthday_date }),
+          isGuardian: is_guardian,
+          name: member_name,
+          PTTKCardNumber: pttk_card_number,
+          shirtSize: shirt_size,
+          shirtType: shirt_type,
+          transportId: transport_id,
+          transportLeavingHourId: transport_leaving_hour_id,
+        };
+      },
+    ),
   });
 
   let leavingHours = null;
@@ -49,6 +110,17 @@ export default function EditPathForm({
     }
   }
 
+  const addMember = () => {
+    if (group.members.length >= MAX_MEMBERS_NUM) {
+      console.log(
+        `Nie można dodać więcej niż ${MAX_MEMBERS_NUM} uczestników do jednej grupy.`,
+      );
+      return;
+    }
+
+    setGroup({ ...group, members: [...group.members, getMemberDefault()] });
+  };
+
   const saveGroup = ({ name, value }: { name: string; value: string }) => {
     setGroup({
       ...group,
@@ -56,8 +128,64 @@ export default function EditPathForm({
     });
   };
 
+  const saveMember = ({
+    id,
+    name,
+    value,
+  }: {
+    name: string;
+    id: string;
+    value: string;
+  }) => {
+    setGroup({
+      ...group,
+      members: group.members
+        .map((member: Member) => ({
+          ...member,
+          ...(name === 'chefGroupId'
+            ? {
+                chefGroupId: '',
+              }
+            : {}),
+        }))
+        .map((member: Member) => ({
+          ...member,
+          ...(member.id === id
+            ? {
+                [name]: value,
+                ...(name === 'transportId'
+                  ? {
+                      transportLeavingHourId: '',
+                    }
+                  : {}),
+                ...(name === 'birthdayDate'
+                  ? {
+                      isGuardian: '',
+                      isAdult: isAdult({ birthDate: value }),
+                    }
+                  : {}),
+              }
+            : {}),
+        })),
+    });
+  };
+
+  const removeMember = (id: string) => {
+    setGroup({
+      ...group,
+      members: group.members.reduce((result: Array<Member>, member: Member) => {
+        if (member.id !== id) {
+          result.push(member);
+        }
+        return result;
+      }, []),
+    });
+  };
+
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
+
+    wasSubmitClicked = true;
 
     const formData = new FormData();
 
@@ -70,11 +198,40 @@ export default function EditPathForm({
     formData.append('remarks', group.remarks);
     formData.append('isInstitution', group.isInstitution);
 
-    // group.members.forEach((member) => {
-    //   formData.append('members', JSON.stringify(member));
-    // });
+    group.members.forEach((member: Member) => {
+      formData.append('members', JSON.stringify(member));
+    });
 
     dispatch(formData);
+  }
+
+  const formErrors = state.errors?.members?.reduce(
+    (result: Array<string>, membersErrors) => {
+      const error = JSON.parse(membersErrors);
+
+      if (error.field === 'chefGroupId') {
+        result.push(error.message);
+      }
+
+      return result;
+    },
+    [],
+  );
+
+  if (wasSubmitClicked && state.errors && Object.keys(state.errors).length) {
+    wasSubmitClicked = false;
+
+    setTimeout(() => {
+      const main = document.getElementsByTagName('main');
+      const errorsElements = main[0].getElementsByClassName('text-red-500');
+
+      if (errorsElements.length) {
+        errorsElements[0].scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    }, 500);
   }
 
   return (
@@ -83,12 +240,48 @@ export default function EditPathForm({
         <input type="hidden" name="id" value={id} />
 
         <GroupDetails
-          leavingHours={leavingHours}
+          mode="EDIT"
           group={group}
+          leavingHours={leavingHours}
           paths={paths}
           state={state}
           saveGroup={saveGroup}
         />
+
+        {/* Adding Group Members */}
+        <div className="mb-4 rounded-md bg-gray-100 p-1 md:p-4">
+          <h3>Uczestnicy grupy ({group.members.length})</h3>
+          {group.members.map((member: Member, i: number) => (
+            <GroupMember
+              key={`group-member-${i}`}
+              memberNumber={i + 1}
+              removeMember={removeMember}
+              saveMember={saveMember}
+              shirtsSizes={shirtsSizes}
+              shirtsTypes={shirtsTypes}
+              transports={transports}
+              isInstitution={group.isInstitution}
+              member={member}
+              memberErrors={state.errors?.members?.reduce(
+                (result, membersErrors) => {
+                  const error = JSON.parse(membersErrors);
+
+                  if (error.id === member.id) {
+                    Object.assign(result, {
+                      [error.field]: [error.message],
+                    });
+                  }
+
+                  return result;
+                },
+                {},
+              )}
+            />
+          ))}
+          <Button type="button" kind={BUTTON_KINDS.ADD} onClick={addMember}>
+            Dodaj uczestnika
+          </Button>
+        </div>
 
         {/* Group Remarks */}
         <div className="mb-4">
@@ -121,6 +314,14 @@ export default function EditPathForm({
                 ))}
             </div>
           </div>
+        </div>
+
+        <div aria-live="polite" aria-atomic="true">
+          {formErrors?.map((error: string) => (
+            <p className="mt-2 text-sm text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">

@@ -12,45 +12,9 @@ import { createGroup } from '@/app/lib/actions/groups';
 import { isAdult } from '@/app/lib/utils';
 import GroupDetails from './group-details';
 import GroupMember, { Member } from './group-member';
-
-const MAX_MEMBERS_NUM = 4;
-
-let memberId = 0;
+import { MAX_MEMBERS_NUM, getMemberDefault, getGroupDefault } from './utils';
 
 let wasSubmitClicked = false;
-
-const getMemberId = () => {
-  memberId += 1;
-  return `member-${memberId}`;
-};
-
-const getMemberDefault = () => ({
-  id: getMemberId(),
-  name: '',
-  birthdayDate: '',
-  PTTKCardNumber: '',
-  chefGroupId: '',
-  shirtType: '',
-  shirtSize: '',
-  transportId: '',
-  transportLeavingHourId: '',
-  guardianName: '',
-  isGuardian: '',
-  isAdult: false,
-});
-
-const getGroupDefault = () => ({
-  name: '',
-  pathId: '',
-  leavingHourId: '',
-  submittingPersonEmail: '',
-  chefGroupPhoneNumber: '',
-  isInstitution: '',
-  remarks: '',
-  termsAndConditions: '',
-  rodo: '',
-  members: [getMemberDefault()],
-});
 
 export default function Form({
   paths,

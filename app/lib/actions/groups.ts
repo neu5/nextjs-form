@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { fetchFormConfiguration } from '@/app/lib/data';
 import { birthDayValidation, nameValidation } from './validation';
+import { Member } from '@/app/ui/groups/group-member';
 
 const FormGroupSchema = z.object({
   id: z.string(),
@@ -68,7 +69,6 @@ const FormGroupSchema = z.object({
 
     return members;
   }),
-  datetime: z.string(),
 });
 
 export type GroupState = {
@@ -86,12 +86,10 @@ export type GroupState = {
   message?: string | null;
 };
 
-const CreateGroup = FormGroupSchema.omit({ id: true, datetime: true });
+const CreateGroup = FormGroupSchema.omit({ id: true });
 const UpdateGroup = FormGroupSchema.omit({
-  datetime: true,
   rodo: true,
   termsAndConditions: true,
-  members: true,
 });
 
 export async function createGroup(prevState: GroupState, formData: FormData) {
@@ -149,7 +147,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           chef_group_phone_number,
           is_institution,
           remarks,
-          datetime
+          creation_datetime,
+          last_edition_datetime
         )
         VALUES (
           ${name},
@@ -159,7 +158,9 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           ${chefGroupPhoneNumber},
           ${isInstitution && isInstitution.length > 0 ? 'TRUE' : 'FALSE'},
           ${remarks},
-          ${datetime})
+          ${datetime},
+          ${datetime}
+        )
         RETURNING id
       `;
 
@@ -243,6 +244,7 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
     submittingPersonEmail: formData.get('submittingPersonEmail'),
     chefGroupPhoneNumber: formData.get('chefGroupPhoneNumber'),
     isInstitution: formData.get('isInstitution'),
+    members: formData.getAll('members'),
     remarks: formData.get('remarks'),
   });
 
@@ -263,8 +265,10 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
     leavingHourId,
     submittingPersonEmail,
     chefGroupPhoneNumber,
+    members,
     remarks,
   } = validatedFields.data;
+  const datetime = new Date().toLocaleString('pl-PL');
 
   try {
     await sql`
@@ -278,11 +282,77 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
         is_institution = ${
           isInstitution && isInstitution.length > 0 ? 'TRUE' : 'FALSE'
         },
-        remarks = ${remarks}
+        remarks = ${remarks},
+        last_edition_datetime = ${datetime}
       WHERE id = ${id}
     `;
   } catch (error) {
     return { message: 'Database Error: Failed to Update Group.' };
+  }
+
+  try {
+    await sql`DELETE FROM members WHERE group_id = ${id}`;
+
+    try {
+      await Promise.all(
+        members.map(
+          ({
+            name,
+            birthdayDate,
+            PTTKCardNumber,
+            chefGroupId,
+            shirtType,
+            shirtSize,
+            transportId,
+            transportLeavingHourId,
+            guardianName,
+            isGuardian,
+            isAdult,
+          }: Member) => sql`
+                INSERT INTO members (
+                  group_id,
+                  name,
+                  birthday_date,
+                  pttk_card_number,
+                  is_group_chef,
+                  shirt_size,
+                  shirt_type,
+                  transport_id,
+                  transport_leaving_hour_id,
+                  guardian_name,
+                  is_guardian,
+                  is_adult
+                )
+                VALUES (
+                  ${id},
+                  ${name},
+                  ${birthdayDate},
+                  ${PTTKCardNumber},
+                  ${chefGroupId && chefGroupId.length > 0 ? 'TRUE' : 'FALSE'},
+                  ${shirtSize},
+                  ${shirtType},
+                  ${transportId && transportId.length > 0 ? transportId : null},
+                  ${
+                    transportLeavingHourId && transportLeavingHourId.length > 0
+                      ? transportLeavingHourId
+                      : null
+                  },
+                  ${guardianName},
+                  ${isGuardian && isGuardian.length > 0 ? 'TRUE' : 'FALSE'},
+                  ${isAdult ? 'TRUE' : 'FALSE'}
+                  )
+              `,
+        ),
+      );
+    } catch (error) {
+      console.log(error);
+
+      return {
+        message: 'Błąd bazy danych: nie udało się edytować uczestników grupy.',
+      };
+    }
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Members.' };
   }
 
   revalidatePath('/dashboard/groups');
