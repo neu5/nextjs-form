@@ -36,8 +36,6 @@ export async function createOrganizer(
     shirtType: formData.get('shirtType'),
   });
 
-  console.log(validatedFields);
-
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     console.log(validatedFields.error.flatten().fieldErrors);

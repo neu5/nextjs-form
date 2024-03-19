@@ -53,27 +53,28 @@ async function seedUsers(client) {
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS users (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        name VARCHAR(255),
+        role VARCHAR(20) NOT NULL,
+        group_id UUID
       );
     `;
 
     console.log(`Created "users" table`);
 
     // Insert data into the "users" table
-    // const insertedUsers = await Promise.all(
-    //   users.map(async (user) => {
-    //     const hashedPassword = await bcrypt.hash(user.password, 10);
-    //     return client.sql`
-    //     INSERT INTO users (id, name, email, password)
-    //     VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
-    //     ON CONFLICT (id) DO NOTHING;
-    //   `;
-    //   }),
-    // );
+    const insertedUsers = await Promise.all(
+      users.map(async ({ email, name, password, role }) => {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        return client.sql`
+        INSERT INTO users (email, name, password, role)
+        VALUES (${email}, ${name}, ${hashedPassword}, ${role});
+      `;
+      }),
+    );
 
-    // console.log(`Seeded ${insertedUsers.length} users`);
+    console.log(`Seeded ${insertedUsers.length} users`);
 
     return {
       createTable,
@@ -419,6 +420,7 @@ async function dropTables(client) {
       DROP TABLE IF EXISTS shirts_sizes;
       DROP TABLE IF EXISTS transports;
       DROP TABLE IF EXISTS transports_leaving_hours;
+      DROP TABLE IF EXISTS organizers;
     `;
 
     console.log(`Dropped tables`);
@@ -439,7 +441,7 @@ async function main() {
 
   // await seedConfiguration(client);
 
-  // await seedUsers(client);
+  await seedUsers(client);
   // await seedPathsTypes(client);
   // await seedPaths(client);
   // await seedLeavingHours(client);

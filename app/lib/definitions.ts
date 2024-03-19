@@ -38,6 +38,12 @@ export type PathsTable = {
   date: string;
 };
 
+export type UsersTable = {
+  id: string;
+  email: string;
+  role: string;
+};
+
 export type OrganizersTable = {
   id: string;
   name: string;
