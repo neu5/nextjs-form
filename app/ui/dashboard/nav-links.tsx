@@ -8,6 +8,7 @@ import {
   TruckIcon,
   TrophyIcon,
   Cog8ToothIcon,
+  UsersIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -29,6 +30,11 @@ const links = [
     name: 'Organizatorzy',
     href: '/dashboard/organizers',
     icon: TrophyIcon,
+  },
+  {
+    name: 'Użytkownicy',
+    href: '/dashboard/users',
+    icon: UsersIcon,
   },
   {
     name: 'Ustawienia',

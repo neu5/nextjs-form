@@ -15,6 +15,7 @@ import {
   ShirtsTypesList,
   TransportForm,
   TransportsTable,
+  UsersTable,
 } from './definitions';
 
 export async function getUser(email: string) {
@@ -259,6 +260,27 @@ export async function fetchGroupById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch group.');
+  }
+}
+
+export async function fetchUsers() {
+  noStore();
+
+  try {
+    const data = await sql<UsersTable>`
+        SELECT
+          users.id,
+          users.email,
+          users.role,
+          users.group_id
+        FROM users`;
+
+    // fetch the group name if group_id is not null?
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch users data.');
   }
 }
 
