@@ -3,8 +3,12 @@ import NavLinks from '@/app/ui/dashboard/nav-links';
 import EmerykLogo from '@/app/ui/emeryk-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import { signOut } from '@/auth';
+import { logout } from '@/app/lib/session';
+import { getSession } from '@/app/lib/session';
 
-export default function SideNav() {
+export default async function SideNav() {
+  const { user } = await getSession();
+
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
@@ -16,11 +20,12 @@ export default function SideNav() {
         </div>
       </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
-        <NavLinks />
+        <NavLinks role={user.role} />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
         <form
           action={async () => {
             'use server';
+            await logout();
             await signOut();
           }}
         >
