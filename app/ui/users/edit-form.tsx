@@ -2,12 +2,18 @@
 
 import { useFormState } from 'react-dom';
 import { User } from '@/app/lib/definitions';
-import { AtSymbolIcon, KeyIcon } from '@heroicons/react/24/outline';
+import { AtSymbolIcon, KeyIcon, ScaleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updateUser } from '@/app/lib/actions/users';
 
-export default function EditUsersForm({ user }: { user: User }) {
+export default function EditUsersForm({
+  loggedUserRole,
+  user,
+}: {
+  loggedUserRole: string;
+  user: User;
+}) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(updateUser, initialState);
 
@@ -15,12 +21,9 @@ export default function EditUsersForm({ user }: { user: User }) {
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         <input type="hidden" name="id" value={user.id} />
-        <input type="hidden" name="role" value={user.role} />
-        <input
-          type="hidden"
-          name="role"
-          value={user.group_id ? user.group_id : ''}
-        />
+        {loggedUserRole === 'user' ? (
+          <input type="hidden" name="role" value={user.role} />
+        ) : null}
 
         {/* User Email */}
         <div className="mb-4">
@@ -42,6 +45,30 @@ export default function EditUsersForm({ user }: { user: User }) {
             </div>
           </div>
         </div>
+
+        {/* User Role */}
+        {loggedUserRole === 'admin' && (
+          <div className="mb-4">
+            <label htmlFor="role" className="mb-2 block text-sm font-medium">
+              Rola użytkownika (user | admin)
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <select
+                  id="role"
+                  name="role"
+                  defaultValue={user.role}
+                  className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  aria-describedby="role-error"
+                >
+                  <option value="user">user</option>
+                  <option value="admin">admin</option>
+                </select>
+                <ScaleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Users name */}
         <div className="mb-4">
