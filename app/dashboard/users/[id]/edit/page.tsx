@@ -1,19 +1,13 @@
-import Form from '@/app/ui/organizers/edit-form';
+import Form from '@/app/ui/users/edit-form';
 import Breadcrumbs from '@/app/ui/breadcrumbs';
-import {
-  fetchShirtsSizes,
-  fetchOrganizerById,
-  fetchShirtsTypes,
-} from '@/app/lib/data';
+import { fetchUserById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
-  const organizer = await fetchOrganizerById(id);
-  const shirtsTypes = await fetchShirtsTypes();
-  const shirtsSizes = await fetchShirtsSizes();
+  const user = await fetchUserById(id);
 
-  if (!organizer) {
+  if (!user) {
     notFound();
   }
 
@@ -21,19 +15,15 @@ export default async function Page({ params }: { params: { id: string } }) {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Organizatorzy', href: '/dashboard/organizers' },
+          { label: 'Użytkownicy', href: '/dashboard/users' },
           {
-            label: 'Edycja organizatora',
-            href: `/dashboard/organizers/${id}/edit`,
+            label: 'Edycja użytkownika',
+            href: `/dashboard/users/${id}/edit`,
             active: true,
           },
         ]}
       />
-      <Form
-        organizer={organizer}
-        shirtsSizes={shirtsSizes}
-        shirtsTypes={shirtsTypes}
-      />
+      <Form user={user} />
     </main>
   );
 }

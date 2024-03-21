@@ -42,7 +42,7 @@ const adminLinks = [
 ];
 
 const userLinks = [
-  { name: 'Grupy', href: '/dashboard/groups', icon: UserGroupIcon },
+  { name: 'Grupa', href: '/dashboard/groups', icon: UserGroupIcon },
   {
     name: 'Profil',
     href: '/dashboard/users',

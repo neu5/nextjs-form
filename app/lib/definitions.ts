@@ -2,7 +2,9 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  password: string;
+  role: string;
+  password?: string;
+  group_id: string;
 };
 
 export type Configuration = {
@@ -40,6 +42,7 @@ export type PathsTable = {
 
 export type UsersTable = {
   id: string;
+  name: string;
   email: string;
   role: string;
 };

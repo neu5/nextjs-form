@@ -1,4 +1,4 @@
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export function CreateUser() {
@@ -13,16 +13,16 @@ export function CreateUser() {
   );
 }
 
-// export function UpdateOrganizer({ id }: { id: string }) {
-//   return (
-//     <Link
-//       href={`/dashboard/organizers/${id}/edit`}
-//       className="rounded-md border p-2 hover:bg-gray-100"
-//     >
-//       <PencilIcon className="w-5" />
-//     </Link>
-//   );
-// }
+export function UpdateUser({ id }: { id: string }) {
+  return (
+    <Link
+      href={`/dashboard/users/${id}/edit`}
+      className="rounded-md border p-2 hover:bg-gray-100"
+    >
+      <PencilIcon className="w-5" />
+    </Link>
+  );
+}
 
 // export function DeleteOrganizer({ id }: { id: string }) {
 //   const deleteOrganizerWithId = deleteOrganizer.bind(null, id);
