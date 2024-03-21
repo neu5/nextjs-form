@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import generator from 'generate-password';
 import bcrypt from 'bcrypt';
+import { sendCreateUserEmail } from '@/app/lib/email';
 
 const FormUsersSchema = z.object({
   id: z.string(),
@@ -77,8 +78,6 @@ export async function createUser(prevState: UsersState, formData: FormData) {
     numbers: true,
   });
 
-  // sent email to the user
-
   // Insert data into the database
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -94,6 +93,8 @@ export async function createUser(prevState: UsersState, formData: FormData) {
       message: 'Błąd bazy danych: nie udało się dodać użytkownika.',
     };
   }
+
+  sendCreateUserEmail({ email, password });
 
   revalidatePath('/dashboard/users');
   redirect('/dashboard/users');
@@ -155,4 +156,14 @@ export async function updateUser(prevState: UsersState, formData: FormData) {
 
   revalidatePath('/dashboard/users');
   redirect('/dashboard/users');
+}
+
+export async function deleteUser(id: string) {
+  try {
+    await sql`DELETE FROM users WHERE id = ${id}`;
+    revalidatePath('/dashboard/users');
+    return { message: 'Deleted User.' };
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete User.' };
+  }
 }

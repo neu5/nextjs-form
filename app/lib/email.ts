@@ -1,6 +1,13 @@
 import nodemailer from 'nodemailer';
+import { createUserMail } from './email-templates/create-user';
 
-export function sendEmail({ emailTo }: { emailTo: string }) {
+export function sendCreateUserEmail({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
   const transporter = nodemailer.createTransport({
     service: 'Cpanel',
     host: 'mail.emeryk.pttk.pl',
@@ -14,9 +21,9 @@ export function sendEmail({ emailTo }: { emailTo: string }) {
 
   const mailOptions = {
     from: 'kontakt@emeryk.pttk.pl',
-    to: emailTo,
-    subject: 'Hello from Nodemailer',
-    text: 'This is a test email sent using Nodemailer.',
+    to: email,
+    subject: 'Rajd Nocny Świętego Emeryka',
+    text: createUserMail({ email, password }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
