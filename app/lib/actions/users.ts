@@ -11,10 +11,19 @@ const FormUsersSchema = z.object({
   id: z.string(),
   name: z
     .string({ required_error: 'Name is required' })
-    .max(200, { message: 'Nazwa nie może mieć więcej niż 255 znaków' })
+    .max(200, { message: 'Nazwa nie może mieć więcej niż 200 znaków' })
     .optional(),
   email: z.string(),
+  group_id: z.string().nullable().optional(),
   role: z.enum(['admin', 'user']),
+  password: z
+    .string()
+    .max(50, { message: 'Hasło nie może mieć więcej niż 50 znaków' })
+    .optional(),
+  passwordConfirmation: z
+    .string()
+    .max(50, { message: 'Hasło nie może mieć więcej niż 50 znaków' })
+    .optional(),
 });
 
 export type UsersState = {
@@ -22,12 +31,25 @@ export type UsersState = {
     name?: string[];
     email?: string[];
     role?: string[];
+    password?: string[];
+    passwordConfirmation?: string[];
   };
   message?: string | null;
 };
 
-const CreateUser = FormUsersSchema.omit({ id: true });
-// const UpdateOrganizer = FormOrganizersSchema;
+const CreateUser = FormUsersSchema.omit({
+  id: true,
+  password: true,
+  passwordConfirmation: true,
+});
+
+const UpdateUser = FormUsersSchema.refine(
+  (data) => data.password === data.passwordConfirmation,
+  {
+    message: 'Hasła nie są takie same',
+    path: ['passwordConfirmation'],
+  },
+);
 
 export async function createUser(prevState: UsersState, formData: FormData) {
   // Validate form using Zod
@@ -55,7 +77,7 @@ export async function createUser(prevState: UsersState, formData: FormData) {
     numbers: true,
   });
 
-  console.log(password);
+  // sent email to the user
 
   // Insert data into the database
   try {
@@ -69,7 +91,7 @@ export async function createUser(prevState: UsersState, formData: FormData) {
     console.log(error);
     // If a database error occurs, return a more specific error.
     return {
-      message: 'Błąd bazy danych: nie udało się dodać organizatora.',
+      message: 'Błąd bazy danych: nie udało się dodać użytkownika.',
     };
   }
 
@@ -77,47 +99,60 @@ export async function createUser(prevState: UsersState, formData: FormData) {
   redirect('/dashboard/users');
 }
 
-// export async function updateOrganizer(
-//   prevState: OrganizersState,
-//   formData: FormData,
-// ) {
-//   const validatedFields = UpdateOrganizer.safeParse({
-//     id: formData.get('id'),
-//     name: formData.get('name'),
-//     shirtSize: formData.get('shirtSize'),
-//     shirtType: formData.get('shirtType'),
-//   });
+export async function updateUser(prevState: UsersState, formData: FormData) {
+  const validatedFields = UpdateUser.safeParse({
+    id: formData.get('id'),
+    email: formData.get('email'),
+    name: formData.get('name'),
+    group_id: formData.get('group_id'),
+    role: formData.get('role'),
+    password: formData.get('password'),
+    passwordConfirmation: formData.get('passwordConfirmation'),
+  });
 
-//   // If form validation fails, return errors early. Otherwise, continue.
-//   if (!validatedFields.success) {
-//     return {
-//       errors: validatedFields.error.flatten().fieldErrors,
-//       message: 'Nie udało się edytować organizatora. Uzupełnij brakujące pola.',
-//     };
-//   }
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
 
-//   const { id, name, shirtSize, shirtType } = validatedFields.data;
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Nie udało się edytować użytkownika. Uzupełnij brakujące pola.',
+    };
+  }
 
-//   try {
-//     await sql`
-//       UPDATE organizers
-//       SET name = ${name}, shirt_size = ${shirtSize}, shirt_type = ${shirtType}
-//       WHERE id = ${id}
-//     `;
-//   } catch (error) {
-//     return { message: 'Database Error: Failed to Update Organizers.' };
-//   }
+  const { id, name, role, group_id, password } = validatedFields.data;
 
-//   revalidatePath('/dashboard/organizers');
-//   redirect('/dashboard/organizers');
-// }
+  if (password) {
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-// export async function deleteOrganizer(id: string) {
-//   try {
-//     await sql`DELETE FROM organizers WHERE id = ${id}`;
-//     revalidatePath('/dashboard/organizers');
-//     return { message: 'Deleted Organizer.' };
-//   } catch (error) {
-//     return { message: 'Database Error: Failed to Delete Organizer.' };
-//   }
-// }
+    try {
+      await sql`
+        UPDATE users
+        SET 
+          name = ${name},
+          role = ${role},
+          group_id = ${group_id},
+          password = ${hashedPassword}
+        WHERE id = ${id}
+      `;
+    } catch (error) {
+      return { message: 'Database Error: Failed to Update Users.' };
+    }
+  } else {
+    try {
+      await sql`
+        UPDATE users
+        SET 
+          name = ${name},
+          role = ${role},
+          group_id = ${group_id}
+        WHERE id = ${id}
+      `;
+    } catch (error) {
+      return { message: 'Database Error: Failed to Update Users.' };
+    }
+  }
+
+  revalidatePath('/dashboard/users');
+  redirect('/dashboard/users');
+}

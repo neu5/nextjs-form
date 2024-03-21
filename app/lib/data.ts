@@ -271,13 +271,33 @@ export async function fetchUsers() {
         SELECT
           users.id,
           users.email,
+          users.name,
           users.role,
           users.group_id
         FROM users`;
 
-    // fetch the group name if group_id is not null?
-
     return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch users data.');
+  }
+}
+
+export async function fetchUserById(id: string) {
+  noStore();
+
+  try {
+    const data = await sql<User>`
+        SELECT
+          users.id,
+          users.email,
+          users.name,
+          users.role,
+          users.group_id
+        FROM users
+        WHERE users.id = ${id}`;
+
+    return data.rows[0];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch users data.');

@@ -1,5 +1,5 @@
 import { fetchUsers } from '@/app/lib/data';
-// import { DeleteOrganizer, UpdateOrganizer } from '@/app/ui/organizers/buttons';
+import { UpdateUser } from '@/app/ui/users/buttons';
 
 export default async function UsersTable() {
   const users = await fetchUsers();
@@ -19,13 +19,14 @@ export default async function UsersTable() {
                     <div className="mb-2 flex items-center">
                       <p>{user.email}</p>
                     </div>
+                    <p className="text-sm text-gray-500">{user.name}</p>
                     <p className="text-sm text-gray-500">{user.role}</p>
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div className="flex justify-end gap-2">
-                    {/* <UpdateOrganizer id={organizer.id} />
-                    <DeleteOrganizer id={organizer.id} /> */}
+                    <UpdateUser id={user.id} />
+                    {/* <DeleteOrganizer id={organizer.id} /> */}
                   </div>
                 </div>
               </div>
@@ -36,6 +37,9 @@ export default async function UsersTable() {
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   E-mail
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Nazwa
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   rola
@@ -56,11 +60,12 @@ export default async function UsersTable() {
                       <p>{user.email}</p>
                     </div>
                   </td>
+                  <td className="whitespace-nowrap px-3 py-3">{user.name}</td>
                   <td className="whitespace-nowrap px-3 py-3">{user.role}</td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      {/* <UpdateOrganizer id={organizer.id} />
-                      <DeleteOrganizer id={organizer.id} /> */}
+                      <UpdateUser id={user.id} />
+                      {/* <DeleteOrganizer id={organizer.id} /> */}
                     </div>
                   </td>
                 </tr>

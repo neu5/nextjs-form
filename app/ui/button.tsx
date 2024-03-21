@@ -39,7 +39,7 @@ export function Button({
         className,
       )}
     >
-      {pending ? '⌛ Trwa zapisywanie…' : children}
+      {pending ? '⌛ Trwa przetwarzanie…' : children}
     </button>
   );
 }
