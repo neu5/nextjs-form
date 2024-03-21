@@ -30,7 +30,7 @@ export function DeleteUser({ id }: { id: string }) {
 
   return (
     <form action={deleteUserWithId}>
-      <button className="rounded-md border p-2 hover:bg-gray-100">
+      <button className="rounded-md border bg-red-300 p-2 hover:bg-red-200">
         <span className="sr-only">Usuń</span>
         <TrashIcon className="w-5" />
       </button>

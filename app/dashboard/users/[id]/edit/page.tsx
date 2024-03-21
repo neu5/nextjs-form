@@ -2,6 +2,7 @@ import Form from '@/app/ui/users/edit-form';
 import Breadcrumbs from '@/app/ui/breadcrumbs';
 import { fetchUserById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
+import { getSession } from '@/app/lib/session';
 
 const getEditPath = (id: string) => ({
   label: 'Edycja użytkownika',
@@ -22,6 +23,7 @@ const getBreadcrumbs = ({ id, role }: { id: string; role: string }) =>
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
   const user = await fetchUserById(id);
+  const session = await getSession();
 
   if (!user) {
     notFound();
@@ -29,8 +31,10 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <main>
-      <Breadcrumbs breadcrumbs={getBreadcrumbs({ id, role: user.role })} />
-      <Form user={user} />
+      <Breadcrumbs
+        breadcrumbs={getBreadcrumbs({ id, role: session.user.role })}
+      />
+      <Form user={user} loggedUserRole={session.user.role} />
     </main>
   );
 }

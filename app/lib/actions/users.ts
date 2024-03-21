@@ -15,7 +15,6 @@ const FormUsersSchema = z.object({
     .max(200, { message: 'Nazwa nie może mieć więcej niż 200 znaków' })
     .optional(),
   email: z.string(),
-  group_id: z.string().nullable().optional(),
   role: z.enum(['admin', 'user']),
   password: z
     .string()
@@ -105,7 +104,6 @@ export async function updateUser(prevState: UsersState, formData: FormData) {
     id: formData.get('id'),
     email: formData.get('email'),
     name: formData.get('name'),
-    group_id: formData.get('group_id'),
     role: formData.get('role'),
     password: formData.get('password'),
     passwordConfirmation: formData.get('passwordConfirmation'),
@@ -121,7 +119,7 @@ export async function updateUser(prevState: UsersState, formData: FormData) {
     };
   }
 
-  const { id, name, role, group_id, password } = validatedFields.data;
+  const { id, name, role, password } = validatedFields.data;
 
   if (password) {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -132,7 +130,6 @@ export async function updateUser(prevState: UsersState, formData: FormData) {
         SET 
           name = ${name},
           role = ${role},
-          group_id = ${group_id},
           password = ${hashedPassword}
         WHERE id = ${id}
       `;
@@ -145,8 +142,7 @@ export async function updateUser(prevState: UsersState, formData: FormData) {
         UPDATE users
         SET 
           name = ${name},
-          role = ${role},
-          group_id = ${group_id}
+          role = ${role}
         WHERE id = ${id}
       `;
     } catch (error) {
