@@ -41,19 +41,36 @@ const adminLinks = [
   },
 ];
 
-const userLinks = [
-  { name: 'Grupa', href: '/dashboard/groups', icon: UserGroupIcon },
+const userLinks = ({
+  userId,
+  groupId,
+}: {
+  userId: string;
+  groupId?: string;
+}) => [
+  ...(groupId
+    ? [{ name: 'Grupa', href: '/dashboard/groups', icon: UserGroupIcon }]
+    : []),
   {
     name: 'Profil',
-    href: '/dashboard/users',
+    href: `/dashboard/users/${userId}/edit`,
     icon: UsersIcon,
   },
 ];
 
-export default function NavLinks({ role }: { role: string }) {
+export default function NavLinks({
+  id,
+  groupId,
+  role,
+}: {
+  id: string;
+  groupId: string;
+  role: string;
+}) {
   const pathname = usePathname();
 
-  const links = role === 'admin' ? adminLinks : userLinks;
+  const links =
+    role === 'admin' ? adminLinks : userLinks({ userId: id, groupId });
 
   return (
     <>

@@ -1,5 +1,6 @@
-import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { deleteUser } from '@/app/lib/actions/users';
 
 export function CreateUser() {
   return (
@@ -24,15 +25,15 @@ export function UpdateUser({ id }: { id: string }) {
   );
 }
 
-// export function DeleteOrganizer({ id }: { id: string }) {
-//   const deleteOrganizerWithId = deleteOrganizer.bind(null, id);
+export function DeleteUser({ id }: { id: string }) {
+  const deleteUserWithId = deleteUser.bind(null, id);
 
-//   return (
-//     <form action={deleteOrganizerWithId}>
-//       <button className="rounded-md border p-2 hover:bg-gray-100">
-//         <span className="sr-only">Usuń</span>
-//         <TrashIcon className="w-5" />
-//       </button>
-//     </form>
-//   );
-// }
+  return (
+    <form action={deleteUserWithId}>
+      <button className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Usuń</span>
+        <TrashIcon className="w-5" />
+      </button>
+    </form>
+  );
+}

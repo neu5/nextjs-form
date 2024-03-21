@@ -1,11 +1,19 @@
 import type { NextAuthConfig } from 'next-auth';
 import { getSession } from '@/app/lib/session';
 
-const canUserGoThere = (pathname: string) => {
+const canUserGoThere = ({
+  pathname,
+  groupId,
+  userId,
+}: {
+  pathname: string;
+  groupId: string;
+  userId: string;
+}) => {
   return (
     pathname === '/dashboard' ||
-    pathname.includes('/users') ||
-    pathname.includes('/groups')
+    pathname.includes(`/users/${userId}/edit`) ||
+    pathname.includes(`/groups/${groupId}/edit`)
   );
 };
 
@@ -20,19 +28,26 @@ export const authConfig = {
       const isOnLoginPage = nextUrl.pathname.startsWith('/login');
       const session = await getSession();
 
-      const role = session?.user.role;
-
       if (isOnLoginPage && isLoggedIn && session) {
         return Response.redirect(new URL('/dashboard', nextUrl));
       }
 
       if (isInAdminPanel) {
+        const userId = session?.user.id;
+        const groupId = session?.user.groupId;
+        const role = session?.user.role;
+
         if (!isLoggedIn || !session) {
           return false;
         }
 
-        if (role === 'admin' || canUserGoThere(nextUrl.pathname)) {
+        if (
+          role === 'admin' ||
+          canUserGoThere({ groupId, pathname: nextUrl.pathname, userId })
+        ) {
           return true;
+        } else {
+          return false;
         }
       }
 

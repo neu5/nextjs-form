@@ -1,5 +1,5 @@
 import { fetchUsers } from '@/app/lib/data';
-import { UpdateUser } from '@/app/ui/users/buttons';
+import { DeleteUser, UpdateUser } from '@/app/ui/users/buttons';
 
 export default async function UsersTable() {
   const users = await fetchUsers();
@@ -26,7 +26,7 @@ export default async function UsersTable() {
                 <div className="flex w-full items-center justify-between pt-4">
                   <div className="flex justify-end gap-2">
                     <UpdateUser id={user.id} />
-                    {/* <DeleteOrganizer id={organizer.id} /> */}
+                    <DeleteUser id={user.id} />
                   </div>
                 </div>
               </div>
@@ -65,7 +65,7 @@ export default async function UsersTable() {
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                       <UpdateUser id={user.id} />
-                      {/* <DeleteOrganizer id={organizer.id} /> */}
+                      <DeleteUser id={user.id} />
                     </div>
                   </td>
                 </tr>

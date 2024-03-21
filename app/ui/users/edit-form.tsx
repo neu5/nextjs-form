@@ -16,7 +16,11 @@ export default function EditUsersForm({ user }: { user: User }) {
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         <input type="hidden" name="id" value={user.id} />
         <input type="hidden" name="role" value={user.role} />
-        <input type="hidden" name="role" value={user.group_id} />
+        <input
+          type="hidden"
+          name="role"
+          value={user.group_id ? user.group_id : ''}
+        />
 
         {/* User Email */}
         <div className="mb-4">

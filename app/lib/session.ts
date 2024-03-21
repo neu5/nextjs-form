@@ -43,8 +43,6 @@ export async function getSession() {
 }
 
 export async function updateSession(request: NextRequest) {
-  console.log('does it get invoked?');
-
   const session = request.cookies.get('session')?.value;
   if (!session) return;
 
