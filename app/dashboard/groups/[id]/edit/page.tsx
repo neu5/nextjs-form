@@ -6,7 +6,9 @@ import {
   fetchShirtsSizes,
   fetchShirtsTypes,
   fetchTransportsWithItsLeavingHours,
+  fetchUserEditingConfiguration,
 } from '@/app/lib/data';
+import { getSession } from '@/app/lib/session';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -16,6 +18,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   const shirtsTypes = await fetchShirtsTypes();
   const shirtsSizes = await fetchShirtsSizes();
   const transports = await fetchTransportsWithItsLeavingHours();
+  const isEditingForUsersEnabled = await fetchUserEditingConfiguration();
+  const session = await getSession();
 
   if (!group) {
     notFound();
@@ -41,6 +45,8 @@ export default async function Page({ params }: { params: { id: string } }) {
         shirtsTypes={shirtsTypes}
         /* @ts-ignore */
         transports={transports}
+        isEditingForUsersEnabled={isEditingForUsersEnabled}
+        loggedUserRole={session.user.role}
       />
     </main>
   );

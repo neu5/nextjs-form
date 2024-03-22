@@ -4,9 +4,16 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { fetchFormConfiguration } from '@/app/lib/data';
+import {
+  fetchFormConfiguration,
+  fetchUserEditingConfiguration,
+} from '@/app/lib/data';
 import { birthDayValidation, nameValidation } from './validation';
 import { Member } from '@/app/ui/groups/group-member';
+import generator from 'generate-password';
+import bcrypt from 'bcrypt';
+import { sendCreateGroupEmail } from '@/app/lib/email';
+import { getSession } from '@/app/lib/session';
 
 const FormGroupSchema = z.object({
   id: z.string(),
@@ -217,6 +224,28 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
               `,
         ),
       );
+
+      const password = generator.generate({
+        length: 10,
+        numbers: true,
+      });
+
+      try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await sql`
+          INSERT INTO users (email, group_id, password, role)
+          VALUES (${submittingPersonEmail}, ${groupId}, ${hashedPassword}, 'user');
+        `;
+      } catch (error) {
+        console.log(error);
+        // If a database error occurs, return a more specific error.
+        return {
+          message: 'Błąd bazy danych: nie udało się dodać użytkownika.',
+        };
+      }
+
+      sendCreateGroupEmail({ email: submittingPersonEmail, name, password });
     } catch (error) {
       console.log(error);
 
@@ -236,6 +265,15 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
 }
 
 export async function updateGroup(prevState: GroupState, formData: FormData) {
+  const isEditingForUsersEnabled = await fetchUserEditingConfiguration();
+  const session = await getSession();
+
+  if (!isEditingForUsersEnabled && session.user.role !== 'admin') {
+    return {
+      message: 'Edycja danych grupy jest wyłączona.',
+    };
+  }
+
   const validatedFields = UpdateGroup.safeParse({
     id: formData.get('id'),
     name: formData.get('name'),

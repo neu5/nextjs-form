@@ -23,6 +23,8 @@ export default function EditGroupForm({
   shirtsSizes,
   shirtsTypes,
   transports,
+  isEditingForUsersEnabled,
+  loggedUserRole,
 }: {
   fetchedGroup: any;
   paths: GroupForm[];
@@ -33,6 +35,8 @@ export default function EditGroupForm({
     name: string;
     leavingHours: Array<{ id: string; value: string }>;
   }>;
+  isEditingForUsersEnabled: boolean;
+  loggedUserRole: 'user' | 'admin';
 }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(updateGroup, initialState);
@@ -250,6 +254,19 @@ export default function EditGroupForm({
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         <input type="hidden" name="id" value={id} />
 
+        {!isEditingForUsersEnabled && (
+          <div className="mb-4 rounded-md bg-red-200 p-3">
+            Obecnie edycja danych grupy jest{' '}
+            <span className="font-bold">wyłączona. 🚫</span>
+          </div>
+        )}
+        {!isEditingForUsersEnabled && loggedUserRole === 'admin' && (
+          <div className="mb-4 rounded-md bg-blue-200 p-3">
+            Ale jesteś <span className="font-bold">🦸 adminem</span>, więc
+            możesz edytować.
+          </div>
+        )}
+
         <GroupDetails
           mode="EDIT"
           group={group}
@@ -334,6 +351,13 @@ export default function EditGroupForm({
             </p>
           ))}
         </div>
+        <div aria-live="polite" aria-atomic="true">
+          {state.message && (
+            <p className="mt-2 text-sm text-red-500" key={state.message}>
+              {state.message}
+            </p>
+          )}
+        </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
@@ -342,7 +366,10 @@ export default function EditGroupForm({
         >
           Anuluj
         </Link>
-        <Button type="submit">Edytuj grupę</Button>
+        {isEditingForUsersEnabled ||
+          (loggedUserRole === 'admin' && (
+            <Button type="submit">Edytuj grupę</Button>
+          ))}
       </div>
     </form>
   );
