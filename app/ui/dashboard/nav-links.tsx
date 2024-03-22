@@ -49,7 +49,13 @@ const userLinks = ({
   groupId?: string;
 }) => [
   ...(groupId
-    ? [{ name: 'Grupa', href: '/dashboard/groups', icon: UserGroupIcon }]
+    ? [
+        {
+          name: 'Grupa',
+          href: `/dashboard/groups/${groupId}/edit`,
+          icon: UserGroupIcon,
+        },
+      ]
     : []),
   {
     name: 'Profil',

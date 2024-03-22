@@ -6,11 +6,10 @@ export const createUserMail = ({
   password: string;
 }) => `Na ten adres email zostało utworzone konto do panelu zarządzania.
   
-  Twoim loginem jest adres email: ${email}
-  Hasło: ${password}
+Twoim loginem jest adres email: ${email}
+Hasło: ${password}
   
-  Hasło możesz zmienić w panelu
-  https://formularz-test.emeryk.pttk.pl
+Hasło możesz zmienić w panelu
+https://formularz-test.emeryk.pttk.pl
   
-  emeryk.pttk.pl
-  `;
+https://emeryk.pttk.pl`;

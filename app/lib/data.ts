@@ -57,6 +57,20 @@ export async function fetchFormConfiguration() {
   }
 }
 
+export async function fetchUserEditingConfiguration() {
+  noStore();
+
+  try {
+    const data =
+      await sql`SELECT is_editing_for_users_enabled FROM configuration`;
+
+    return data.rows[0].is_editing_for_users_enabled as boolean;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch configuration.');
+  }
+}
+
 export async function fetchGroups() {
   noStore();
 

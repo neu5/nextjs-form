@@ -11,7 +11,7 @@ export default function EditUsersForm({
   loggedUserRole,
   user,
 }: {
-  loggedUserRole: string;
+  loggedUserRole: 'user' | 'admin';
   user: User;
 }) {
   const initialState = { message: null, errors: {} };
