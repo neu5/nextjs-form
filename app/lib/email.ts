@@ -57,7 +57,7 @@ export function sendCreateGroupEmail({
 
   const mailOptions = {
     from: 'kontakt@emeryk.pttk.pl',
-    to: 'neus90@gmail.com',
+    to: email,
     subject: 'Rajd Nocny Świętego Emeryka',
     text: createGroupMail({ email, name, password }),
   };
