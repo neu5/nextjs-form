@@ -6,6 +6,8 @@ import type { User } from '@/app/lib/definitions';
 const secretKey = process.env.SESSION_SALT;
 const key = new TextEncoder().encode(secretKey);
 
+console.log(secretKey);
+
 export async function encrypt(payload: any) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
