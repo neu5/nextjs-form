@@ -13,13 +13,24 @@ import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
-  const group = await fetchGroupById(id);
-  const paths = await fetchPathsWithItsLeavingHours();
-  const shirtsTypes = await fetchShirtsTypes();
-  const shirtsSizes = await fetchShirtsSizes();
-  const transports = await fetchTransportsWithItsLeavingHours();
-  const isEditingForUsersEnabled = await fetchUserEditingConfiguration();
-  const session = await getSession();
+
+  const [
+    group,
+    paths,
+    shirtsTypes,
+    shirtsSizes,
+    transports,
+    isEditingForUsersEnabled,
+    session,
+  ] = await Promise.all([
+    fetchGroupById(id),
+    fetchPathsWithItsLeavingHours(),
+    fetchShirtsTypes(),
+    fetchShirtsSizes(),
+    fetchTransportsWithItsLeavingHours(),
+    fetchUserEditingConfiguration(),
+    getSession(),
+  ]);
 
   if (!group) {
     notFound();

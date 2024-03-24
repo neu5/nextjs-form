@@ -92,6 +92,48 @@ export async function fetchGroups() {
   }
 }
 
+export async function fetchGroupCount() {
+  noStore();
+
+  try {
+    const data = await sql`
+        SELECT COUNT(id) FROM groups`;
+
+    return data.rows[0].count;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch groups data.');
+  }
+}
+
+export async function fetchMembersCount() {
+  noStore();
+
+  try {
+    const data = await sql`
+        SELECT COUNT(id) FROM members`;
+
+    return data.rows[0].count;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch members data.');
+  }
+}
+
+export async function fetchMembersWithPTTKCardCount() {
+  noStore();
+
+  try {
+    const data = await sql`
+        SELECT COUNT(pttk_card_number) FROM members WHERE pttk_card_number != ''`;
+
+    return data.rows[0].count;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch members data.');
+  }
+}
+
 export async function fetchPathsTypes() {
   noStore();
 
