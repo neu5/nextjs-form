@@ -209,7 +209,7 @@ export default function GroupMember({
             </span>
           </label>
         </div>
-      ) : (
+      ) : !isAdult ? (
         <div className="mb-4 mt-4">
           <label
             htmlFor={`guardian-name-${id}`}
@@ -239,7 +239,7 @@ export default function GroupMember({
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Member PTTK card */}
       <div className="mb-4 mt-4">
