@@ -441,7 +441,7 @@ async function main() {
 
   // await seedConfiguration(client);
 
-  await seedUsers(client);
+  // await seedUsers(client);
   // await seedPathsTypes(client);
   // await seedPaths(client);
   // await seedLeavingHours(client);
