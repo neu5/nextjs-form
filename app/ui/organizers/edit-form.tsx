@@ -125,7 +125,7 @@ export default function EditOrganizerForm({
         >
           Anuluj
         </Link>
-        <Button type="submit">Edytuj organizatora</Button>
+        <Button type="submit">Zapisz zmiany</Button>
       </div>
     </form>
   );

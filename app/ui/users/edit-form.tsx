@@ -171,7 +171,7 @@ export default function EditUsersForm({
         >
           Anuluj
         </Link>
-        <Button type="submit">Edytuj użytkownika</Button>
+        <Button type="submit">Zapisz zmiany</Button>
       </div>
     </form>
   );

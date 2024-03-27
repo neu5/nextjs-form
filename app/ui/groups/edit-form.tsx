@@ -367,7 +367,7 @@ export default function EditGroupForm({
           Anuluj
         </Link>
         {(isEditingForUsersEnabled || loggedUserRole === 'admin') && (
-          <Button type="submit">Edytuj grupę</Button>
+          <Button type="submit">Zapisz zmiany</Button>
         )}
       </div>
     </form>
