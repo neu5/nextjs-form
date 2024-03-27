@@ -76,7 +76,7 @@ export default function EditConfigurationForm({
         >
           Anuluj
         </Link>
-        <Button type="submit">Zapisz</Button>
+        <Button type="submit">Zapisz zmiany</Button>
       </div>
     </form>
   );

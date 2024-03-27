@@ -88,7 +88,7 @@ export default function EditTransportForm({
         >
           Anuluj
         </Link>
-        <Button type="submit">Edytuj transport</Button>
+        <Button type="submit">Zapisz zmiany</Button>
       </div>
     </form>
   );

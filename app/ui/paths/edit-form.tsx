@@ -112,7 +112,7 @@ export default function EditPathForm({
         >
           Anuluj
         </Link>
-        <Button type="submit">Edytuj trasę</Button>
+        <Button type="submit">Zapisz zmiany</Button>
       </div>
     </form>
   );
