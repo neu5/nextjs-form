@@ -1,4 +1,4 @@
 import { createUserMail } from './create-user';
-import { createGroupMail } from './create-group';
+import { createGroupMail, createGroupMailAdmin } from './create-group';
 
-export { createGroupMail, createUserMail };
+export { createGroupMail, createGroupMailAdmin, createUserMail };
