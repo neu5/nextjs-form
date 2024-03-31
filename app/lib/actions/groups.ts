@@ -12,7 +12,10 @@ import { birthDayValidation, nameValidation } from './validation';
 import { Member } from '@/app/ui/groups/group-member';
 import generator from 'generate-password';
 import bcrypt from 'bcrypt';
-import { sendCreateGroupEmail } from '@/app/lib/email';
+import {
+  sendCreateGroupEmail,
+  sendCreateGroupEmailToAdmin,
+} from '@/app/lib/email';
 import { getSession } from '@/app/lib/session';
 
 const FormGroupSchema = z.object({
@@ -246,6 +249,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
       }
 
       sendCreateGroupEmail({ email: submittingPersonEmail, name, password });
+      sendCreateGroupEmailToAdmin({ name });
     } catch (error) {
       console.log(error);
 

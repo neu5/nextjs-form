@@ -23,3 +23,10 @@ Nazwa grupy: ${name}
 Pozdrawiamy,
 emeryk.pttk.pl
 `;
+
+export const createGroupMailAdmin = ({ name }: { name: string }) => `Adminie!
+Zostało dodane nowe zgłoszenie:
+
+Nazwa grupy: ${name}
+
+`;
