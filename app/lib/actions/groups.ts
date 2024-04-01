@@ -386,6 +386,8 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
               `,
         ),
       );
+
+      sendCreateGroupEmailToAdmin({ name, type: 'update' });
     } catch (error) {
       console.log(error);
 

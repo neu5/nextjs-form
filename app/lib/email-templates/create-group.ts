@@ -24,8 +24,14 @@ Pozdrawiamy,
 emeryk.pttk.pl
 `;
 
-export const createGroupMailAdmin = ({ name }: { name: string }) => `Adminie!
-Zostało dodane nowe zgłoszenie:
+export const createGroupMailAdmin = ({
+  name,
+  type = 'create',
+}: {
+  name: string;
+  type: 'create' | 'update';
+}) => `Adminie!
+Zostało ${type === 'create' ? 'dodane nowe' : 'uaktualnione'} zgłoszenie:
 
 Nazwa grupy: ${name}
 

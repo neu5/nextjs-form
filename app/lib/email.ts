@@ -6,14 +6,8 @@ import {
 } from '@/app/lib/email-templates';
 import { ADMIN_EMAIL_ADDRESS } from '@/app/lib/constants';
 
-export function sendCreateUserEmail({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) {
-  const transporter = nodemailer.createTransport({
+const getTransporter = () => {
+  return nodemailer.createTransport({
     service: 'Cpanel',
     host: 'mail.emeryk.pttk.pl',
     port: 465,
@@ -23,6 +17,16 @@ export function sendCreateUserEmail({
       pass: process.env.EMAIL_PASS,
     },
   });
+};
+
+export function sendCreateUserEmail({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
+  const transporter = getTransporter();
 
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
@@ -49,16 +53,7 @@ export function sendCreateGroupEmail({
   name: string;
   password: string;
 }) {
-  const transporter = nodemailer.createTransport({
-    service: 'Cpanel',
-    host: 'mail.emeryk.pttk.pl',
-    port: 465,
-    secure: true,
-    auth: {
-      user: ADMIN_EMAIL_ADDRESS,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  const transporter = getTransporter();
 
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
@@ -76,23 +71,20 @@ export function sendCreateGroupEmail({
   });
 }
 
-export function sendCreateGroupEmailToAdmin({ name }: { name: string }) {
-  const transporter = nodemailer.createTransport({
-    service: 'Cpanel',
-    host: 'mail.emeryk.pttk.pl',
-    port: 465,
-    secure: true,
-    auth: {
-      user: ADMIN_EMAIL_ADDRESS,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+export function sendCreateGroupEmailToAdmin({
+  name,
+  type = 'create',
+}: {
+  name: string;
+  type?: 'create' | 'update';
+}) {
+  const transporter = getTransporter();
 
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
     to: ADMIN_EMAIL_ADDRESS,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: createGroupMailAdmin({ name }),
+    text: createGroupMailAdmin({ name, type }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
