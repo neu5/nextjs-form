@@ -1,4 +1,4 @@
-export const createUserMail = ({
+export const userCreateMail = ({
   email,
   password,
 }: {

@@ -13,8 +13,9 @@ import { Member } from '@/app/ui/groups/group-member';
 import generator from 'generate-password';
 import bcrypt from 'bcrypt';
 import {
-  sendCreateGroupEmail,
-  sendCreateGroupEmailToAdmin,
+  sendGroupCreateEmail,
+  sendGroupCreateEmailToAdmin,
+  sendGroupUpdateEmailToAdmin,
 } from '@/app/lib/email';
 import { getSession } from '@/app/lib/session';
 
@@ -248,8 +249,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
         };
       }
 
-      sendCreateGroupEmail({ email: submittingPersonEmail, name, password });
-      sendCreateGroupEmailToAdmin({ name });
+      sendGroupCreateEmail({ email: submittingPersonEmail, name, password });
+      sendGroupCreateEmailToAdmin({ name });
     } catch (error) {
       console.log(error);
 
@@ -387,7 +388,7 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
         ),
       );
 
-      sendCreateGroupEmailToAdmin({ name, type: 'update' });
+      sendGroupUpdateEmailToAdmin({ name });
     } catch (error) {
       console.log(error);
 

@@ -1,8 +1,9 @@
 import nodemailer from 'nodemailer';
 import {
-  createGroupMail,
-  createGroupMailAdmin,
-  createUserMail,
+  groupCreateMail,
+  groupCreateMailAdmin,
+  groupUpdateMailAdmin,
+  userCreateMail,
 } from '@/app/lib/email-templates';
 import { ADMIN_EMAIL_ADDRESS } from '@/app/lib/constants';
 
@@ -19,7 +20,7 @@ const getTransporter = () => {
   });
 };
 
-export function sendCreateUserEmail({
+export function sendUserCreateEmail({
   email,
   password,
 }: {
@@ -32,7 +33,7 @@ export function sendCreateUserEmail({
     from: ADMIN_EMAIL_ADDRESS,
     to: email,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: createUserMail({ email, password }),
+    text: userCreateMail({ email, password }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -44,7 +45,7 @@ export function sendCreateUserEmail({
   });
 }
 
-export function sendCreateGroupEmail({
+export function sendGroupCreateEmail({
   email,
   name,
   password,
@@ -59,7 +60,7 @@ export function sendCreateGroupEmail({
     from: ADMIN_EMAIL_ADDRESS,
     to: email,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: createGroupMail({ email, name, password }),
+    text: groupCreateMail({ email, name, password }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -71,20 +72,33 @@ export function sendCreateGroupEmail({
   });
 }
 
-export function sendCreateGroupEmailToAdmin({
-  name,
-  type = 'create',
-}: {
-  name: string;
-  type?: 'create' | 'update';
-}) {
+export function sendGroupCreateEmailToAdmin({ name }: { name: string }) {
   const transporter = getTransporter();
 
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
     to: ADMIN_EMAIL_ADDRESS,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: createGroupMailAdmin({ name, type }),
+    text: groupCreateMailAdmin({ name }),
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email: ', error);
+    } else {
+      console.log('Email sent: ', info.response);
+    }
+  });
+}
+
+export function sendGroupUpdateEmailToAdmin({ name }: { name: string }) {
+  const transporter = getTransporter();
+
+  const mailOptions = {
+    from: ADMIN_EMAIL_ADDRESS,
+    to: ADMIN_EMAIL_ADDRESS,
+    subject: 'Rajd Nocny Świętego Emeryka',
+    text: groupUpdateMailAdmin({ name }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
