@@ -1,4 +1,4 @@
-export const createGroupMail = ({
+export const groupCreateMail = ({
   email,
   name,
   password,
@@ -24,9 +24,16 @@ Pozdrawiamy,
 emeryk.pttk.pl
 `;
 
-export const createGroupMailAdmin = ({ name }: { name: string }) => `Adminie!
+export const groupCreateMailAdmin = ({ name }: { name: string }) => `Adminie!
 Zostało dodane nowe zgłoszenie:
 
 Nazwa grupy: ${name}
+
+`;
+
+export const groupUpdateMailAdmin = ({ name }: { name: string }) => `Adminie!
+Grupa
+${name}
+została uaktualniona.
 
 `;

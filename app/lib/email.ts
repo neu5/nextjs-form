@@ -1,19 +1,14 @@
 import nodemailer from 'nodemailer';
 import {
-  createGroupMail,
-  createGroupMailAdmin,
-  createUserMail,
+  groupCreateMail,
+  groupCreateMailAdmin,
+  groupUpdateMailAdmin,
+  userCreateMail,
 } from '@/app/lib/email-templates';
 import { ADMIN_EMAIL_ADDRESS } from '@/app/lib/constants';
 
-export function sendCreateUserEmail({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) {
-  const transporter = nodemailer.createTransport({
+const getTransporter = () => {
+  return nodemailer.createTransport({
     service: 'Cpanel',
     host: 'mail.emeryk.pttk.pl',
     port: 465,
@@ -23,12 +18,22 @@ export function sendCreateUserEmail({
       pass: process.env.EMAIL_PASS,
     },
   });
+};
+
+export function sendUserCreateEmail({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
+  const transporter = getTransporter();
 
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
     to: email,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: createUserMail({ email, password }),
+    text: userCreateMail({ email, password }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -40,7 +45,7 @@ export function sendCreateUserEmail({
   });
 }
 
-export function sendCreateGroupEmail({
+export function sendGroupCreateEmail({
   email,
   name,
   password,
@@ -49,22 +54,13 @@ export function sendCreateGroupEmail({
   name: string;
   password: string;
 }) {
-  const transporter = nodemailer.createTransport({
-    service: 'Cpanel',
-    host: 'mail.emeryk.pttk.pl',
-    port: 465,
-    secure: true,
-    auth: {
-      user: ADMIN_EMAIL_ADDRESS,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  const transporter = getTransporter();
 
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
     to: email,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: createGroupMail({ email, name, password }),
+    text: groupCreateMail({ email, name, password }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -76,23 +72,33 @@ export function sendCreateGroupEmail({
   });
 }
 
-export function sendCreateGroupEmailToAdmin({ name }: { name: string }) {
-  const transporter = nodemailer.createTransport({
-    service: 'Cpanel',
-    host: 'mail.emeryk.pttk.pl',
-    port: 465,
-    secure: true,
-    auth: {
-      user: ADMIN_EMAIL_ADDRESS,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+export function sendGroupCreateEmailToAdmin({ name }: { name: string }) {
+  const transporter = getTransporter();
 
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
     to: ADMIN_EMAIL_ADDRESS,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: createGroupMailAdmin({ name }),
+    text: groupCreateMailAdmin({ name }),
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email: ', error);
+    } else {
+      console.log('Email sent: ', info.response);
+    }
+  });
+}
+
+export function sendGroupUpdateEmailToAdmin({ name }: { name: string }) {
+  const transporter = getTransporter();
+
+  const mailOptions = {
+    from: ADMIN_EMAIL_ADDRESS,
+    to: ADMIN_EMAIL_ADDRESS,
+    subject: 'Rajd Nocny Świętego Emeryka',
+    text: groupUpdateMailAdmin({ name }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

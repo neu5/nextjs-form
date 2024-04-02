@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import generator from 'generate-password';
 import bcrypt from 'bcrypt';
-import { sendCreateUserEmail } from '@/app/lib/email';
+import { sendUserCreateEmail } from '@/app/lib/email';
 
 const FormUsersSchema = z.object({
   id: z.string(),
@@ -93,7 +93,7 @@ export async function createUser(prevState: UsersState, formData: FormData) {
     };
   }
 
-  sendCreateUserEmail({ email, password });
+  sendUserCreateEmail({ email, password });
 
   revalidatePath('/dashboard/users');
   redirect('/dashboard/users');
