@@ -1,4 +1,4 @@
-const MAX_MEMBERS_NUM = 4;
+const MAX_MEMBERS_NUM = 50;
 
 let memberId = 0;
 

@@ -28,7 +28,7 @@ export const nameValidation = ({
     hasNameError = true;
   }
 
-  if (name.length < 3 && !hasNameError) {
+  if (name.length <= 3 && !hasNameError) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: JSON.stringify({
