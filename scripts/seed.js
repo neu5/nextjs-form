@@ -218,6 +218,7 @@ async function seedGroups(client) {
           submitting_person_email VARCHAR(100) NOT NULL,
           chef_group_phone_number VARCHAR(20) NOT NULL,
           is_institution BOOLEAN DEFAULT FALSE,
+          is_skkt_starachowice BOOLEAN DEFAULT FALSE,
           remarks VARCHAR(1000),
           creation_datetime VARCHAR(20) NOT NULL,
           last_edition_datetime VARCHAR(20) NOT NULL
@@ -251,6 +252,7 @@ async function seedMembers(client) {
           birthday_date VARCHAR(12) NOT NULL,
           pttk_card_number VARCHAR(6),
           guardian_name VARCHAR(255),
+          fee NUMERIC(12,2),
           is_adult BOOLEAN DEFAULT FALSE,
           is_group_chef BOOLEAN DEFAULT FALSE,
           is_guardian BOOLEAN DEFAULT FALSE

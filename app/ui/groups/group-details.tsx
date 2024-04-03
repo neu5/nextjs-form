@@ -27,6 +27,7 @@ export default function GroupDetails({
     name: string;
     leavingHourId: string;
     isInstitution: string | boolean;
+    isSKKTStarachowice: string | boolean;
     pathId: string;
     submittingPersonEmail: string;
   };
@@ -201,6 +202,28 @@ export default function GroupDetails({
           płaci.
         </span>
       </div>
+
+      {/* Is SKKT Starachowice */}
+      {group.isInstitution && (
+        <div className="my-8">
+          <label className="mb-2 block flex text-sm font-medium">
+            <input
+              name="isSKKTStarachowice"
+              id="isSKKTStarachowice"
+              className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
+              type="checkbox"
+              checked={!!group.isSKKTStarachowice}
+              onChange={(ev) =>
+                saveGroup({
+                  name: 'isSKKTStarachowice',
+                  value: ev.target.checked ? 'true' : '',
+                })
+              }
+            />
+            <span>Czy grupa jest z SKKT Starachowice?</span>
+          </label>
+        </div>
+      )}
 
       {/* Submitting Person Email */}
       <div className="mb-4">
