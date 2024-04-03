@@ -45,6 +45,7 @@ export default function EditGroupForm({
     id,
     chef_group_phone_number,
     is_institution,
+    is_skkt_starachowice,
     leaving_hour_id,
     name,
     path_id,
@@ -55,6 +56,7 @@ export default function EditGroupForm({
   const [group, setGroup] = useState({
     chefGroupPhoneNumber: chef_group_phone_number,
     isInstitution: is_institution,
+    isSKKTStarachowice: is_skkt_starachowice,
     leavingHourId: leaving_hour_id,
     name,
     pathId: path_id,
@@ -201,6 +203,7 @@ export default function EditGroupForm({
     formData.append('chefGroupPhoneNumber', group.chefGroupPhoneNumber);
     formData.append('remarks', group.remarks);
     formData.append('isInstitution', group.isInstitution);
+    formData.append('isSKKTStarachowice', group.isSKKTStarachowice);
 
     group.members.forEach((member: Member) => {
       formData.append('members', JSON.stringify(member));

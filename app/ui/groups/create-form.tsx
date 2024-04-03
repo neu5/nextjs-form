@@ -133,6 +133,7 @@ export default function Form({
     formData.append('remarks', group.remarks);
     formData.append('termsAndConditions', group.termsAndConditions);
     formData.append('isInstitution', group.isInstitution);
+    formData.append('isSKKTStarachowice', group.isSKKTStarachowice);
     formData.append('rodo', group.rodo);
 
     group.members.forEach((member) => {

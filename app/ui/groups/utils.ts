@@ -29,6 +29,7 @@ const getGroupDefault = () => ({
   submittingPersonEmail: '',
   chefGroupPhoneNumber: '',
   isInstitution: '',
+  isSKKTStarachowice: '',
   remarks: '',
   termsAndConditions: '',
   rodo: '',

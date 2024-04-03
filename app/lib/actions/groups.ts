@@ -19,6 +19,65 @@ import {
 } from '@/app/lib/email';
 import { getSession } from '@/app/lib/session';
 
+const SHIRT_FEE = 25;
+const REGULAR_MEMBER_FEE = 30;
+const PTTK_MEMBER_FEE = 25;
+
+const getMemberFee = ({
+  isInstitution,
+  isGuardian,
+  isSKKTStarachowice,
+  PTTKCardNumber,
+}: {
+  isInstitution: boolean;
+  isGuardian: boolean;
+  isSKKTStarachowice: boolean;
+  PTTKCardNumber: boolean;
+}) => {
+  if (isInstitution) {
+    if (isGuardian) {
+      return 0;
+    }
+    if (isSKKTStarachowice) {
+      return 15;
+    }
+    if (PTTKCardNumber) {
+      return PTTK_MEMBER_FEE;
+    }
+
+    return REGULAR_MEMBER_FEE;
+  } else {
+    return PTTKCardNumber ? PTTK_MEMBER_FEE : REGULAR_MEMBER_FEE;
+  }
+};
+
+const getFee = ({
+  isInstitution,
+  isGuardian,
+  isSKKTStarachowice,
+  PTTKCardNumber,
+  shirtSize,
+  shirtType,
+}: {
+  isInstitution: boolean;
+  isGuardian: boolean;
+  isSKKTStarachowice: boolean;
+  PTTKCardNumber: boolean;
+  shirtSize: boolean;
+  shirtType: boolean;
+}) => {
+  const memberFee = getMemberFee({
+    isInstitution,
+    isGuardian,
+    isSKKTStarachowice,
+    PTTKCardNumber,
+  });
+
+  const shirtFee = shirtSize && shirtType ? SHIRT_FEE : 0;
+
+  return memberFee + shirtFee;
+};
+
 const FormGroupSchema = z.object({
   id: z.string(),
   name: z
@@ -49,6 +108,7 @@ const FormGroupSchema = z.object({
     .min(5, { message: 'Numer telefonu musi mieć co najmniej 5 znaków' })
     .max(20, { message: 'Numer telefonu nie może mieć więcej niż 20 znaków' }),
   isInstitution: z.string().optional(),
+  isSKKTStarachowice: z.string().optional(),
   remarks: z
     .string()
     .max(1000, { message: 'Uwagi nie mogą być dłuższe niż 1000 znaków' }),
@@ -118,6 +178,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     submittingPersonEmail: formData.get('submittingPersonEmail'),
     chefGroupPhoneNumber: formData.get('chefGroupPhoneNumber'),
     isInstitution: formData.get('isInstitution'),
+    isSKKTStarachowice: formData.get('isSKKTStarachowice'),
     members: formData.getAll('members'),
     remarks: formData.get('remarks'),
     termsAndConditions: formData.get('termsAndConditions'),
@@ -142,6 +203,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     submittingPersonEmail,
     chefGroupPhoneNumber,
     isInstitution,
+    isSKKTStarachowice,
     members,
     remarks,
   } = validatedFields.data;
@@ -157,6 +219,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           submitting_person_email,
           chef_group_phone_number,
           is_institution,
+          is_skkt_starachowice,
           remarks,
           creation_datetime,
           last_edition_datetime
@@ -168,6 +231,11 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           ${submittingPersonEmail},
           ${chefGroupPhoneNumber},
           ${isInstitution && isInstitution.length > 0 ? 'TRUE' : 'FALSE'},
+          ${
+            isSKKTStarachowice && isSKKTStarachowice.length > 0
+              ? 'TRUE'
+              : 'FALSE'
+          },
           ${remarks},
           ${datetime},
           ${datetime}
@@ -205,7 +273,8 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
                   transport_leaving_hour_id,
                   guardian_name,
                   is_guardian,
-                  is_adult
+                  is_adult,
+                  fee
                 )
                 VALUES (
                   ${groupId},
@@ -223,7 +292,15 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
                   },
                   ${guardianName},
                   ${isGuardian.length > 0 ? 'TRUE' : 'FALSE'},
-                  ${isAdult ? 'TRUE' : 'FALSE'}
+                  ${isAdult ? 'TRUE' : 'FALSE'},
+                  ${getFee({
+                    isInstitution: !!isInstitution,
+                    isGuardian: !!isGuardian,
+                    isSKKTStarachowice: !!isSKKTStarachowice,
+                    PTTKCardNumber: !!PTTKCardNumber.length,
+                    shirtSize: !!shirtSize,
+                    shirtType: !!shirtType,
+                  })}
                   )
               `,
         ),
@@ -287,6 +364,7 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
     submittingPersonEmail: formData.get('submittingPersonEmail'),
     chefGroupPhoneNumber: formData.get('chefGroupPhoneNumber'),
     isInstitution: formData.get('isInstitution'),
+    isSKKTStarachowice: formData.get('isSKKTStarachowice'),
     members: formData.getAll('members'),
     remarks: formData.get('remarks'),
   });
@@ -304,6 +382,7 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
     id,
     name,
     isInstitution,
+    isSKKTStarachowice,
     pathId,
     leavingHourId,
     submittingPersonEmail,
@@ -364,7 +443,8 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
                   transport_leaving_hour_id,
                   guardian_name,
                   is_guardian,
-                  is_adult
+                  is_adult,
+                  fee
                 )
                 VALUES (
                   ${id},
@@ -382,7 +462,15 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
                   },
                   ${guardianName},
                   ${isGuardian && isGuardian.length > 0 ? 'TRUE' : 'FALSE'},
-                  ${isAdult ? 'TRUE' : 'FALSE'}
+                  ${isAdult ? 'TRUE' : 'FALSE'},
+                  ${getFee({
+                    isInstitution: !!isInstitution,
+                    isGuardian: !!isGuardian,
+                    isSKKTStarachowice: !!isSKKTStarachowice,
+                    PTTKCardNumber: !!PTTKCardNumber.length,
+                    shirtSize: !!shirtSize,
+                    shirtType: !!shirtType,
+                  })}
                   )
               `,
         ),
