@@ -4,6 +4,7 @@ import {
   CalendarDaysIcon,
   ClockIcon,
   CreditCardIcon,
+  CurrencyDollarIcon,
   TruckIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
@@ -14,6 +15,7 @@ import { ShirtsSizesList, ShirtsTypesList } from '@/app/lib/definitions';
 export type Member = {
   id: string;
   name: string;
+  fee: string;
   birthdayDate: string;
   PTTKCardNumber: string;
   chefGroupId: string;
@@ -36,6 +38,7 @@ export default function GroupMember({
   shirtsTypes,
   transports,
   memberErrors,
+  loggedUserRole,
 }: {
   member: Member;
   memberNumber: number;
@@ -50,10 +53,12 @@ export default function GroupMember({
     leavingHours: Array<{ id: string; value: string }>;
   }>;
   memberErrors: any;
+  loggedUserRole: 'user' | 'admin';
 }) {
   const {
     id,
     birthdayDate,
+    fee,
     chefGroupId,
     guardianName,
     isGuardian,
@@ -115,6 +120,41 @@ export default function GroupMember({
           </div>
         </div>
       </div>
+
+      {/* Member Fee */}
+      {loggedUserRole === 'admin' ? (
+        <div className="mb-4 mt-4">
+          <label
+            htmlFor={`fee-${id}`}
+            className="mb-2 block text-sm font-medium"
+          >
+            <span className="after:ml-0.5 after:text-red-500">Opłata</span>
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id={`fee-${id}`}
+                name="fee"
+                placeholder="opłata"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                type="text"
+                value={fee}
+                onChange={(ev) =>
+                  saveMember({
+                    id,
+                    name: 'fee',
+                    value: ev.target.value,
+                  })
+                }
+                aria-describedby="group-pttk-card-number-error"
+              />
+              <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <input type="hidden" name={`fee-${id}`} value={fee} />
+      )}
 
       {/* Member Birthday date */}
       <div className="mb-4">
