@@ -15,7 +15,7 @@ import { ShirtsSizesList, ShirtsTypesList } from '@/app/lib/definitions';
 export type Member = {
   id: string;
   name: string;
-  fee: string;
+  fee?: string;
   birthdayDate: string;
   PTTKCardNumber: string;
   chefGroupId: string;
@@ -53,7 +53,7 @@ export default function GroupMember({
     leavingHours: Array<{ id: string; value: string }>;
   }>;
   memberErrors: any;
-  loggedUserRole: 'user' | 'admin';
+  loggedUserRole?: 'user' | 'admin';
 }) {
   const {
     id,
