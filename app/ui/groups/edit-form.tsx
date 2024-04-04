@@ -55,8 +55,8 @@ export default function EditGroupForm({
 
   const [group, setGroup] = useState({
     chefGroupPhoneNumber: chef_group_phone_number,
-    isInstitution: is_institution,
-    isSKKTStarachowice: is_skkt_starachowice,
+    isInstitution: is_institution ? 'true' : '',
+    isSKKTStarachowice: is_skkt_starachowice ? 'true' : '',
     leavingHourId: leaving_hour_id,
     name,
     pathId: path_id,
@@ -65,6 +65,7 @@ export default function EditGroupForm({
     members: fetchedGroup.map(
       ({
         birthday_date,
+        fee,
         guardian_name,
         is_group_chef,
         is_guardian,
@@ -76,6 +77,7 @@ export default function EditGroupForm({
         transport_leaving_hour_id,
       }: {
         birthday_date: string;
+        fee: string;
         guardian_name: string;
         is_group_chef: boolean;
         is_guardian: string;
@@ -90,11 +92,12 @@ export default function EditGroupForm({
 
         return {
           birthdayDate: birthday_date,
+          fee,
           chefGroupId: is_group_chef ? memberId : '',
           guardianName: guardian_name,
           id: memberId,
           isAdult: isAdult({ birthDate: birthday_date }),
-          isGuardian: is_guardian,
+          isGuardian: is_guardian ? 'true' : '',
           name: member_name,
           PTTKCardNumber: pttk_card_number,
           shirtSize: shirt_size,
@@ -293,6 +296,7 @@ export default function EditGroupForm({
               transports={transports}
               isInstitution={group.isInstitution}
               member={member}
+              loggedUserRole={loggedUserRole}
               memberErrors={state.errors?.members?.reduce(
                 (result, membersErrors) => {
                   const error = JSON.parse(membersErrors);

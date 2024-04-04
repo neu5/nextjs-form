@@ -157,7 +157,7 @@ export type GroupState = {
   message?: string | null;
 };
 
-const CreateGroup = FormGroupSchema.omit({ id: true });
+const CreateGroup = FormGroupSchema.omit({ id: true, fee: true });
 const UpdateGroup = FormGroupSchema.omit({
   rodo: true,
   termsAndConditions: true,
@@ -350,7 +350,9 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
   const isEditingForUsersEnabled = await fetchUserEditingConfiguration();
   const session = await getSession();
 
-  if (!isEditingForUsersEnabled && session.user.role !== 'admin') {
+  const isAdmin = session.user.role === 'admin';
+
+  if (!isEditingForUsersEnabled && !isAdmin) {
     return {
       message: 'Edycja danych grupy jest wyłączona.',
     };
@@ -426,6 +428,7 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
             shirtType,
             shirtSize,
             transportId,
+            fee,
             transportLeavingHourId,
             guardianName,
             isGuardian,
@@ -463,14 +466,18 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
                   ${guardianName},
                   ${isGuardian && isGuardian.length > 0 ? 'TRUE' : 'FALSE'},
                   ${isAdult ? 'TRUE' : 'FALSE'},
-                  ${getFee({
-                    isInstitution: !!isInstitution,
-                    isGuardian: !!isGuardian,
-                    isSKKTStarachowice: !!isSKKTStarachowice,
-                    PTTKCardNumber: !!PTTKCardNumber.length,
-                    shirtSize: !!shirtSize,
-                    shirtType: !!shirtType,
-                  })}
+                  ${
+                    isAdmin
+                      ? fee
+                      : getFee({
+                          isInstitution: !!isInstitution,
+                          isGuardian: !!isGuardian,
+                          isSKKTStarachowice: !!isSKKTStarachowice,
+                          PTTKCardNumber: !!PTTKCardNumber.length,
+                          shirtSize: !!shirtSize,
+                          shirtType: !!shirtType,
+                        })
+                  }
                   )
               `,
         ),
