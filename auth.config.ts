@@ -26,7 +26,20 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       const isInAdminPanel = nextUrl.pathname.startsWith('/dashboard');
       const isOnLoginPage = nextUrl.pathname.startsWith('/login');
+      const isOnPrintPage = nextUrl.pathname.startsWith('/print');
       const session = await getSession();
+
+      if (isOnPrintPage) {
+        if (!isLoggedIn || !session) {
+          return false;
+        }
+
+        const role = session?.user.role;
+
+        if (role !== 'admin') {
+          return false;
+        }
+      }
 
       if (isOnLoginPage && isLoggedIn && session) {
         return Response.redirect(new URL('/dashboard', nextUrl));
