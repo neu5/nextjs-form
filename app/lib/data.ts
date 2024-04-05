@@ -142,7 +142,8 @@ export async function fetchMembersWithPTTKCardForPrint() {
         SELECT 
           members.id as id,
           members.name as name,
-          members.birthday_date as birthdayDate
+          members.birthday_date as birthdaydate,
+          members.pttk_card_number as pttkcardnumber
         FROM members
         WHERE pttk_card_number != ''`;
 
