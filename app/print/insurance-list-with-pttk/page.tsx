@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import Table from '@/app/ui/print/insurance-list-with-no-pttk';
+import Table from '@/app/ui/print/insurance-list-with-pttk';
 
 export const metadata: Metadata = {
   title: 'Do druku',

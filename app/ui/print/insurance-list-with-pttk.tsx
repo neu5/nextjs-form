@@ -19,6 +19,9 @@ export default async function GroupsTable() {
                 <th scope="col" className="px-3 py-5 font-medium">
                   Data urodzenia
                 </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Nr legitymacji PTTK
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white">
@@ -35,6 +38,9 @@ export default async function GroupsTable() {
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {member.birthdaydate}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {member.pttkcardnumber}
                   </td>
                 </tr>
               ))}
