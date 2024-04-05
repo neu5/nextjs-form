@@ -134,6 +134,44 @@ export async function fetchMembersWithPTTKCardCount() {
   }
 }
 
+export async function fetchMembersWithPTTKCardForPrint() {
+  noStore();
+
+  try {
+    const data = await sql`
+        SELECT 
+          members.id as id,
+          members.name as name,
+          members.birthday_date as birthdayDate
+        FROM members
+        WHERE pttk_card_number != ''`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch members data.');
+  }
+}
+
+export async function fetchMembersWithNoPTTKCardForPrint() {
+  noStore();
+
+  try {
+    const data = await sql`
+        SELECT 
+          members.id as id,
+          members.name as name,
+          members.birthday_date as birthdayDate
+        FROM members
+        WHERE pttk_card_number = ''`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch members data.');
+  }
+}
+
 export async function fetchPathsTypes() {
   noStore();
 

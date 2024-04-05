@@ -1,5 +1,6 @@
 import { lusitana } from '@/app/ui/fonts';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import {
   fetchGroupCount,
   fetchMembersCount,
@@ -30,23 +31,44 @@ export default async function Page() {
         Dashboard
       </h1>
       {isAdmin && (
-        <div className="rounded-md bg-gray-50 p-4 md:p-6">
-          <p>
-            Liczba zapisanych uczestników:{' '}
-            <span className="font-bold">{membersCount}</span>
-          </p>
-          <p>
-            Liczba osób z legitymacją PTTK:{' '}
-            <span className="font-bold">{membersWithPTTKCardCount}</span>
-          </p>
-          <p>
-            Liczba osób bez legitymacji PTTK:{' '}
-            <span className="font-bold">{membersWithoutPTTKCardCount}</span>
-          </p>
-          <p>
-            Liczba grup: <span className="font-bold">{groupCount}</span>
-          </p>
-        </div>
+        <>
+          <div className="rounded-md bg-gray-50 p-4 md:p-6">
+            <p>
+              Liczba zapisanych uczestników:{' '}
+              <span className="font-bold">{membersCount}</span>
+            </p>
+            <p>
+              Liczba osób z legitymacją PTTK:{' '}
+              <span className="font-bold">{membersWithPTTKCardCount}</span>
+            </p>
+            <p>
+              Liczba osób bez legitymacji PTTK:{' '}
+              <span className="font-bold">{membersWithoutPTTKCardCount}</span>
+            </p>
+            <p>
+              Liczba grup: <span className="font-bold">{groupCount}</span>
+            </p>
+          </div>
+
+          <div className="rounded-md bg-gray-50 px-6 py-1">
+            <Link
+              href="/print/insurance-list-with-no-pttk"
+              target="_blank"
+              className="font-bold text-blue-600 underline"
+            >
+              Lista ubezpieczeniowa uczestników bez legitymacji PTTK
+            </Link>
+          </div>
+          <div className="rounded-md bg-gray-50 px-6 py-1">
+            <Link
+              href="/print/insurance-list-with-pttk"
+              target="_blank"
+              className="font-bold text-blue-600 underline"
+            >
+              Lista ubezpieczeniowa uczestników z legitymacją PTTK
+            </Link>
+          </div>
+        </>
       )}
       {/* <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>
