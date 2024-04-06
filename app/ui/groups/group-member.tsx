@@ -387,7 +387,7 @@ export default function GroupMember({
                       'opacity-50': shouldShowShirtInfo,
                     },
                   )}
-                  aria-describedby="shirt-type-error"
+                  aria-describedby="shirt-size-type-error"
                   value={shirtSize}
                   disabled={shouldShowShirtInfo}
                   onChange={(ev) =>
@@ -406,6 +406,18 @@ export default function GroupMember({
                   ))}
                 </select>
               </div>
+            </div>
+            <div
+              id={`group-member-shirt-size-type-${id}-error`}
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {memberErrors?.shirtSize &&
+                memberErrors.shirtSize.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
             </div>
           </div>
         </>

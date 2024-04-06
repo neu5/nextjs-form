@@ -8,7 +8,11 @@ import {
   fetchFormConfiguration,
   fetchUserEditingConfiguration,
 } from '@/app/lib/data';
-import { birthDayValidation, nameValidation } from './validation';
+import {
+  birthDayValidation,
+  nameValidation,
+  shirtsValidation,
+} from './validation';
 import { Member } from '@/app/ui/groups/group-member';
 import generator from 'generate-password';
 import bcrypt from 'bcrypt';
@@ -122,6 +126,7 @@ const FormGroupSchema = z.object({
     members.forEach((member) => {
       nameValidation({ ctx, member });
       birthDayValidation({ ctx, member });
+      shirtsValidation({ ctx, member });
     });
 
     const showMissingChefError = !members.some(
