@@ -34,7 +34,10 @@ export async function fetchConfiguration() {
 
   try {
     const data = await sql<Configuration>`SELECT 
-      is_form_enabled, is_editing_for_users_enabled, is_mailing_enabled
+      is_form_enabled, 
+      is_editing_for_users_enabled,
+      is_mailing_enabled,
+      is_ordering_shirts_enabled
     FROM configuration`;
 
     return data.rows[0];
@@ -65,6 +68,20 @@ export async function fetchUserEditingConfiguration() {
       await sql`SELECT is_editing_for_users_enabled FROM configuration`;
 
     return data.rows[0].is_editing_for_users_enabled as boolean;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch configuration.');
+  }
+}
+
+export async function fetchShirtOrderingConfiguration() {
+  noStore();
+
+  try {
+    const data =
+      await sql`SELECT is_ordering_shirts_enabled FROM configuration`;
+
+    return data.rows[0].is_ordering_shirts_enabled as boolean;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch configuration.');

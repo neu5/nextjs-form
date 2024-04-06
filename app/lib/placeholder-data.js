@@ -20,6 +20,7 @@ const configuration = [
     is_form_enabled: false,
     is_editing_for_users_enabled: false,
     is_mailing_enabled: false,
+    is_ordering_shirts_enabled: false,
   },
 ];
 
