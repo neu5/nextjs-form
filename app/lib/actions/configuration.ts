@@ -9,6 +9,7 @@ const FormConfigurationSchema = z.object({
   isFormEnabled: z.string().nullable(),
   isEditingForUsersEnabled: z.string().nullable(),
   isMailingEnabled: z.string().nullable(),
+  isOrderingShirtsEnabled: z.string().nullable(),
 });
 
 export type ConfigurationState = {
@@ -16,6 +17,7 @@ export type ConfigurationState = {
     isFormEnabled?: string[];
     isEditingForUsersEnabled?: string[];
     isMailingEnabled?: string[];
+    isOrderingShirtsEnabled?: string[];
   };
   message?: string | null;
 };
@@ -30,6 +32,7 @@ export async function updateConfiguration(
     isFormEnabled: formData.get('isFormEnabled'),
     isEditingForUsersEnabled: formData.get('isEditingForUsersEnabled'),
     isMailingEnabled: formData.get('isMailingEnabled'),
+    isOrderingShirtsEnabled: formData.get('isOrderingShirtsEnabled'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
@@ -40,8 +43,12 @@ export async function updateConfiguration(
     };
   }
 
-  const { isFormEnabled, isEditingForUsersEnabled, isMailingEnabled } =
-    validatedFields.data;
+  const {
+    isFormEnabled,
+    isEditingForUsersEnabled,
+    isMailingEnabled,
+    isOrderingShirtsEnabled,
+  } = validatedFields.data;
 
   try {
     await sql`
@@ -49,7 +56,9 @@ export async function updateConfiguration(
       SET 
         is_form_enabled = ${!!isFormEnabled},
         is_editing_for_users_enabled = ${!!isEditingForUsersEnabled},
-        is_mailing_enabled = ${!!isMailingEnabled}`;
+        is_mailing_enabled = ${!!isMailingEnabled},
+        is_ordering_shirts_enabled = ${!!isOrderingShirtsEnabled}
+        `;
   } catch (error) {
     return { message: 'Database Error: Failed to Update Configuration.' };
   }

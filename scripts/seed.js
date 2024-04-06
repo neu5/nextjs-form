@@ -15,7 +15,8 @@ async function seedConfiguration(client) {
         CREATE TABLE IF NOT EXISTS configuration (
           is_form_enabled BOOLEAN DEFAULT FALSE,
           is_editing_for_users_enabled BOOLEAN DEFAULT FALSE,
-          is_mailing_enabled BOOLEAN DEFAULT FALSE
+          is_mailing_enabled BOOLEAN DEFAULT FALSE,
+          is_ordering_shirts_enabled BOOLEAN DEFAULT FALSE
         );
       `;
 
@@ -27,9 +28,21 @@ async function seedConfiguration(client) {
           is_form_enabled,
           is_editing_for_users_enabled,
           is_mailing_enabled,
+          is_ordering_shirts_enabled,
         }) => client.sql`
-          INSERT INTO configuration (is_form_enabled, is_editing_for_users_enabled, is_mailing_enabled)
-          VALUES (${is_form_enabled}, ${is_editing_for_users_enabled}, ${is_mailing_enabled});
+          INSERT INTO 
+            configuration (
+              is_form_enabled,
+              is_editing_for_users_enabled,
+              is_mailing_enabled,
+              is_ordering_shirts_enabled
+            )
+          VALUES (
+            ${is_form_enabled},
+            ${is_editing_for_users_enabled},
+            ${is_mailing_enabled},
+            ${is_ordering_shirts_enabled}
+          );
         `,
       ),
     );

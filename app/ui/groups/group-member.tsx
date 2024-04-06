@@ -31,7 +31,9 @@ export type Member = {
 export default function GroupMember({
   member,
   memberNumber,
+  mode,
   isInstitution,
+  isShirtOrderingEnabled,
   removeMember,
   saveMember,
   shirtsSizes,
@@ -42,7 +44,9 @@ export default function GroupMember({
 }: {
   member: Member;
   memberNumber: number;
+  mode?: string;
   isInstitution: string;
+  isShirtOrderingEnabled: boolean;
   removeMember: Function;
   saveMember: Function;
   shirtsSizes: Array<ShirtsSizesList>;
@@ -70,6 +74,8 @@ export default function GroupMember({
     transportId,
     transportLeavingHourId,
   } = member;
+
+  const shouldShowShirtInfo = !isShirtOrderingEnabled && mode === 'EDIT';
 
   return (
     <div className="mb-8">
@@ -318,78 +324,92 @@ export default function GroupMember({
       </div>
 
       {/* Shirt type */}
-      <div className="mb-4 mt-4">
-        <label
-          htmlFor={`shirt-type-${id}`}
-          className="mb-2 block text-sm font-medium"
-        >
-          <span className="after:ml-0.5 after:text-red-500">
-            Rodzaj koszulki
-          </span>
-        </label>
-        <div className="relative mt-2 rounded-md">
-          <div className="relative">
-            <select
-              id={`shirt-type-${id}`}
-              name="shirtType"
-              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              aria-describedby="shirt-type-error"
-              value={shirtType}
-              onChange={(ev) =>
-                saveMember({
-                  id,
-                  name: 'shirtType',
-                  value: ev.target.value,
-                })
-              }
+      {(isShirtOrderingEnabled || shouldShowShirtInfo) && (
+        <>
+          <div className="mb-4 mt-4">
+            <label
+              htmlFor={`shirt-type-${id}`}
+              className="mb-2 block text-sm font-medium"
             >
-              <option value="">Wybierz rodzaj koszulki</option>
-              {shirtsTypes.map(({ type }) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+              <span className="after:ml-0.5 after:text-red-500">
+                Rodzaj koszulki
+              </span>
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <select
+                  id={`shirt-type-${id}`}
+                  name="shirtType"
+                  className={clsx(
+                    'peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500',
+                    {
+                      'opacity-50': shouldShowShirtInfo,
+                    },
+                  )}
+                  aria-describedby="shirt-type-error"
+                  value={shirtType}
+                  disabled={shouldShowShirtInfo}
+                  onChange={(ev) =>
+                    saveMember({
+                      id,
+                      name: 'shirtType',
+                      value: ev.target.value,
+                    })
+                  }
+                >
+                  <option value="">Wybierz rodzaj koszulki</option>
+                  {shirtsTypes.map(({ type }) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      {/* Shirt size */}
-      <div className="mb-4 mt-4">
-        <label
-          htmlFor={`shirt-size-${id}`}
-          className="mb-2 block text-sm font-medium"
-        >
-          <span className="after:ml-0.5 after:text-red-500">
-            Rozmiar koszulki
-          </span>
-        </label>
-        <div className="relative mt-2 rounded-md">
-          <div className="relative">
-            <select
-              id={`shirt-size-${id}`}
-              name="shirtSize"
-              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              aria-describedby="shirt-type-error"
-              value={shirtSize}
-              onChange={(ev) =>
-                saveMember({
-                  id,
-                  name: 'shirtSize',
-                  value: ev.target.value,
-                })
-              }
+          <div className="mb-4 mt-4">
+            <label
+              htmlFor={`shirt-size-${id}`}
+              className="mb-2 block text-sm font-medium"
             >
-              <option value="">Wybierz rozmiar koszulki</option>
-              {shirtsSizes.map(({ size }) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </select>
+              <span className="after:ml-0.5 after:text-red-500">
+                Rozmiar koszulki
+              </span>
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <select
+                  id={`shirt-size-${id}`}
+                  name="shirtSize"
+                  className={clsx(
+                    'peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500',
+                    {
+                      'opacity-50': shouldShowShirtInfo,
+                    },
+                  )}
+                  aria-describedby="shirt-type-error"
+                  value={shirtSize}
+                  disabled={shouldShowShirtInfo}
+                  onChange={(ev) =>
+                    saveMember({
+                      id,
+                      name: 'shirtSize',
+                      value: ev.target.value,
+                    })
+                  }
+                >
+                  <option value="">Wybierz rozmiar koszulki</option>
+                  {shirtsSizes.map(({ size }) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
 
       {/* Transport */}
       {transports.length > 0 && (

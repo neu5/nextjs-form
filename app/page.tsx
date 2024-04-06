@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import CreateGroup from '@/app/ui/groups/create-form';
 import {
   fetchFormConfiguration,
+  fetchShirtOrderingConfiguration,
   fetchPathsWithItsLeavingHours,
   fetchShirtsSizes,
   fetchShirtsTypes,
@@ -24,13 +25,18 @@ async function CreateGroupWrapper({
     return null;
   }
 
-  const paths = await fetchPathsWithItsLeavingHours();
-  const shirtsTypes = await fetchShirtsTypes();
-  const shirtsSizes = await fetchShirtsSizes();
-  const transports = await fetchTransportsWithItsLeavingHours();
+  const [paths, shirtsTypes, shirtsSizes, transports, isShirtOrderingEnabled] =
+    await Promise.all([
+      fetchPathsWithItsLeavingHours(),
+      fetchShirtsTypes(),
+      fetchShirtsSizes(),
+      fetchTransportsWithItsLeavingHours(),
+      fetchShirtOrderingConfiguration(),
+    ]);
 
   return (
     <CreateGroup
+      isShirtOrderingEnabled={isShirtOrderingEnabled}
       /* @ts-ignore */
       paths={paths}
       shirtsSizes={shirtsSizes}

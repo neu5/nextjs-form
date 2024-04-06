@@ -17,11 +17,13 @@ import { MAX_MEMBERS_NUM, getMemberDefault, getGroupDefault } from './utils';
 let wasSubmitClicked = false;
 
 export default function Form({
+  isShirtOrderingEnabled,
   paths,
   shirtsSizes,
   shirtsTypes,
   transports,
 }: {
+  isShirtOrderingEnabled: boolean;
   paths: GroupForm[];
   shirtsSizes: ShirtsSizesList[];
   shirtsTypes: ShirtsTypesList[];
@@ -208,6 +210,7 @@ export default function Form({
               shirtsTypes={shirtsTypes}
               transports={transports}
               isInstitution={group.isInstitution}
+              isShirtOrderingEnabled={isShirtOrderingEnabled}
               member={member}
               memberErrors={state.errors?.members?.reduce(
                 (result, membersErrors) => {

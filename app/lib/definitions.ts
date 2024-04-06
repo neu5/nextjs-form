@@ -11,6 +11,7 @@ export type Configuration = {
   is_form_enabled: boolean;
   is_editing_for_users_enabled: boolean;
   is_mailing_enabled: boolean;
+  is_ordering_shirts_enabled: boolean;
 };
 
 export type GroupsTable = {
