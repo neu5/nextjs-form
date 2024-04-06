@@ -7,6 +7,7 @@ import {
   fetchShirtsTypes,
   fetchTransportsWithItsLeavingHours,
   fetchUserEditingConfiguration,
+  fetchShirtOrderingConfiguration,
 } from '@/app/lib/data';
 import { getSession } from '@/app/lib/session';
 import { notFound } from 'next/navigation';
@@ -21,6 +22,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     shirtsSizes,
     transports,
     isEditingForUsersEnabled,
+    isShirtOrderingEnabled,
     session,
   ] = await Promise.all([
     fetchGroupById(id),
@@ -29,6 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     fetchShirtsSizes(),
     fetchTransportsWithItsLeavingHours(),
     fetchUserEditingConfiguration(),
+    fetchShirtOrderingConfiguration(),
     getSession(),
   ]);
 
@@ -57,6 +60,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         /* @ts-ignore */
         transports={transports}
         isEditingForUsersEnabled={isEditingForUsersEnabled}
+        isShirtOrderingEnabled={isShirtOrderingEnabled}
         loggedUserRole={session.user.role}
       />
     </main>

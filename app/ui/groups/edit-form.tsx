@@ -16,6 +16,7 @@ import GroupMember, { Member } from './group-member';
 import { MAX_MEMBERS_NUM, getMemberDefault, getMemberId } from './utils';
 
 let wasSubmitClicked = false;
+const mode = 'EDIT';
 
 export default function EditGroupForm({
   fetchedGroup,
@@ -24,6 +25,7 @@ export default function EditGroupForm({
   shirtsTypes,
   transports,
   isEditingForUsersEnabled,
+  isShirtOrderingEnabled,
   loggedUserRole,
 }: {
   fetchedGroup: any;
@@ -36,6 +38,7 @@ export default function EditGroupForm({
     leavingHours: Array<{ id: string; value: string }>;
   }>;
   isEditingForUsersEnabled: boolean;
+  isShirtOrderingEnabled: boolean;
   loggedUserRole: 'user' | 'admin';
 }) {
   const initialState = { message: null, errors: {} };
@@ -274,7 +277,7 @@ export default function EditGroupForm({
         )}
 
         <GroupDetails
-          mode="EDIT"
+          mode={mode}
           group={group}
           leavingHours={leavingHours}
           paths={paths}
@@ -291,10 +294,12 @@ export default function EditGroupForm({
               memberNumber={i + 1}
               removeMember={removeMember}
               saveMember={saveMember}
+              mode={mode}
               shirtsSizes={shirtsSizes}
               shirtsTypes={shirtsTypes}
               transports={transports}
               isInstitution={group.isInstitution}
+              isShirtOrderingEnabled={isShirtOrderingEnabled}
               member={member}
               loggedUserRole={loggedUserRole}
               memberErrors={state.errors?.members?.reduce(

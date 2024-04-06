@@ -31,6 +31,7 @@ export type Member = {
 export default function GroupMember({
   member,
   memberNumber,
+  mode,
   isInstitution,
   isShirtOrderingEnabled,
   removeMember,
@@ -43,6 +44,7 @@ export default function GroupMember({
 }: {
   member: Member;
   memberNumber: number;
+  mode?: string;
   isInstitution: string;
   isShirtOrderingEnabled: boolean;
   removeMember: Function;
@@ -72,6 +74,8 @@ export default function GroupMember({
     transportId,
     transportLeavingHourId,
   } = member;
+
+  const shouldShowShirtInfo = !isShirtOrderingEnabled && mode === 'EDIT';
 
   return (
     <div className="mb-8">
@@ -320,7 +324,7 @@ export default function GroupMember({
       </div>
 
       {/* Shirt type */}
-      {isShirtOrderingEnabled && (
+      {(isShirtOrderingEnabled || shouldShowShirtInfo) && (
         <>
           <div className="mb-4 mt-4">
             <label
@@ -336,9 +340,15 @@ export default function GroupMember({
                 <select
                   id={`shirt-type-${id}`}
                   name="shirtType"
-                  className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className={clsx(
+                    'peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500',
+                    {
+                      'opacity-50': shouldShowShirtInfo,
+                    },
+                  )}
                   aria-describedby="shirt-type-error"
                   value={shirtType}
+                  disabled={shouldShowShirtInfo}
                   onChange={(ev) =>
                     saveMember({
                       id,
@@ -371,9 +381,15 @@ export default function GroupMember({
                 <select
                   id={`shirt-size-${id}`}
                   name="shirtSize"
-                  className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className={clsx(
+                    'peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500',
+                    {
+                      'opacity-50': shouldShowShirtInfo,
+                    },
+                  )}
                   aria-describedby="shirt-type-error"
                   value={shirtSize}
+                  disabled={shouldShowShirtInfo}
                   onChange={(ev) =>
                     saveMember({
                       id,
