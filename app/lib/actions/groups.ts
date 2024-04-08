@@ -8,6 +8,7 @@ import {
   fetchFormConfiguration,
   fetchUserEditingConfiguration,
   fetchGroupsByEmailAddressCount,
+  fetchGroupsByNameCount,
 } from '@/app/lib/data';
 import {
   birthDayValidation,
@@ -215,15 +216,27 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
 
-  const groupsCountWithEmailAddress = await fetchGroupsByEmailAddressCount(
-    submittingPersonEmail,
-  );
+  const [groupsCountWithEmailAddress, groupsCountWithName] = await Promise.all([
+    fetchGroupsByEmailAddressCount(submittingPersonEmail),
+    fetchGroupsByNameCount(name),
+  ]);
 
-  if (groupsCountWithEmailAddress !== 0) {
+  if (Number(groupsCountWithEmailAddress) !== 0) {
     return {
       errors: {
         submittingPersonEmail: [
           'Jest już zgłoszona grupa połączona z tym adresem email. Proszę podać inny adres email.',
+        ],
+      },
+      message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+    };
+  }
+
+  if (Number(groupsCountWithName) !== 0) {
+    return {
+      errors: {
+        name: [
+          'Jest już zgłoszona grupa o takiej nazwie. Podaj proszę inną nazwę grupy.',
         ],
       },
       message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
