@@ -163,7 +163,23 @@ export async function fetchGroupsByEmailAddressCount(emailAddress: string) {
     return data.rows[0].count;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch members data.');
+    throw new Error('Failed to fetch group data.');
+  }
+}
+
+export async function fetchGroupsByNameCount(name: string) {
+  noStore();
+
+  try {
+    const data = await sql`
+      SELECT COUNT(*) 
+        FROM groups 
+        WHERE name = ${name}`;
+
+    return data.rows[0].count;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch group data.');
   }
 }
 
