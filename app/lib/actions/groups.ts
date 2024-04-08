@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache';
 import {
   fetchFormConfiguration,
   fetchUserEditingConfiguration,
+  fetchGroupsByEmailAddressCount,
 } from '@/app/lib/data';
 import {
   birthDayValidation,
@@ -213,6 +214,21 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     remarks,
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
+
+  const groupsCountWithEmailAddress = await fetchGroupsByEmailAddressCount(
+    submittingPersonEmail,
+  );
+
+  if (groupsCountWithEmailAddress !== 0) {
+    return {
+      errors: {
+        submittingPersonEmail: [
+          'Jest już zgłoszona grupa połączona z tym adresem email. Proszę podać inny adres email.',
+        ],
+      },
+      message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+    };
+  }
 
   // Insert data into the database
   try {

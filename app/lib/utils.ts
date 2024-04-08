@@ -17,27 +17,25 @@ export const getSortedMembersShirts = (
   }[],
 ) =>
   membersWithShirts.reduce(
-    (shirts, shirtInfo) => {
-      return {
-        ...shirts,
-        ...(shirtInfo.shirt_type === 'męska'
-          ? {
-              male: {
-                ...shirts.male,
-                [shirtInfo.shirt_size]: shirts.male[shirtInfo.shirt_size] + 1,
-              },
-            }
-          : {}),
-        ...(shirtInfo.shirt_type === 'damska'
-          ? {
-              female: {
-                ...shirts.female,
-                [shirtInfo.shirt_size]: shirts.female[shirtInfo.shirt_size] + 1,
-              },
-            }
-          : {}),
-      };
-    },
+    (shirts, shirtInfo) => ({
+      ...shirts,
+      ...(shirtInfo.shirt_type === 'męska'
+        ? {
+            male: {
+              ...shirts.male,
+              [shirtInfo.shirt_size]: shirts.male[shirtInfo.shirt_size] + 1,
+            },
+          }
+        : {}),
+      ...(shirtInfo.shirt_type === 'damska'
+        ? {
+            female: {
+              ...shirts.female,
+              [shirtInfo.shirt_size]: shirts.female[shirtInfo.shirt_size] + 1,
+            },
+          }
+        : {}),
+    }),
     {
       male: {
         S: 0,

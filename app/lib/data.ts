@@ -151,6 +151,22 @@ export async function fetchMembersWithPTTKCardCount() {
   }
 }
 
+export async function fetchGroupsByEmailAddressCount(emailAddress: string) {
+  noStore();
+
+  try {
+    const data = await sql`
+      SELECT COUNT(*) 
+        FROM groups 
+        WHERE submitting_person_email = ${emailAddress}`;
+
+    return data.rows[0].count;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch members data.');
+  }
+}
+
 export async function fetchMembersWithShirts() {
   noStore();
 
