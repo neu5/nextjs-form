@@ -151,6 +151,28 @@ export async function fetchMembersWithPTTKCardCount() {
   }
 }
 
+export async function fetchMembersWithShirts() {
+  noStore();
+
+  try {
+    const data = await sql`
+        SELECT 
+          members.shirt_size,
+          members.shirt_type
+        FROM members
+        WHERE 
+          shirt_size != '' OR shirt_type != ''`;
+
+    return data.rows as {
+      shirt_size: 'S' | 'M' | 'L' | 'XL' | 'XXL';
+      shirt_type: 'damska' | 'męska';
+    }[];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch members data.');
+  }
+}
+
 export async function fetchMembersWithPTTKCardForPrint() {
   noStore();
 

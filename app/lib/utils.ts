@@ -10,6 +10,52 @@ export const isAdult = ({
   /* @ts-ignore */
   Math.floor((eventDate - new Date(birthDate).getTime()) / 3.15576e10) >= 18;
 
+export const getSortedMembersShirts = (
+  membersWithShirts: {
+    shirt_size: 'S' | 'M' | 'L' | 'XL' | 'XXL';
+    shirt_type: 'damska' | 'męska';
+  }[],
+) =>
+  membersWithShirts.reduce(
+    (shirts, shirtInfo) => {
+      return {
+        ...shirts,
+        ...(shirtInfo.shirt_type === 'męska'
+          ? {
+              male: {
+                ...shirts.male,
+                [shirtInfo.shirt_size]: shirts.male[shirtInfo.shirt_size] + 1,
+              },
+            }
+          : {}),
+        ...(shirtInfo.shirt_type === 'damska'
+          ? {
+              female: {
+                ...shirts.female,
+                [shirtInfo.shirt_size]: shirts.female[shirtInfo.shirt_size] + 1,
+              },
+            }
+          : {}),
+      };
+    },
+    {
+      male: {
+        S: 0,
+        M: 0,
+        L: 0,
+        XL: 0,
+        XXL: 0,
+      },
+      female: {
+        S: 0,
+        M: 0,
+        L: 0,
+        XL: 0,
+        XXL: 0,
+      },
+    },
+  );
+
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
     style: 'currency',
