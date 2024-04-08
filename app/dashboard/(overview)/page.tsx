@@ -5,24 +5,107 @@ import {
   fetchGroupCount,
   fetchMembersCount,
   fetchMembersWithPTTKCardCount,
+  fetchMembersWithShirts,
 } from '@/app/lib/data';
 import { getSession } from '@/app/lib/session';
+import { getSortedMembersShirts } from '@/app/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Home',
 };
 
+const AdminInfo = ({
+  membersCount,
+  membersWithPTTKCardCount,
+  membersWithoutPTTKCardCount,
+  membersWithShirts,
+  groupCount,
+}: {
+  membersCount: number;
+  membersWithPTTKCardCount: number;
+  membersWithoutPTTKCardCount: number;
+  membersWithShirts: {
+    shirt_size: 'S' | 'M' | 'L' | 'XL' | 'XXL';
+    shirt_type: 'damska' | 'męska';
+  }[];
+  groupCount: number;
+}) => {
+  const sortedMembersShirts = getSortedMembersShirts(membersWithShirts);
+
+  return (
+    <div className="rounded-md bg-gray-50 p-4 md:p-6">
+      <div className="">
+        <p>
+          Liczba zapisanych uczestników:{' '}
+          <span className="font-bold">{membersCount}</span>
+        </p>
+        <p>
+          Liczba osób z legitymacją PTTK:{' '}
+          <span className="font-bold">{membersWithPTTKCardCount}</span>
+        </p>
+        <p>
+          Liczba osób bez legitymacji PTTK:{' '}
+          <span className="font-bold">{membersWithoutPTTKCardCount}</span>
+        </p>
+        <p>
+          Liczba grup: <span className="font-bold">{groupCount}</span>
+        </p>
+      </div>
+
+      <div className="mt-6">
+        <Link
+          href="/print/insurance-list-with-no-pttk"
+          target="_blank"
+          className="font-bold text-blue-600 underline"
+        >
+          Lista ubezpieczeniowa uczestników bez legitymacji PTTK
+        </Link>
+      </div>
+      <div className="">
+        <Link
+          href="/print/insurance-list-with-pttk"
+          target="_blank"
+          className="font-bold text-blue-600 underline"
+        >
+          Lista ubezpieczeniowa uczestników z legitymacją PTTK
+        </Link>
+      </div>
+
+      <div className="mt-6">
+        <h2>Koszulki</h2>
+        <h3 className="font-bold">Męskie</h3>
+        <p>S: {sortedMembersShirts.male.S}</p>
+        <p>M: {sortedMembersShirts.male.M}</p>
+        <p>L: {sortedMembersShirts.male.L}</p>
+        <p>XL: {sortedMembersShirts.male.XL}</p>
+        <p>XXL: {sortedMembersShirts.male.XXL}</p>
+        <h3 className="mt-4 font-bold">Damskie</h3>
+        <p>S: {sortedMembersShirts.female.S}</p>
+        <p>M: {sortedMembersShirts.female.M}</p>
+        <p>L: {sortedMembersShirts.female.L}</p>
+        <p>XL: {sortedMembersShirts.female.XL}</p>
+        <p>XXL: {sortedMembersShirts.female.XXL}</p>
+      </div>
+    </div>
+  );
+};
+
 export default async function Page() {
-  const [membersCount, membersWithPTTKCardCount, groupCount, session] =
-    await Promise.all([
-      fetchMembersCount(),
-      fetchMembersWithPTTKCardCount(),
-      fetchGroupCount(),
-      getSession(),
-    ]);
+  const [
+    membersCount,
+    membersWithPTTKCardCount,
+    groupCount,
+    membersWithShirts,
+    session,
+  ] = await Promise.all([
+    fetchMembersCount(),
+    fetchMembersWithPTTKCardCount(),
+    fetchGroupCount(),
+    fetchMembersWithShirts(),
+    getSession(),
+  ]);
 
   const membersWithoutPTTKCardCount = membersCount - membersWithPTTKCardCount;
-
   const isAdmin = session.user.role === 'admin';
 
   return (
@@ -31,44 +114,13 @@ export default async function Page() {
         Dashboard
       </h1>
       {isAdmin && (
-        <>
-          <div className="rounded-md bg-gray-50 p-4 md:p-6">
-            <p>
-              Liczba zapisanych uczestników:{' '}
-              <span className="font-bold">{membersCount}</span>
-            </p>
-            <p>
-              Liczba osób z legitymacją PTTK:{' '}
-              <span className="font-bold">{membersWithPTTKCardCount}</span>
-            </p>
-            <p>
-              Liczba osób bez legitymacji PTTK:{' '}
-              <span className="font-bold">{membersWithoutPTTKCardCount}</span>
-            </p>
-            <p>
-              Liczba grup: <span className="font-bold">{groupCount}</span>
-            </p>
-          </div>
-
-          <div className="rounded-md bg-gray-50 px-6 py-1">
-            <Link
-              href="/print/insurance-list-with-no-pttk"
-              target="_blank"
-              className="font-bold text-blue-600 underline"
-            >
-              Lista ubezpieczeniowa uczestników bez legitymacji PTTK
-            </Link>
-          </div>
-          <div className="rounded-md bg-gray-50 px-6 py-1">
-            <Link
-              href="/print/insurance-list-with-pttk"
-              target="_blank"
-              className="font-bold text-blue-600 underline"
-            >
-              Lista ubezpieczeniowa uczestników z legitymacją PTTK
-            </Link>
-          </div>
-        </>
+        <AdminInfo
+          membersCount={membersCount}
+          membersWithPTTKCardCount={membersWithPTTKCardCount}
+          membersWithoutPTTKCardCount={membersWithoutPTTKCardCount}
+          groupCount={groupCount}
+          membersWithShirts={membersWithShirts}
+        />
       )}
       {/* <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>
