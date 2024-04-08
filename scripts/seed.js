@@ -228,7 +228,7 @@ async function seedGroups(client) {
           name VARCHAR(255) NOT NULL,
           path_id UUID NOT NULL,
           leaving_hour_id UUID NOT NULL,
-          submitting_person_email VARCHAR(100) NOT NULL UNIQUE,
+          submitting_person_email VARCHAR(100) NOT NULL,
           chef_group_phone_number VARCHAR(20) NOT NULL,
           is_institution BOOLEAN DEFAULT FALSE,
           is_skkt_starachowice BOOLEAN DEFAULT FALSE,
