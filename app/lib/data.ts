@@ -183,6 +183,30 @@ export async function fetchGroupsByNameCount(name: string) {
   }
 }
 
+export async function fetchGroupRemarks() {
+  noStore();
+
+  try {
+    const data = await sql`
+        SELECT 
+          groups.id,
+          groups.name,
+          groups.submitting_person_email,
+          groups.path_id,
+          groups.remarks,
+          paths.name AS pathName
+        FROM groups
+        JOIN paths ON groups.path_id = paths.id
+        WHERE 
+          groups.remarks != ''`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch members data.');
+  }
+}
+
 export async function fetchMembersWithShirts() {
   noStore();
 
