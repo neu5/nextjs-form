@@ -54,6 +54,14 @@ const AdminInfo = ({
 
       <div className="mt-6">
         <Link
+          href="/dashboard/remarks"
+          className="font-bold text-blue-600 underline"
+        >
+          Uwagi ze wszystkich grup
+        </Link>
+      </div>
+      <div className="mt-4">
+        <Link
           href="/print/insurance-list-with-no-pttk"
           target="_blank"
           className="font-bold text-blue-600 underline"
