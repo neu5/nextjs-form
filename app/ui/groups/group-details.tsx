@@ -220,7 +220,7 @@ export default function GroupDetails({
                 })
               }
             />
-            <span>Czy grupa jest z SKKT Starachowice?</span>
+            <span>Czy grupa jest ze SKKT Starachowice?</span>
           </label>
         </div>
       )}
