@@ -23,7 +23,7 @@ export default async function GroupsRemarksTable() {
                   Email
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Nr legitymacji PTTK
+                  Treść uwagi
                 </th>
               </tr>
             </thead>
