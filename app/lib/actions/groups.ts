@@ -14,6 +14,7 @@ import {
   birthDayValidation,
   nameValidation,
   shirtsValidation,
+  minorChefGroupValidation,
 } from './validation';
 import { Member } from '@/app/ui/groups/group-member';
 import generator from 'generate-password';
@@ -129,6 +130,7 @@ const FormGroupSchema = z.object({
       nameValidation({ ctx, member });
       birthDayValidation({ ctx, member });
       shirtsValidation({ ctx, member });
+      minorChefGroupValidation({ ctx, member });
     });
 
     const showMissingChefError = !members.some(
