@@ -221,6 +221,32 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     fetchGroupsByNameCount(name),
   ]);
 
+  if (!isInstitution) {
+    let missingGuardiansErrors = [] as string[];
+
+    members.map((member) => {
+      if (!member.isAdult && member.guardianName === '') {
+        missingGuardiansErrors.push(member.id);
+      }
+    });
+
+    if (missingGuardiansErrors.length > 0) {
+      return {
+        errors: {
+          members: missingGuardiansErrors.map((id) =>
+            JSON.stringify({
+              id,
+              field: 'guardianName',
+              message:
+                'Dla osoby niepełnoletniej wymagane jest podanie danych opiekuna',
+            }),
+          ),
+        },
+        message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+      };
+    }
+  }
+
   if (Number(groupsCountWithEmailAddress) !== 0) {
     return {
       errors: {
