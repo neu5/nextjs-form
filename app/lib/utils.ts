@@ -1,4 +1,15 @@
 const TRIP_STARTING_DATE = new Date('2024-05-25');
+const THE_YOUNGEST_MEMBER_BIRTHDAY_DATE = new Date('2014-12-31');
+
+export const isAtLeastTenYearsOld = ({
+  date = THE_YOUNGEST_MEMBER_BIRTHDAY_DATE,
+  birthDate,
+}: {
+  date?: Date;
+  birthDate: string;
+}) =>
+  /* @ts-ignore */
+  Math.floor((date - new Date(birthDate).getTime()) / 3.15576e10) >= 0;
 
 export const isAdult = ({
   eventDate = TRIP_STARTING_DATE,
