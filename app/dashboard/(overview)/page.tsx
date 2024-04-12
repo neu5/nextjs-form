@@ -80,7 +80,16 @@ const AdminInfo = ({
       </div>
 
       <div className="mt-6">
-        <h2>Koszulki</h2>
+        <h2>
+          <Link
+            href="/print/shirts-list"
+            target="_blank"
+            className="font-bold text-blue-600 underline"
+          >
+            Koszulki
+          </Link>
+          : {membersWithShirts.length}
+        </h2>
         <h3 className="font-bold">Męskie</h3>
         <p>S: {sortedMembersShirts.male.S}</p>
         <p>M: {sortedMembersShirts.male.M}</p>
