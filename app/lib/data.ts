@@ -212,14 +212,22 @@ export async function fetchMembersWithShirts() {
 
   try {
     const data = await sql`
-        SELECT 
+        SELECT
+          members.id,
+          members.name,
+          members.group_id,
           members.shirt_size,
-          members.shirt_type
+          members.shirt_type,
+          groups.name as group_name
         FROM members
+        JOIN groups ON groups.id = members.group_id
         WHERE 
           shirt_size != '' OR shirt_type != ''`;
 
     return data.rows as {
+      id: string;
+      group_name: string;
+      name: string;
       shirt_size: 'S' | 'M' | 'L' | 'XL' | 'XXL';
       shirt_type: 'damska' | 'męska';
     }[];
