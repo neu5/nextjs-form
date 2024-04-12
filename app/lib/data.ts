@@ -137,6 +137,39 @@ export async function fetchMembersCount() {
   }
 }
 
+export async function fetchMembersGroupCount(id: string) {
+  noStore();
+
+  try {
+    const data = await sql`
+      SELECT COUNT(*) 
+        FROM members 
+        WHERE group_id = ${id}`;
+
+    return data.rows[0].count;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch group data.');
+  }
+}
+
+export async function fetchGroupChefByGroupId(id: string) {
+  noStore();
+
+  try {
+    const data = await sql`
+      SELECT
+        members.name
+      FROM members 
+      WHERE group_id = ${id} AND is_group_chef = true`;
+
+    return data.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch group data.');
+  }
+}
+
 export async function fetchMembersWithPTTKCardCount() {
   noStore();
 
@@ -460,6 +493,31 @@ export async function fetchGroupById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch group.');
+  }
+}
+
+export async function fetchGroupsByPathId(id: string) {
+  noStore();
+
+  try {
+    const data = await sql<PathForm>`
+      SELECT
+        groups.id,
+        groups.name,
+        groups.chef_group_phone_number,
+        groups.leaving_hour_id,
+        paths.id as path_id,
+        leaving_hours.value as leaving_hour
+      FROM groups
+      JOIN paths ON groups.path_id = paths.id
+      JOIN leaving_hours ON leaving_hours.id = groups.leaving_hour_id
+      WHERE paths.id = ${id}
+    `;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch groups.');
   }
 }
 

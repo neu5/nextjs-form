@@ -6,6 +6,7 @@ import {
   fetchMembersCount,
   fetchMembersWithPTTKCardCount,
   fetchMembersWithShirts,
+  fetchPaths,
 } from '@/app/lib/data';
 import { getSession } from '@/app/lib/session';
 import { getSortedMembersShirts } from '@/app/lib/utils';
@@ -20,6 +21,7 @@ const AdminInfo = ({
   membersWithoutPTTKCardCount,
   membersWithShirts,
   groupCount,
+  paths,
 }: {
   membersCount: number;
   membersWithPTTKCardCount: number;
@@ -29,6 +31,7 @@ const AdminInfo = ({
     shirt_type: 'damska' | 'męska';
   }[];
   groupCount: number;
+  paths: { id: string; type: string; name: string; date: Date }[];
 }) => {
   const sortedMembersShirts = getSortedMembersShirts(membersWithShirts);
 
@@ -50,6 +53,20 @@ const AdminInfo = ({
         <p>
           Liczba grup: <span className="font-bold">{groupCount}</span>
         </p>
+      </div>
+
+      <div className="mt-6">
+        <h3>Spis grup do druku dla kierowników tras:</h3>
+        {paths.map(({ id, name, type }) => (
+          <div key={id}>
+            <Link
+              href={`/print/groups/list/${id}`}
+              className="text-blue-600 underline"
+            >
+              {name} {type ? `(${type})` : ''}
+            </Link>
+          </div>
+        ))}
       </div>
 
       <div className="mt-6">
@@ -113,12 +130,14 @@ export default async function Page() {
     membersWithPTTKCardCount,
     groupCount,
     membersWithShirts,
+    paths,
     session,
   ] = await Promise.all([
     fetchMembersCount(),
     fetchMembersWithPTTKCardCount(),
     fetchGroupCount(),
     fetchMembersWithShirts(),
+    fetchPaths(),
     getSession(),
   ]);
 
@@ -137,6 +156,8 @@ export default async function Page() {
           membersWithoutPTTKCardCount={membersWithoutPTTKCardCount}
           groupCount={groupCount}
           membersWithShirts={membersWithShirts}
+          /* @ts-ignore */
+          paths={paths}
         />
       )}
       {/* <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
