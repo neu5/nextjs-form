@@ -82,29 +82,35 @@ export default async function GroupsTable({ id }: { id: string }) {
               {groupWithMembersCountAndGroupChef?.map((group, idx) => (
                 <tr
                   key={group.id}
-                  className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                  className="w-full border-b border-black py-3 text-sm"
                 >
-                  <td className="whitespace-nowrap border-solid py-3 pl-6 pr-3">
+                  <td className="whitespace-nowrap border border-black py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">{idx + 1}</div>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
                     <p>{group.name}</p>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
                     {group.groupChefName}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
                     {group.chef_group_phone_number}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
                     {group.leaving_hour}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">{''}</td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
+                    {''}
+                  </td>
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
                     {group.membersCount}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">{''}</td>
-                  <td className="whitespace-nowrap px-3 py-3">{''}</td>
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
+                    {''}
+                  </td>
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
+                    {''}
+                  </td>
                 </tr>
               ))}
             </tbody>

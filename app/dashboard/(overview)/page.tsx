@@ -61,6 +61,22 @@ const AdminInfo = ({
           <div key={id}>
             <Link
               href={`/print/groups/list/${id}`}
+              target="_blank"
+              className="text-blue-600 underline"
+            >
+              {name} {type ? `(${type})` : ''}
+            </Link>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6">
+        <h3>Lista obecności:</h3>
+        {paths.map(({ id, name, type }) => (
+          <div key={id}>
+            <Link
+              href={`/print/groups/attendance-list/${id}`}
+              target="_blank"
               className="text-blue-600 underline"
             >
               {name} {type ? `(${type})` : ''}
@@ -97,7 +113,7 @@ const AdminInfo = ({
       </div>
 
       <div className="mt-6">
-        <h2>
+        <h3>
           <Link
             href="/print/shirts-list"
             target="_blank"
@@ -106,7 +122,7 @@ const AdminInfo = ({
             Koszulki
           </Link>
           : {membersWithShirts.length}
-        </h2>
+        </h3>
         <h3 className="font-bold">Męskie</h3>
         <p>S: {sortedMembersShirts.male.S}</p>
         <p>M: {sortedMembersShirts.male.M}</p>

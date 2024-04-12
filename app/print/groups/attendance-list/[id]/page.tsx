@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import Table from '@/app/ui/print/groups/list';
+import Table from '@/app/ui/print/groups/attendance-list';
 
 export const metadata: Metadata = {
-  title: 'Do druku | Spis grup',
+  title: 'Do druku | Lista obecności',
 };
 
 export default function Print({ params }: { params: { id: string } }) {
