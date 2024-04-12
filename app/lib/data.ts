@@ -521,6 +521,25 @@ export async function fetchGroupsByPathId(id: string) {
   }
 }
 
+export async function fetchMembersGroup(id: string) {
+  noStore();
+
+  try {
+    const data = await sql`
+      SELECT
+        members.id,
+        members.name,
+        members.is_group_chef
+      FROM members 
+      WHERE group_id = ${id}`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch group data.');
+  }
+}
+
 export async function fetchUsers() {
   noStore();
 
