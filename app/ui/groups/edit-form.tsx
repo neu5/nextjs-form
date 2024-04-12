@@ -43,6 +43,7 @@ export default function EditGroupForm({
 }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(updateGroup, initialState);
+  const [isTooManyMembers, setTooManyMembersError] = useState(false);
 
   const {
     id,
@@ -124,16 +125,17 @@ export default function EditGroupForm({
 
   const addMember = () => {
     if (group.members.length >= MAX_MEMBERS_NUM) {
-      console.log(
-        `Nie można dodać więcej niż ${MAX_MEMBERS_NUM} uczestników do jednej grupy.`,
-      );
+      setTooManyMembersError(true);
+
       return;
     }
 
+    setTooManyMembersError(false);
     setGroup({ ...group, members: [...group.members, getMemberDefault()] });
   };
 
   const saveGroup = ({ name, value }: { name: string; value: string }) => {
+    setTooManyMembersError(false);
     setGroup({
       ...group,
       [name]: value,
@@ -149,6 +151,7 @@ export default function EditGroupForm({
     id: string;
     value: string;
   }) => {
+    setTooManyMembersError(false);
     setGroup({
       ...group,
       members: group.members
@@ -183,6 +186,7 @@ export default function EditGroupForm({
   };
 
   const removeMember = (id: string) => {
+    setTooManyMembersError(false);
     setGroup({
       ...group,
       members: group.members.reduce((result: Array<Member>, member: Member) => {
@@ -231,14 +235,17 @@ export default function EditGroupForm({
     [],
   );
 
-  if (wasSubmitClicked && state.errors && Object.keys(state.errors).length) {
+  if (
+    (wasSubmitClicked && state.errors && Object.keys(state.errors).length) ||
+    isTooManyMembers
+  ) {
     wasSubmitClicked = false;
 
     setTimeout(() => {
       const main = document.getElementsByTagName('main');
       const errorsElements = main[0].getElementsByClassName('text-red-500');
 
-      if (errorsElements.length) {
+      if (errorsElements.length || isTooManyMembers) {
         errorsElements[0].scrollIntoView({
           behavior: 'smooth',
           block: 'center',
@@ -367,6 +374,11 @@ export default function EditGroupForm({
           {state.message && (
             <p className="mt-2 text-sm text-red-500" key={state.message}>
               {state.message}
+            </p>
+          )}
+          {isTooManyMembers && (
+            <p className="mt-2 text-sm text-red-500">
+              Nie można dodać kolejnego uczestnika. Limit to {MAX_MEMBERS_NUM}.
             </p>
           )}
         </div>

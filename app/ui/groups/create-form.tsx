@@ -38,6 +38,8 @@ export default function Form({
 
   const [group, setGroup] = useState(getGroupDefault());
 
+  const [isTooManyMembers, setTooManyMembersError] = useState(false);
+
   let leavingHours = null;
 
   if (paths !== undefined && group.pathId !== '') {
@@ -50,16 +52,17 @@ export default function Form({
 
   const addMember = () => {
     if (group.members.length >= MAX_MEMBERS_NUM) {
-      console.log(
-        `Nie można dodać więcej niż ${MAX_MEMBERS_NUM} uczestników do jednej grupy.`,
-      );
+      setTooManyMembersError(true);
+
       return;
     }
 
+    setTooManyMembersError(false);
     setGroup({ ...group, members: [...group.members, getMemberDefault()] });
   };
 
   const saveGroup = ({ name, value }: { name: string; value: string }) => {
+    setTooManyMembersError(false);
     setGroup({
       ...group,
       [name]: value,
@@ -75,6 +78,7 @@ export default function Form({
     id: string;
     value: string;
   }) => {
+    setTooManyMembersError(false);
     setGroup({
       ...group,
       members: group.members
@@ -109,6 +113,7 @@ export default function Form({
   };
 
   const removeMember = (id: string) => {
+    setTooManyMembersError(false);
     setGroup({
       ...group,
       members: group.members.reduce((result: Array<Member>, member) => {
@@ -158,14 +163,17 @@ export default function Form({
     [],
   );
 
-  if (wasSubmitClicked && state.errors && Object.keys(state.errors).length) {
+  if (
+    (wasSubmitClicked && state.errors && Object.keys(state.errors).length) ||
+    isTooManyMembers
+  ) {
     wasSubmitClicked = false;
 
     setTimeout(() => {
       const main = document.getElementsByTagName('main');
       const errorsElements = main[0].getElementsByClassName('text-red-500');
 
-      if (errorsElements.length) {
+      if (errorsElements.length || isTooManyMembers) {
         errorsElements[0].scrollIntoView({
           behavior: 'smooth',
           block: 'center',
@@ -358,6 +366,11 @@ export default function Form({
               {error}
             </p>
           ))}
+          {isTooManyMembers && (
+            <p className="mt-2 text-sm text-red-500">
+              Nie można dodać kolejnego uczestnika. Limit to {MAX_MEMBERS_NUM}.
+            </p>
+          )}
         </div>
       </div>
 
