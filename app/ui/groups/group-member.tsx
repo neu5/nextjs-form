@@ -261,7 +261,7 @@ export default function GroupMember({
             htmlFor={`guardian-name-${id}`}
             className="mb-2 block text-sm font-medium"
           >
-            <span>Opiekun</span>
+            <span>Opiekun (opiekun musi być uczestnikiem rajdu)</span>
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -344,7 +344,7 @@ export default function GroupMember({
               className="mb-2 block text-sm font-medium"
             >
               <span className="after:ml-0.5 after:text-red-500">
-                Rodzaj koszulki
+                Rodzaj koszulki (25zł)
               </span>
             </label>
             <div className="relative mt-2 rounded-md">
