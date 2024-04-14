@@ -292,7 +292,7 @@ export default function Form({
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
               Akceptuję{' '}
               <a
-                href="http://www.emeryk.pttk.pl/images/Emeryk_2023_regulamin.pdf"
+                href="https://emeryk.pttk.pl/rajd/dokumenty"
                 target="_blank"
                 className="text-blue-600 underline"
               >
@@ -342,7 +342,7 @@ export default function Form({
               Emeryka organizowanego przez Oddział Międzyszkolny PTTK w
               Starachowicach.{' '}
               <a
-                href="http://www.emeryk.pttk.pl/images/rodo.pdf"
+                href="https://emeryk.pttk.pl/rajd/dokumenty"
                 target="_blank"
                 className="text-blue-600 underline"
               >
