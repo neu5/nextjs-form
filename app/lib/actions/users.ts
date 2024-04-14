@@ -18,12 +18,16 @@ const FormUsersSchema = z.object({
   role: z.enum(['admin', 'user']),
   password: z
     .string()
+    .min(6, { message: 'Hasło nie może mieć mniej niż 6 znaków' })
     .max(50, { message: 'Hasło nie może mieć więcej niż 50 znaków' })
-    .optional(),
+    .optional()
+    .or(z.literal('')),
   passwordConfirmation: z
     .string()
+    .min(6, { message: 'Hasło nie może mieć mniej niż 6 znaków' })
     .max(50, { message: 'Hasło nie może mieć więcej niż 50 znaków' })
-    .optional(),
+    .optional()
+    .or(z.literal('')),
 });
 
 export type UsersState = {
