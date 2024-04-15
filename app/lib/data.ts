@@ -505,6 +505,7 @@ export async function fetchGroupsByPathId(id: string) {
         groups.id,
         groups.name,
         groups.chef_group_phone_number,
+        groups.submitting_person_email,
         groups.leaving_hour_id,
         paths.id as path_id,
         leaving_hours.value as leaving_hour
@@ -529,7 +530,12 @@ export async function fetchMembersGroup(id: string) {
       SELECT
         members.id,
         members.name,
-        members.is_group_chef
+        members.is_group_chef,
+        members.birthday_date,
+        members.pttk_card_number,
+        members.shirt_size,
+        members.shirt_type,
+        members.fee
       FROM members 
       WHERE group_id = ${id}`;
 
