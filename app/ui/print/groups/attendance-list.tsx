@@ -42,7 +42,7 @@ const Table = ({
                   Lp.
                 </th>
                 <th scope="col" className="px-4 py-5 font-medium">
-                  Nazwa grupy
+                  Imię i nazwisko
                 </th>
                 <th scope="col" className="px-4 py-5 font-medium">
                   Obecność

@@ -1,4 +1,5 @@
 import { lusitana } from '@/app/ui/fonts';
+// import { Suspense } from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import {
@@ -7,15 +8,62 @@ import {
   fetchMembersWithPTTKCardCount,
   fetchMembersWithShirts,
   fetchPaths,
+  fetchGroupsByPathId,
+  fetchMembersGroupCount,
 } from '@/app/lib/data';
 import { getSession } from '@/app/lib/session';
 import { getSortedMembersShirts } from '@/app/lib/utils';
+import type { PathsTable } from '@/app/lib/definitions';
 
 export const metadata: Metadata = {
   title: 'Home',
 };
 
-const AdminInfo = ({
+async function MembersList({ paths }: { paths: PathsTable[] }) {
+  const pathsWithGroups = await Promise.all(
+    paths.map(async (path: PathsTable) => {
+      const groups = await fetchGroupsByPathId(path.id);
+
+      const membersPerGroup = await Promise.all(
+        groups.map(async (group) => {
+          const membersCount = await fetchMembersGroupCount(group.id);
+
+          return {
+            ...group,
+            membersCount,
+          };
+        }),
+      );
+
+      return {
+        ...path,
+        membersCount: membersPerGroup.reduce(
+          (sum, group) => sum + Number(group.membersCount),
+          0,
+        ),
+      };
+    }),
+  );
+
+  return (
+    <div className="mt-6">
+      <h3>Liczba ludzi na trasach:</h3>
+      {pathsWithGroups.map(({ id, name, type, membersCount }) => (
+        <div key={id}>
+          <Link
+            href={`/print/groups/members-list/${id}`}
+            target="_blank"
+            className="text-blue-600 underline"
+          >
+            {name} {type ? `(${type})` : ''} ({membersCount})
+          </Link>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const AdminInfo = async ({
   membersCount,
   membersWithPTTKCardCount,
   membersWithoutPTTKCardCount,
@@ -54,7 +102,8 @@ const AdminInfo = ({
           Liczba grup: <span className="font-bold">{groupCount}</span>
         </p>
       </div>
-
+      {/* @ts-ignore */}
+      <MembersList paths={paths} />
       <div className="mt-6">
         <h3>Spis grup do druku dla kierowników tras:</h3>
         {paths.map(({ id, name, type }) => (
@@ -69,7 +118,6 @@ const AdminInfo = ({
           </div>
         ))}
       </div>
-
       <div className="mt-6">
         <h3>Lista obecności:</h3>
         {paths.map(({ id, name, type }) => (
@@ -84,7 +132,6 @@ const AdminInfo = ({
           </div>
         ))}
       </div>
-
       <div className="mt-6">
         <Link
           href="/dashboard/remarks"
@@ -111,7 +158,6 @@ const AdminInfo = ({
           Lista ubezpieczeniowa uczestników z legitymacją PTTK
         </Link>
       </div>
-
       <div className="mt-6">
         <h3>
           <Link
@@ -176,19 +222,6 @@ export default async function Page() {
           paths={paths}
         />
       )}
-      {/* <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Suspense fallback={<CardsSkeleton />}>
-          <CardWrapper />
-        </Suspense>
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-        <Suspense fallback={<RevenueChartSkeleton />}>
-          <RevenueChart />
-        </Suspense>
-        <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices />
-        </Suspense>
-      </div> */}
     </main>
   );
 }
