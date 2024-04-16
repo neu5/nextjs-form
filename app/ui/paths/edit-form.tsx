@@ -6,6 +6,7 @@ import { GlobeEuropeAfricaIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updatePath } from '@/app/lib/actions/paths';
+import { getSortedLeavingHours } from '@/app/lib/utils';
 
 export default function EditPathForm({
   path,
@@ -20,6 +21,8 @@ export default function EditPathForm({
 }) {
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(updatePath, initialState);
+
+  const sortedLeavingHours = getSortedLeavingHours(leavingHours);
 
   return (
     <form action={dispatch}>
@@ -83,7 +86,7 @@ export default function EditPathForm({
             Godziny startu
           </label>
           <div className="relative mt-2 rounded-md">
-            {leavingHours.map((leavingHour) => (
+            {sortedLeavingHours.map((leavingHour) => (
               <div key={leavingHour.id} className="relative mt-2">
                 <input
                   id={leavingHour.id}
