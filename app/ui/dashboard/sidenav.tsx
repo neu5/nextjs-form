@@ -7,7 +7,13 @@ import { logout } from '@/app/lib/session';
 import { getSession } from '@/app/lib/session';
 
 export default async function SideNav() {
-  const { user } = await getSession();
+  const session = await getSession();
+
+  if (!session) {
+    return null;
+  }
+
+  const { user } = session;
 
   return (
     <div className="flex h-full flex-col overflow-y-auto px-3 py-4 md:px-2">
@@ -19,7 +25,7 @@ export default async function SideNav() {
           <EmerykLogo />
         </div>
       </Link>
-      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+      <div className="flex grow flex-row space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks id={user.id} groupId={user.groupId} role={user.role} />
         <form
           action={async () => {

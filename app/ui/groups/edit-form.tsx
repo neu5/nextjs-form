@@ -384,6 +384,14 @@ export default function EditGroupForm({
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
+        {(isEditingForUsersEnabled || loggedUserRole === 'admin') && (
+          <Link
+            href={`/dashboard/groups/${id}/delete`}
+            className="flex h-10 items-center rounded-lg bg-red-500 p-2 px-4 text-sm font-medium text-white transition-colors hover:bg-red-400 focus-visible:outline-red-500 active:bg-red-600"
+          >
+            Usuń grupę
+          </Link>
+        )}
         <Link
           href="/dashboard/groups"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"

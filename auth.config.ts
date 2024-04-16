@@ -13,7 +13,8 @@ const canUserGoThere = ({
   return (
     pathname === '/dashboard' ||
     pathname.includes(`/users/${userId}/edit`) ||
-    pathname.includes(`/groups/${groupId}/edit`)
+    pathname.includes(`/groups/${groupId}/edit`) ||
+    pathname.includes(`/groups/${groupId}/delete`)
   );
 };
 

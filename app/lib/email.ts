@@ -4,6 +4,7 @@ import {
   groupCreateMailAdmin,
   groupUpdateMailAdmin,
   userCreateMail,
+  groupDeleteMail,
 } from '@/app/lib/email-templates';
 import { ADMIN_EMAIL_ADDRESS } from '@/app/lib/constants';
 
@@ -99,6 +100,50 @@ export function sendGroupUpdateEmailToAdmin({ name }: { name: string }) {
     to: ADMIN_EMAIL_ADDRESS,
     subject: 'Rajd Nocny Świętego Emeryka',
     text: groupUpdateMailAdmin({ name }),
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email: ', error);
+    } else {
+      console.log('Email sent: ', info.response);
+    }
+  });
+}
+
+export function sendGroupDeleteEmail({
+  email,
+  name,
+}: {
+  email: string;
+  name: string;
+}) {
+  const transporter = getTransporter();
+
+  const mailOptions = {
+    from: ADMIN_EMAIL_ADDRESS,
+    to: email,
+    subject: 'Rajd Nocny Świętego Emeryka',
+    text: groupDeleteMail({ name }),
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email: ', error);
+    } else {
+      console.log('Email sent: ', info.response);
+    }
+  });
+}
+
+export function sendGroupDeleteEmailToAdmin({ name }: { name: string }) {
+  const transporter = getTransporter();
+
+  const mailOptions = {
+    from: ADMIN_EMAIL_ADDRESS,
+    to: ADMIN_EMAIL_ADDRESS,
+    subject: 'Rajd Nocny Świętego Emeryka',
+    text: groupDeleteMail({ name }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
