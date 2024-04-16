@@ -10,7 +10,8 @@ import {
   PhoneIcon,
 } from '@heroicons/react/24/outline';
 import { GroupForm } from '@/app/lib/definitions';
-import { GroupState } from '../../lib/actions/groups';
+import { GroupState } from '@/app/lib/actions/groups';
+import { getSortedLeavingHours } from '@/app/lib/utils';
 
 export default function GroupDetails({
   mode,
@@ -35,6 +36,12 @@ export default function GroupDetails({
   saveGroup: Function;
   state: GroupState;
 }) {
+  let sortedLeavingHours;
+
+  if (leavingHours) {
+    sortedLeavingHours = getSortedLeavingHours(leavingHours);
+  }
+
   return (
     <>
       {/* Group Name */}
@@ -128,7 +135,7 @@ export default function GroupDetails({
             Planowana godzina startu
           </span>
         </label>
-        {leavingHours ? (
+        {sortedLeavingHours ? (
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <select
@@ -147,7 +154,7 @@ export default function GroupDetails({
                 <option value="" disabled>
                   Wybierz godzinę
                 </option>
-                {leavingHours.map((leavingHour) => (
+                {sortedLeavingHours.map((leavingHour) => (
                   <option key={leavingHour.id} value={leavingHour.id}>
                     {leavingHour.value}
                   </option>

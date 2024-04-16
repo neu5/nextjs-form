@@ -65,6 +65,14 @@ export const getSortedMembersShirts = (
     },
   );
 
+export const getSortedLeavingHours = (
+  leavingHours: { id: string; value: string }[],
+) =>
+  leavingHours?.sort(
+    (a: { value: string }, b: { value: string }) =>
+      Number(a.value.replace(':', '')) - Number(b.value.replace(':', '')),
+  );
+
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
     style: 'currency',
