@@ -37,3 +37,12 @@ ${name}
 została uaktualniona.
 
 `;
+
+export const groupDeleteMail = ({ name }: { name: string }) => `Grupa:
+${name}
+
+została usunięta.
+
+Pozdrawiamy,
+emeryk.pttk.pl
+`;

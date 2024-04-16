@@ -1,6 +1,5 @@
 import { fetchTransports } from '@/app/lib/data';
 import { UpdateTransport } from '@/app/ui/transports/buttons';
-// import { formatDateToLocal } from '@/app/lib/utils';
 
 export default async function TransportsTable() {
   const transports = await fetchTransports();

@@ -3,6 +3,7 @@ import {
   groupCreateMail,
   groupCreateMailAdmin,
   groupUpdateMailAdmin,
+  groupDeleteMail,
 } from './group';
 
 export {
@@ -10,4 +11,5 @@ export {
   groupCreateMailAdmin,
   groupUpdateMailAdmin,
   userCreateMail,
+  groupDeleteMail,
 };

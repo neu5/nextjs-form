@@ -1,7 +1,5 @@
-// import Image from 'next/image';
 import { fetchGroups } from '@/app/lib/data';
-import { UpdateGroup } from '@/app/ui/groups/buttons';
-// import { formatDateToLocal } from '@/app/lib/utils';
+import { UpdateGroup, DeleteGroup } from '@/app/ui/groups/buttons';
 
 export default async function GroupsTable() {
   const groups = await fetchGroups();
@@ -33,7 +31,7 @@ export default async function GroupsTable() {
                   </div>
                   <div className="flex justify-end gap-2">
                     <UpdateGroup id={group.id} />
-                    {/* <DeleteInvoice id={invoice.id} /> */}
+                    <DeleteGroup id={group.id} />
                   </div>
                 </div>
               </div>
@@ -82,7 +80,7 @@ export default async function GroupsTable() {
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                       <UpdateGroup id={group.id} />
-                      {/* <DeleteInvoice id={invoice.id} /> */}
+                      <DeleteGroup id={group.id} />
                     </div>
                   </td>
                 </tr>

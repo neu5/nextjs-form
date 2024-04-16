@@ -9,6 +9,7 @@ import {
   fetchUserEditingConfiguration,
   fetchGroupsByEmailAddressCount,
   fetchGroupsByNameCount,
+  fetchUserByEmail,
 } from '@/app/lib/data';
 import {
   birthDayValidation,
@@ -23,8 +24,10 @@ import {
   sendGroupCreateEmail,
   sendGroupCreateEmailToAdmin,
   sendGroupUpdateEmailToAdmin,
+  sendGroupDeleteEmail,
+  sendGroupDeleteEmailToAdmin,
 } from '@/app/lib/email';
-import { getSession } from '@/app/lib/session';
+import { getSession, logout } from '@/app/lib/session';
 
 const SHIRT_FEE = 25;
 const REGULAR_MEMBER_FEE = 30;
@@ -559,4 +562,54 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
 
   revalidatePath('/dashboard/groups');
   redirect('/dashboard/groups');
+}
+
+export async function deleteGroup({
+  id,
+  name,
+  submitting_person_email,
+}: {
+  id: string;
+  name: string;
+  submitting_person_email: string;
+}) {
+  const user = await fetchUserByEmail(submitting_person_email);
+
+  if (!user) {
+    return { message: 'Database Error: Failed to fetch the User.' };
+  }
+
+  const session = await getSession();
+  const isAdmin = session.user.role === 'admin';
+
+  // delete members
+  try {
+    await sql`DELETE FROM members WHERE group_id = ${id}`;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Members.' };
+  }
+
+  // delete group
+  try {
+    await sql`DELETE FROM groups WHERE id = ${id}`;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Organizer.' };
+  }
+
+  // delete user
+  try {
+    await sql`DELETE FROM users WHERE id = ${user.id}`;
+
+    if (!isAdmin) {
+      await logout();
+    }
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete User.' };
+  }
+
+  sendGroupDeleteEmail({ name, email: submitting_person_email });
+  sendGroupDeleteEmailToAdmin({ name });
+
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
 }

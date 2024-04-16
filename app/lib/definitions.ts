@@ -75,6 +75,7 @@ export type PathForm = {
   id: string;
   name: string;
   type: string;
+  submitting_person_email: string;
 };
 
 export type LeavingHoursPathForm = {

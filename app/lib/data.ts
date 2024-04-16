@@ -587,6 +587,27 @@ export async function fetchUserById(id: string) {
   }
 }
 
+export async function fetchUserByEmail(email: string) {
+  noStore();
+
+  try {
+    const data = await sql<User>`
+        SELECT
+          users.id,
+          users.email,
+          users.name,
+          users.role,
+          users.group_id
+        FROM users
+        WHERE users.email = ${email}`;
+
+    return data.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch users data.');
+  }
+}
+
 export async function fetchOrganizers() {
   noStore();
 
