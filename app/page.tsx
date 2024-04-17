@@ -62,7 +62,7 @@ export default async function Page() {
       </div>
       <div className="flex items-center justify-center p-6">
         <Image
-          src="/emeryk2023-znaczek.png"
+          src="/emeryk2024-znaczek.png"
           width={200}
           height={200}
           className="hidden md:block"
@@ -70,7 +70,7 @@ export default async function Page() {
           priority={true}
         />
         <Image
-          src="/emeryk2023-znaczek.png"
+          src="/emeryk2024-znaczek.png"
           width={100}
           height={100}
           className="block md:hidden"
