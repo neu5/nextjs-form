@@ -13,12 +13,19 @@ const FormPathsSchema = z.object({
     .max(255, { message: 'Nazwa nie może mieć więcej niż 255 znaków' }),
   leavingHours: z.array(z.string()).optional(),
   pathType: z.string().optional(),
+  order: z
+    .string()
+    .regex(/^[+1-9]*$/, {
+      message: 'Kolejność powinna być wyrażona w liczbach od 1 w górę',
+    })
+    .optional(),
   date: z.string(),
 });
 
 export type PathState = {
   errors?: {
     name?: string[];
+    order?: string[];
   };
   message?: string | null;
 };
@@ -70,6 +77,7 @@ export async function updatePath(prevState: PathState, formData: FormData) {
     id: formData.get('id'),
     name: formData.get('name'),
     pathType: formData.get('pathType'),
+    order: formData.get('order'),
     leavingHours: formData.getAll('leavingHours'),
   });
 
@@ -81,12 +89,12 @@ export async function updatePath(prevState: PathState, formData: FormData) {
     };
   }
 
-  const { id, name, leavingHours, pathType } = validatedFields.data;
+  const { id, name, leavingHours, pathType, order } = validatedFields.data;
 
   try {
     await sql`
       UPDATE paths
-      SET name = ${name}, type = ${pathType}
+      SET name = ${name}, type = ${pathType}, path_order = ${order}
       WHERE id = ${id}
     `;
   } catch (error) {

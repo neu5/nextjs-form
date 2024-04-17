@@ -141,6 +141,7 @@ async function seedPaths(client) {
           id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
           type VARCHAR(50),
           name VARCHAR(255) NOT NULL,
+          path_order VARCHAR(10),
           date DATE NOT NULL
         );
       `;

@@ -1,16 +1,19 @@
 import { fetchPaths } from '@/app/lib/data';
 import { UpdatePath } from '@/app/ui/paths/buttons';
 import { formatDateToLocal } from '@/app/lib/utils';
+import { getSortedPaths } from '@/app/lib/utils';
 
 export default async function PathsTable() {
   const paths = await fetchPaths();
+
+  const sortedPaths = getSortedPaths(paths);
 
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
-            {paths?.map((path) => (
+            {sortedPaths?.map((path) => (
               <div
                 key={path.id}
                 className="mb-2 w-full rounded-md bg-white p-4"
@@ -23,7 +26,11 @@ export default async function PathsTable() {
                     <p className="text-sm text-gray-500">{path.type}</p>
                   </div>
                 </div>
+
                 <div className="flex w-full items-center justify-between pt-4">
+                  <div>
+                    <p>Kolejność - {path.path_order}</p>
+                  </div>
                   <div>
                     <p>{formatDateToLocal(path.date)}</p>
                   </div>
@@ -45,6 +52,9 @@ export default async function PathsTable() {
                   Rodzaj trasy
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
+                  Kolejność
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
                   Data dodania trasy
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -64,6 +74,9 @@ export default async function PathsTable() {
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">{path.type}</td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {path.path_order}
+                  </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatDateToLocal(path.date)}
                   </td>

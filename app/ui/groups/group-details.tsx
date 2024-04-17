@@ -11,7 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { GroupForm } from '@/app/lib/definitions';
 import { GroupState } from '@/app/lib/actions/groups';
-import { getSortedLeavingHours } from '@/app/lib/utils';
+import { getSortedLeavingHours, getSortedPaths } from '@/app/lib/utils';
 
 export default function GroupDetails({
   mode,
@@ -41,6 +41,8 @@ export default function GroupDetails({
   if (leavingHours) {
     sortedLeavingHours = getSortedLeavingHours(leavingHours);
   }
+
+  const sortedPaths = getSortedPaths(paths);
 
   return (
     <>
@@ -109,7 +111,7 @@ export default function GroupDetails({
               <option value="" disabled>
                 Wybierz trasę
               </option>
-              {paths.map((path) => (
+              {sortedPaths.map((path) => (
                 <option key={path.id} value={path.id}>
                   {path.name} {path.type ? `(${path.type})` : ''}
                 </option>
