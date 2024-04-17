@@ -379,10 +379,11 @@ export async function fetchLeavingHourById(id: string) {
   noStore();
 
   try {
-    const data = await sql<LeavingHoursTable>`SELECT
+    const data = await sql<LeavingHoursTable>`
+    SELECT
       id, value
-    FROM
-    leaving_hours WHERE id = ${id}`;
+    FROM leaving_hours
+    WHERE id = ${id}`;
 
     return data.rows[0];
   } catch (error) {
