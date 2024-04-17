@@ -375,6 +375,22 @@ export async function fetchLeavingHours() {
   }
 }
 
+export async function fetchLeavingHourById(id: string) {
+  noStore();
+
+  try {
+    const data = await sql<LeavingHoursTable>`SELECT
+      id, value
+    FROM
+    leaving_hours WHERE id = ${id}`;
+
+    return data.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch leaving hours data.');
+  }
+}
+
 export async function fetchPathsLeavingHours() {
   noStore();
 

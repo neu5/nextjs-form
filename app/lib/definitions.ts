@@ -79,6 +79,14 @@ export type PathForm = {
   type: string;
   path_order: string;
   submitting_person_email: string;
+  chef_group_phone_number: string;
+  is_institution: boolean;
+  leaving_hour_id: string;
+  path_id: string;
+  member_id: string;
+  member_name: string;
+  birthday_date: string;
+  is_group_chef: boolean;
 };
 
 export type LeavingHoursPathForm = {

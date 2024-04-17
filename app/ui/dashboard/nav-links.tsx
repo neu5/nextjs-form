@@ -41,7 +41,7 @@ const adminLinks = [
   },
 ];
 
-const userLinks = ({
+const memberLinks = ({
   userId,
   groupId,
 }: {
@@ -76,7 +76,7 @@ export default function NavLinks({
   const pathname = usePathname();
 
   const links =
-    role === 'admin' ? adminLinks : userLinks({ userId: id, groupId });
+    role === 'admin' ? adminLinks : memberLinks({ userId: id, groupId });
 
   return (
     <>
