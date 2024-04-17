@@ -549,6 +549,7 @@ export default function GroupMember({
       >
         Usuń uczestnika ({memberNumber})
       </Button>
+      <hr className="mt-6 border-2" />
     </div>
   );
 }
