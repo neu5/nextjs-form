@@ -326,7 +326,13 @@ export async function fetchPaths() {
   noStore();
 
   try {
-    const data = await sql<PathsTable>`SELECT * FROM paths`;
+    const data = await sql<PathsTable>`SELECT 
+     paths.id,
+     paths.type,
+     paths.name,
+     paths.path_order,
+     paths.date
+    FROM paths`;
 
     return data.rows;
   } catch (error) {
@@ -343,7 +349,8 @@ export async function fetchPathById(id: string) {
       SELECT
         paths.id,
         paths.name,
-        paths.type
+        paths.type,
+        paths.path_order
       FROM paths
       WHERE paths.id = ${id};
     `;

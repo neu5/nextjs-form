@@ -1,3 +1,5 @@
+import type { PathsTable } from '@/app/lib/definitions';
+
 const TRIP_STARTING_DATE = new Date('2024-05-25');
 const THE_YOUNGEST_MEMBER_BIRTHDAY_DATE = new Date('2014-12-31');
 
@@ -63,6 +65,13 @@ export const getSortedMembersShirts = (
         XXL: 0,
       },
     },
+  );
+
+export const getSortedPaths = (paths: PathsTable[]) =>
+  paths.sort(
+    (a: { path_order?: string }, b: { path_order?: string }) =>
+      Number(a.path_order === '' ? Infinity : a.path_order) -
+      Number(b.path_order === '' ? Infinity : b.path_order),
   );
 
 export const getSortedLeavingHours = (

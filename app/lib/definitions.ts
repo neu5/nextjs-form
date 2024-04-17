@@ -27,6 +27,7 @@ export type GroupForm = {
   name: string;
   type: string;
   date: string;
+  path_order: string;
   leavingHours: Array<{ id: string; value: string }>;
 };
 
@@ -38,6 +39,7 @@ export type PathsTable = {
   id: string;
   name: string;
   type: string;
+  path_order: string;
   date: string;
 };
 
@@ -75,6 +77,7 @@ export type PathForm = {
   id: string;
   name: string;
   type: string;
+  path_order: string;
   submitting_person_email: string;
 };
 

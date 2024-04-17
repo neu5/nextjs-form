@@ -77,6 +77,33 @@ export default function EditPathForm({
           </div>
         </div>
 
+        {/* Path Order */}
+        <div className="mb-4">
+          <label htmlFor="order" className="mb-2 block text-sm font-medium">
+            Kolejność trasy (1 do 100)
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="order"
+                name="order"
+                defaultValue={path.path_order}
+                placeholder="Kolejność"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="order-error"
+              />
+            </div>
+            <div id="order-error" aria-live="polite" aria-atomic="true">
+              {state.errors?.order &&
+                state.errors.order.map((error: string) => (
+                  <p className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
+
         {/* Leaving hours */}
         <div className="mb-4">
           <label
