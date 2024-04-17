@@ -11,7 +11,7 @@ import {
   fetchMembersGroupCount,
 } from '@/app/lib/data';
 import { getSession } from '@/app/lib/session';
-import { getSortedMembersShirts } from '@/app/lib/utils';
+import { getSortedMembersShirts, getSortedPaths } from '@/app/lib/utils';
 import type { PathsTable } from '@/app/lib/definitions';
 
 export const metadata: Metadata = {
@@ -78,9 +78,10 @@ const AdminInfo = async ({
     shirt_type: 'damska' | 'męska';
   }[];
   groupCount: number;
-  paths: { id: string; type: string; name: string; date: Date }[];
+  paths: PathsTable[];
 }) => {
   const sortedMembersShirts = getSortedMembersShirts(membersWithShirts);
+  const sortedPaths = getSortedPaths(paths);
 
   return (
     <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -102,10 +103,10 @@ const AdminInfo = async ({
         </p>
       </div>
       {/* @ts-ignore */}
-      <MembersList paths={paths} />
+      <MembersList paths={sortedPaths} />
       <div className="mt-6">
         <h3>Spis grup do druku dla kierowników tras:</h3>
-        {paths.map(({ id, name, type }) => (
+        {sortedPaths.map(({ id, name, type }) => (
           <div key={id}>
             <Link
               href={`/print/groups/list/${id}`}
@@ -119,7 +120,7 @@ const AdminInfo = async ({
       </div>
       <div className="mt-6">
         <h3>Lista obecności:</h3>
-        {paths.map(({ id, name, type }) => (
+        {sortedPaths.map(({ id, name, type }) => (
           <div key={id}>
             <Link
               href={`/print/groups/attendance-list/${id}`}
