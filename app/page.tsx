@@ -91,20 +91,13 @@ export default async function Page() {
           Prosimy podawać prawidłowe i kompletne dane w zgłoszeniu. Podanie
           niewłaściwych danych może skutkować brakiem ubezpieczenia dla
           uczestnika Rajdu. W przypadku konieczności zmiany danych uczestnika
-          Rajdu możliwe jest wykonanie korekty do dnia 01.06.2023 r.
+          Rajdu możliwe jest wykonanie korekty do dnia 19 maja 2024 r.
         </li>
         <li>
-          Jeśli osoba zgłaszająca grupę ma być uczestnikiem Rajdu należy
-          policzyć ją jako uczestnika i wpisać dane w polach dotyczących
-          uczestników Rajdu.
-        </li>
-        <li>
-          <strong className="font-bold">
-            Jeśli w grupie znajdują się osoby niepełnoletnie prosimy w uwagach
-            podać imię i nazwisko{' '}
-            <span className="text-red-600">opiekuna/opiekunów prawnych</span>
-            &nbsp; (opiekun prawny musi być uczestnikiem Rajdu).
-          </strong>
+          Jeśli w grupie znajdują się osoby niepełnoletnie prosimy w formularzu
+          podać imię i nazwisko{' '}
+          <span className="text-red-600">opiekuna/opiekunów prawnych</span>
+          &nbsp; (opiekun prawny musi być uczestnikiem Rajdu).
         </li>
         <li>
           Prosimy o wyznaczenie kierownika grupy (należy zaznaczyć opcję przy
@@ -130,14 +123,15 @@ export default async function Page() {
           opcję (przy każdym uczestniku Rajdu osobno) i z opcji wybrać rodzaj
           koszulki i rozmiar. Szczegóły w zakładce &nbsp;
           <a
-            href="http://www.emeryk.pttk.pl/koszulki"
-            target="_self"
+            href="https://emeryk.pttk.pl/rajd/koszulki"
+            target="_blank"
             title="Koszulki"
             className="font-bold text-blue-600 underline"
           >
             KOSZULKI
           </a>
-          .
+          . Od dnia 6 maja 2024 r. korekcie nie podlega ilość, rodzaj oraz
+          rozmiar zamówionych koszulek.
         </li>
         <li>
           Wszystkie pola oznaczone <span className="text-red-600">*</span> są
