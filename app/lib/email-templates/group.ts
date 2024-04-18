@@ -1,11 +1,19 @@
 export const groupCreateMail = ({
+  chefGroupPhoneNumber,
+  creationTime,
   email,
+  leavingHour,
   name,
   password,
+  pathName,
 }: {
+  chefGroupPhoneNumber: string;
+  creationTime: string;
   email: string;
+  leavingHour: string;
   name: string;
   password: string;
+  pathName: string;
 }) => `Dziękujemy za zgłoszenie grupy!
   
 Możesz edytować swoje zgłoszenie logując się na
@@ -17,8 +25,13 @@ Hasło: ${password}
 Hasło możesz zmienić w panelu po zalogowaniu.
 
 
-Podsumowanie zgłoszenia
-Nazwa grupy: ${name}
+<h2>Podsumowanie zgłoszenia</h2>
+Data zgłoszenia: ${creationTime}
+Nazwa drużyny: ${name}
+Wybrana trasa: ${pathName}
+Email zgłaszającego: ${email}
+Telefon zgłaszającego: ${chefGroupPhoneNumber}
+Planowana godzina startu: ${leavingHour}
   
 Pozdrawiamy,
 emeryk.pttk.pl

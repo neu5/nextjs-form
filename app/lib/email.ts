@@ -47,13 +47,21 @@ export function sendUserCreateEmail({
 }
 
 export function sendGroupCreateEmail({
+  chefGroupPhoneNumber,
+  creationTime,
   email,
+  leavingHour,
   name,
   password,
+  pathName,
 }: {
+  chefGroupPhoneNumber: string;
+  creationTime: string;
   email: string;
+  leavingHour: string;
   name: string;
   password: string;
+  pathName: string;
 }) {
   const transporter = getTransporter();
 
@@ -61,7 +69,15 @@ export function sendGroupCreateEmail({
     from: ADMIN_EMAIL_ADDRESS,
     to: email,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: groupCreateMail({ email, name, password }),
+    text: groupCreateMail({
+      chefGroupPhoneNumber,
+      creationTime,
+      email,
+      leavingHour,
+      name,
+      password,
+      pathName,
+    }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

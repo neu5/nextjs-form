@@ -10,6 +10,8 @@ import {
   fetchGroupsByEmailAddressCount,
   fetchGroupsByNameCount,
   fetchUserByEmail,
+  fetchPathById,
+  fetchLeavingHourById,
 } from '@/app/lib/data';
 import {
   birthDayValidation,
@@ -391,7 +393,18 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
         };
       }
 
-      sendGroupCreateEmail({ email: submittingPersonEmail, name, password });
+      const path = await fetchPathById(pathId);
+      const leavingHour = await fetchLeavingHourById(leavingHourId);
+
+      sendGroupCreateEmail({
+        chefGroupPhoneNumber,
+        creationTime: datetime,
+        email: submittingPersonEmail,
+        leavingHour: leavingHour.value,
+        name,
+        password,
+        pathName: path.name,
+      });
       sendGroupCreateEmailToAdmin({ name });
     } catch (error) {
       console.log(error);
