@@ -166,7 +166,7 @@ Każda koszulka kosztuje <b><u>25 zł</u></b>, zatem do przelewu należy doliczy
 <br>
 <h3>KONTAKT:</h3>
 <div>tel. 515 045 475 (Komendant Rajdu)</div>
-<div>e-mail:</div>
+<div>e-mail: kontakt@emeryk.pttk.pl</div>
 <br>
 <div><a href="kontakt@emeryk.pttk.pl">kontakt@emeryk.pttk.pl</a> - oficjalny adres email Rajdu</div>
 <div><a href="www.emeryk.pttk.pl">www.emeryk.pttk.pl</a> - oficjalna strona Rajdu</div>
@@ -348,7 +348,7 @@ Każda koszulka kosztuje <b><u>25 zł</u></b>, zatem do przelewu należy doliczy
 <br>
 <h3>KONTAKT:</h3>
 <div>tel. 515 045 475 (Komendant Rajdu)</div>
-<div>e-mail:</div>
+<div>e-mail: kontakt@emeryk.pttk.pl</div>
 <br>
 <div><a href="kontakt@emeryk.pttk.pl">kontakt@emeryk.pttk.pl</a> - oficjalny adres email Rajdu</div>
 <div><a href="www.emeryk.pttk.pl">www.emeryk.pttk.pl</a> - oficjalna strona Rajdu</div>
