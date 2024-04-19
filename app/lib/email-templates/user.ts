@@ -10,6 +10,6 @@ Twoim loginem jest adres email: ${email}
 Hasło: ${password}
   
 Hasło możesz zmienić w panelu
-https://formularz-test.emeryk.pttk.pl
+https://emeryk.pttk.pl/formularz
   
 https://emeryk.pttk.pl`;

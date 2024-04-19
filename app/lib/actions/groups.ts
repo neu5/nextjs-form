@@ -401,11 +401,44 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
         creationTime: datetime,
         email: submittingPersonEmail,
         leavingHour: leavingHour.value,
+        members,
         name,
         password,
         pathName: path.name,
+        pathType: path.type,
+        shirts: members.reduce((shirts, member) => {
+          if (!!member.shirtType && !!member.shirtSize) {
+            shirts.push({
+              shirtType: member.shirtType,
+              shirtSize: member.shirtSize,
+            });
+          }
+
+          return shirts;
+        }, []),
       });
-      sendGroupCreateEmailToAdmin({ name });
+
+      sendGroupCreateEmailToAdmin({
+        chefGroupPhoneNumber,
+        creationTime: datetime,
+        email: submittingPersonEmail,
+        leavingHour: leavingHour.value,
+        members,
+        name,
+        password,
+        pathName: path.name,
+        pathType: path.type,
+        shirts: members.reduce((shirts, member) => {
+          if (!!member.shirtType && !!member.shirtSize) {
+            shirts.push({
+              shirtType: member.shirtType,
+              shirtSize: member.shirtSize,
+            });
+          }
+
+          return shirts;
+        }, []),
+      });
     } catch (error) {
       console.log(error);
 
