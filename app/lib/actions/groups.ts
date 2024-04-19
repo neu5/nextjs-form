@@ -10,6 +10,8 @@ import {
   fetchGroupsByEmailAddressCount,
   fetchGroupsByNameCount,
   fetchUserByEmail,
+  fetchPathById,
+  fetchLeavingHourById,
 } from '@/app/lib/data';
 import {
   birthDayValidation,
@@ -391,8 +393,52 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
         };
       }
 
-      sendGroupCreateEmail({ email: submittingPersonEmail, name, password });
-      sendGroupCreateEmailToAdmin({ name });
+      const path = await fetchPathById(pathId);
+      const leavingHour = await fetchLeavingHourById(leavingHourId);
+
+      sendGroupCreateEmail({
+        chefGroupPhoneNumber,
+        creationTime: datetime,
+        email: submittingPersonEmail,
+        leavingHour: leavingHour.value,
+        members,
+        name,
+        password,
+        pathName: path.name,
+        pathType: path.type,
+        shirts: members.reduce((shirts, member) => {
+          if (!!member.shirtType && !!member.shirtSize) {
+            shirts.push({
+              shirtType: member.shirtType,
+              shirtSize: member.shirtSize,
+            });
+          }
+
+          return shirts;
+        }, []),
+      });
+
+      sendGroupCreateEmailToAdmin({
+        chefGroupPhoneNumber,
+        creationTime: datetime,
+        email: submittingPersonEmail,
+        leavingHour: leavingHour.value,
+        members,
+        name,
+        password,
+        pathName: path.name,
+        pathType: path.type,
+        shirts: members.reduce((shirts, member) => {
+          if (!!member.shirtType && !!member.shirtSize) {
+            shirts.push({
+              shirtType: member.shirtType,
+              shirtSize: member.shirtSize,
+            });
+          }
+
+          return shirts;
+        }, []),
+      });
     } catch (error) {
       console.log(error);
 

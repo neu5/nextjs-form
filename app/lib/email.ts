@@ -47,13 +47,27 @@ export function sendUserCreateEmail({
 }
 
 export function sendGroupCreateEmail({
+  chefGroupPhoneNumber,
+  creationTime,
   email,
+  leavingHour,
+  members,
   name,
   password,
+  pathName,
+  pathType,
+  shirts,
 }: {
+  chefGroupPhoneNumber: string;
+  creationTime: string;
   email: string;
+  leavingHour: string;
   name: string;
+  members: { name: string; birthdayDate: string; PTTKCardNumber: string }[];
   password: string;
+  pathName: string;
+  pathType: string;
+  shirts: { shirtType: string; shirtSize: string }[];
 }) {
   const transporter = getTransporter();
 
@@ -61,7 +75,18 @@ export function sendGroupCreateEmail({
     from: ADMIN_EMAIL_ADDRESS,
     to: email,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: groupCreateMail({ email, name, password }),
+    html: groupCreateMail({
+      chefGroupPhoneNumber,
+      creationTime,
+      email,
+      leavingHour,
+      members,
+      name,
+      password,
+      pathName,
+      pathType,
+      shirts,
+    }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -73,14 +98,47 @@ export function sendGroupCreateEmail({
   });
 }
 
-export function sendGroupCreateEmailToAdmin({ name }: { name: string }) {
+export function sendGroupCreateEmailToAdmin({
+  chefGroupPhoneNumber,
+  creationTime,
+  email,
+  leavingHour,
+  members,
+  name,
+  password,
+  pathName,
+  pathType,
+  shirts,
+}: {
+  chefGroupPhoneNumber: string;
+  creationTime: string;
+  email: string;
+  leavingHour: string;
+  name: string;
+  members: { name: string; birthdayDate: string; PTTKCardNumber: string }[];
+  password: string;
+  pathName: string;
+  pathType: string;
+  shirts: { shirtType: string; shirtSize: string }[];
+}) {
   const transporter = getTransporter();
 
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
     to: ADMIN_EMAIL_ADDRESS,
     subject: 'Rajd Nocny Świętego Emeryka',
-    text: groupCreateMailAdmin({ name }),
+    html: groupCreateMailAdmin({
+      chefGroupPhoneNumber,
+      creationTime,
+      email,
+      leavingHour,
+      members,
+      name,
+      password,
+      pathName,
+      pathType,
+      shirts,
+    }),
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
