@@ -276,6 +276,23 @@ export default function EditGroupForm({
             <span className="font-bold">wyłączona. 🚫</span>
           </div>
         )}
+        {!isShirtOrderingEnabled && (
+          <div className="mb-4 rounded-md bg-red-200 p-3">
+            Zamawianie koszulek jest{' '}
+            <span className="font-bold">wyłączone. 🚫</span>
+            <div>
+              W grupie znajdują się osoby z zamówionymi koszulkami, w związku z
+              tym nie da się usunąć grupy ani tych uczestników. Jeśli
+              potrzebujesz pomocy skontaktuj się z nami -{' '}
+              <a
+                className="text-blue-600 underline"
+                href="mailto:kontakt@emeryk.pttk.pl"
+              >
+                kontakt@emeryk.pttk.pl
+              </a>
+            </div>
+          </div>
+        )}
         {!isEditingForUsersEnabled && loggedUserRole === 'admin' && (
           <div className="mb-4 rounded-md bg-blue-200 p-3">
             Ale jesteś <span className="font-bold">🦸 adminem</span>, więc
@@ -384,7 +401,7 @@ export default function EditGroupForm({
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
-        {(isEditingForUsersEnabled || loggedUserRole === 'admin') && (
+        {isEditingForUsersEnabled && isShirtOrderingEnabled && (
           <Link
             href={`/dashboard/groups/${id}/delete`}
             className="flex h-10 items-center rounded-lg bg-red-500 p-2 px-4 text-sm font-medium text-white transition-colors hover:bg-red-400 focus-visible:outline-red-500 active:bg-red-600"
