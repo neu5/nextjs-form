@@ -193,6 +193,17 @@ export default function Form({
     ev.preventDefault();
   };
 
+  const adultGuardians = group.members.reduce(
+    (adultGuardians: Member[], member: Member) => {
+      if (member.isAdult) {
+        adultGuardians.push(member);
+      }
+
+      return adultGuardians;
+    },
+    [],
+  );
+
   return (
     <form onSubmit={onSubmit}>
       <h2 className="my-8 text-3xl font-bold">Dodaj zgłoszenie</h2>
@@ -211,6 +222,7 @@ export default function Form({
           {group.members.map((member, i) => (
             <GroupMember
               key={`group-member-${i}`}
+              adultGuardians={adultGuardians}
               memberNumber={i + 1}
               removeMember={removeMember}
               saveMember={saveMember}

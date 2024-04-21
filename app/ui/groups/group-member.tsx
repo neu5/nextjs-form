@@ -29,6 +29,7 @@ export type Member = {
 };
 
 export default function GroupMember({
+  adultGuardians,
   member,
   memberNumber,
   mode,
@@ -42,6 +43,7 @@ export default function GroupMember({
   memberErrors,
   loggedUserRole,
 }: {
+  adultGuardians: Member[];
   member: Member;
   memberNumber: number;
   mode?: string;
@@ -269,12 +271,11 @@ export default function GroupMember({
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
-              <input
+              <select
                 id={`guardian-name-${id}`}
                 name="guardianName"
                 placeholder="Imię i nazwisko opiekuna"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                type="text"
                 value={guardianName}
                 onChange={(ev) =>
                   saveMember({
@@ -284,7 +285,14 @@ export default function GroupMember({
                   })
                 }
                 aria-describedby="group-guardian-name-error"
-              />
+              >
+                <option value="">Wybierz opiekuna</option>
+                {adultGuardians.map(({ name }: { name: string }, idx) => (
+                  <option key={idx} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
               <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
             </div>
             <div
