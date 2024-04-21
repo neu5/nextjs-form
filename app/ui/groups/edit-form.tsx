@@ -280,6 +280,17 @@ export default function EditGroupForm({
     ev.preventDefault();
   };
 
+  const adultGuardians = group.members.reduce(
+    (adultGuardians: Member[], member: Member) => {
+      if (member.isAdult) {
+        adultGuardians.push(member);
+      }
+
+      return adultGuardians;
+    },
+    [],
+  );
+
   return (
     <form onSubmit={onSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -330,6 +341,7 @@ export default function EditGroupForm({
           {group.members.map((member: Member, i: number) => (
             <GroupMember
               key={`group-member-${i}`}
+              adultGuardians={adultGuardians}
               memberNumber={i + 1}
               removeMember={removeMember}
               saveMember={saveMember}
