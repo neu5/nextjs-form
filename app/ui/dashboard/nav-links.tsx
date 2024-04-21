@@ -48,6 +48,7 @@ const memberLinks = ({
   userId: string;
   groupId?: string;
 }) => [
+  { name: 'Home', href: '/dashboard', icon: HomeIcon },
   ...(groupId
     ? [
         {

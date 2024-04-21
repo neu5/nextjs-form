@@ -18,6 +18,15 @@ import { MAX_MEMBERS_NUM, getMemberDefault, getMemberId } from './utils';
 let wasSubmitClicked = false;
 const mode = 'EDIT';
 
+const DeleteMemberLink = ({ id }: { id: string }) => (
+  <Link
+    href={`/dashboard/groups/${id}/delete`}
+    className="flex h-10 items-center rounded-lg bg-red-500 p-2 px-4 text-sm font-medium text-white transition-colors hover:bg-red-400 focus-visible:outline-red-500 active:bg-red-600"
+  >
+    Usuń grupę
+  </Link>
+);
+
 export default function EditGroupForm({
   fetchedGroup,
   paths,
@@ -114,6 +123,12 @@ export default function EditGroupForm({
   });
 
   let leavingHours = null;
+  const isAdmin = loggedUserRole === 'admin';
+
+  const areMembersWithShirts = group.members.some(
+    ({ shirtSize, shirtType }: { shirtSize: string; shirtType: string }) =>
+      shirtSize && shirtType,
+  );
 
   if (paths !== undefined && group.pathId !== '') {
     const path = paths.find((path) => path.id === group.pathId);
@@ -293,7 +308,7 @@ export default function EditGroupForm({
             </div>
           </div>
         )}
-        {!isEditingForUsersEnabled && loggedUserRole === 'admin' && (
+        {!isEditingForUsersEnabled && isAdmin && (
           <div className="mb-4 rounded-md bg-blue-200 p-3">
             Ale jesteś <span className="font-bold">🦸 adminem</span>, więc
             możesz edytować.
@@ -401,13 +416,13 @@ export default function EditGroupForm({
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
-        {isEditingForUsersEnabled && isShirtOrderingEnabled && (
-          <Link
-            href={`/dashboard/groups/${id}/delete`}
-            className="flex h-10 items-center rounded-lg bg-red-500 p-2 px-4 text-sm font-medium text-white transition-colors hover:bg-red-400 focus-visible:outline-red-500 active:bg-red-600"
-          >
-            Usuń grupę
-          </Link>
+        {!isEditingForUsersEnabled ||
+        (!isShirtOrderingEnabled && areMembersWithShirts) ? (
+          isAdmin ? (
+            <DeleteMemberLink id={id} />
+          ) : null
+        ) : (
+          <DeleteMemberLink id={id} />
         )}
         <Link
           href="/dashboard/groups"
@@ -415,7 +430,7 @@ export default function EditGroupForm({
         >
           Anuluj
         </Link>
-        {(isEditingForUsersEnabled || loggedUserRole === 'admin') && (
+        {(isEditingForUsersEnabled || isAdmin) && (
           <Button type="submit">Zapisz zmiany</Button>
         )}
       </div>

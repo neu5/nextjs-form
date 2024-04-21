@@ -1,4 +1,5 @@
 import { getSession } from '@/app/lib/session';
+import Link from 'next/link';
 import {
   fetchGroupById,
   fetchPathById,
@@ -51,7 +52,15 @@ export default async function MemberInfo() {
 
   return (
     <div className="rounded-md bg-gray-50 p-4 md:p-6">
-      <h2>Podsumowanie grupy</h2>
+      <h2>
+        Podsumowanie grupy -{' '}
+        <Link
+          className="text-blue-600 underline"
+          href={`/dashboard/groups/${groupId}/edit`}
+        >
+          edytuj grupę
+        </Link>
+      </h2>
       <div className="mt-4">
         <table className="min-w-full md:table">
           <tbody className="bg-white">
