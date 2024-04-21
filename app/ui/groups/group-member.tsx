@@ -542,13 +542,15 @@ export default function GroupMember({
           </span>
         </label>
       </div>
-      <Button
-        type="button"
-        kind={BUTTON_KINDS.REMOVE}
-        onClick={() => removeMember(id)}
-      >
-        Usuń uczestnika ({memberNumber})
-      </Button>
+      {!isShirtOrderingEnabled && !!shirtSize && !!shirtType ? null : (
+        <Button
+          type="button"
+          kind={BUTTON_KINDS.REMOVE}
+          onClick={() => removeMember(id)}
+        >
+          Usuń uczestnika ({memberNumber})
+        </Button>
+      )}
       <hr className="mt-6 border-2" />
     </div>
   );
