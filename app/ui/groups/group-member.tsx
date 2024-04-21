@@ -184,10 +184,14 @@ export default function GroupMember({
           ) : null}
         </label>
         <div className="relative mt-2 rounded-md">
-          <span className="text-xs">
-            Możesz wpisać datę ręcznie lub wybrać z kalendarza, który otwiera
-            się po kliknięciu w ikonę po prawej stronie.
-          </span>
+          {typeof window !== 'undefined' ? (
+            'ontouchstart' in window ? null : (
+              <span className="text-xs">
+                Możesz wpisać datę ręcznie lub wybrać z kalendarza, który
+                otwiera się po kliknięciu w ikonę po prawej stronie.
+              </span>
+            )
+          ) : null}
           <div className="relative">
             <input
               id={`birthday-${id}`}
