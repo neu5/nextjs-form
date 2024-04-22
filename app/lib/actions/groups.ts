@@ -228,7 +228,45 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     fetchGroupsByNameCount(name),
   ]);
 
-  if (!isInstitution) {
+  if (isInstitution) {
+    let nonAdultMembers = [] as Member[];
+    let guardiansNumber = 0;
+
+    for (let i = 0; i < members.length; i++) {
+      if (members[i].isGuardian) {
+        guardiansNumber = guardiansNumber + 1;
+      }
+      if (!members[i].isAdult) {
+        nonAdultMembers.push(members[i]);
+      }
+    }
+
+    const nonAdultMembersNum = nonAdultMembers.length;
+
+    if (nonAdultMembersNum > 0) {
+      if (guardiansNumber === 0) {
+        return {
+          errors: {
+            name: ['Jest za mało opiekunów w grupie'],
+          },
+          message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+        };
+      }
+
+      const maxGuardiansNum = Math.ceil(nonAdultMembersNum / 10);
+
+      if (guardiansNumber > maxGuardiansNum) {
+        return {
+          errors: {
+            name: [
+              `Jest zbyt wielu opiekunów. Dla grupy liczącej osób: ${nonAdultMembersNum} maksymalna liczba opiekunów to ${maxGuardiansNum}`,
+            ],
+          },
+          message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+        };
+      }
+    }
+  } else {
     let missingGuardiansErrors = [] as string[];
 
     let adultMembers = [] as Member[];
@@ -522,7 +560,45 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
 
-  if (!isInstitution) {
+  if (isInstitution) {
+    let nonAdultMembers = [] as Member[];
+    let guardiansNumber = 0;
+
+    for (let i = 0; i < members.length; i++) {
+      if (members[i].isGuardian) {
+        guardiansNumber = guardiansNumber + 1;
+      }
+      if (!members[i].isAdult) {
+        nonAdultMembers.push(members[i]);
+      }
+    }
+
+    const nonAdultMembersNum = nonAdultMembers.length;
+
+    if (nonAdultMembersNum > 0) {
+      if (guardiansNumber === 0) {
+        return {
+          errors: {
+            name: ['Jest za mało opiekunów w grupie'],
+          },
+          message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+        };
+      }
+
+      const maxGuardiansNum = Math.ceil(nonAdultMembersNum / 10);
+
+      if (guardiansNumber > maxGuardiansNum) {
+        return {
+          errors: {
+            name: [
+              `Jest zbyt wielu opiekunów. Dla grupy liczącej osób: ${members.length} maksymalna liczba opiekunów to ${maxGuardiansNum}`,
+            ],
+          },
+          message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+        };
+      }
+    }
+  } else {
     let missingGuardiansErrors = [] as string[];
 
     let adultMembers = [] as Member[];
