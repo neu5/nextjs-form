@@ -231,9 +231,26 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
   if (!isInstitution) {
     let missingGuardiansErrors = [] as string[];
 
-    members.map((member) => {
-      if (!member.isAdult && member.guardianName === '') {
-        missingGuardiansErrors.push(member.id);
+    let adultMembers = [] as Member[];
+    let nonAdultMembers = [] as Member[];
+
+    for (let i = 0; i < members.length; i++) {
+      if (members[i].isAdult) {
+        adultMembers.push(members[i]);
+      } else {
+        nonAdultMembers.push(members[i]);
+      }
+    }
+
+    nonAdultMembers.forEach(({ guardianName, id }) => {
+      if (guardianName === '') {
+        return missingGuardiansErrors.push(id);
+      }
+
+      if (
+        !adultMembers.some((adultMember) => guardianName === adultMember.name)
+      ) {
+        return missingGuardiansErrors.push(id);
       }
     });
 
@@ -504,6 +521,49 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
     remarks,
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
+
+  if (!isInstitution) {
+    let missingGuardiansErrors = [] as string[];
+
+    let adultMembers = [] as Member[];
+    let nonAdultMembers = [] as Member[];
+
+    for (let i = 0; i < members.length; i++) {
+      if (members[i].isAdult) {
+        adultMembers.push(members[i]);
+      } else {
+        nonAdultMembers.push(members[i]);
+      }
+    }
+
+    nonAdultMembers.forEach(({ guardianName, id }) => {
+      if (guardianName === '') {
+        return missingGuardiansErrors.push(id);
+      }
+
+      if (
+        !adultMembers.some((adultMember) => guardianName === adultMember.name)
+      ) {
+        return missingGuardiansErrors.push(id);
+      }
+    });
+
+    if (missingGuardiansErrors.length > 0) {
+      return {
+        errors: {
+          members: missingGuardiansErrors.map((id) =>
+            JSON.stringify({
+              id,
+              field: 'guardianName',
+              message:
+                'Dla osoby niepełnoletniej wymagane jest podanie danych opiekuna',
+            }),
+          ),
+        },
+        message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+      };
+    }
+  }
 
   try {
     await sql`
