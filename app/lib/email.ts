@@ -138,7 +138,7 @@ export async function sendGroupCreateEmailToAdmin({
   return transporter.sendMail(mailOptions);
 }
 
-export function sendGroupUpdateEmailToAdmin({ name }: { name: string }) {
+export async function sendGroupUpdateEmailToAdmin({ name }: { name: string }) {
   const transporter = getTransporter();
 
   const mailOptions = {
@@ -148,13 +148,7 @@ export function sendGroupUpdateEmailToAdmin({ name }: { name: string }) {
     text: groupUpdateMailAdmin({ name }),
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error sending email: ', error);
-    } else {
-      console.log('Email sent: ', info.response);
-    }
-  });
+  return transporter.sendMail(mailOptions);
 }
 
 export function sendGroupDeleteEmail({
