@@ -46,7 +46,7 @@ export function sendUserCreateEmail({
   });
 }
 
-export function sendGroupCreateEmail({
+export async function sendGroupCreateEmail({
   chefGroupPhoneNumber,
   creationTime,
   email,
@@ -89,16 +89,10 @@ export function sendGroupCreateEmail({
     }),
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error sending email: ', error);
-    } else {
-      console.log('Email sent: ', info.response);
-    }
-  });
+  return transporter.sendMail(mailOptions);
 }
 
-export function sendGroupCreateEmailToAdmin({
+export async function sendGroupCreateEmailToAdmin({
   chefGroupPhoneNumber,
   creationTime,
   email,
@@ -141,13 +135,7 @@ export function sendGroupCreateEmailToAdmin({
     }),
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error sending email: ', error);
-    } else {
-      console.log('Email sent: ', info.response);
-    }
-  });
+  return transporter.sendMail(mailOptions);
 }
 
 export function sendGroupUpdateEmailToAdmin({ name }: { name: string }) {
