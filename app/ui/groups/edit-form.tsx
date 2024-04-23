@@ -75,6 +75,7 @@ export default function EditGroupForm({
     pathId: path_id,
     remarks,
     submittingPersonEmail: submitting_person_email,
+    shouldSentInitialEmail: '',
     members: fetchedGroup.map(
       ({
         birthday_date,
@@ -228,6 +229,7 @@ export default function EditGroupForm({
     formData.append('chefGroupPhoneNumber', group.chefGroupPhoneNumber);
     formData.append('remarks', group.remarks);
     formData.append('isInstitution', group.isInstitution);
+    formData.append('shouldSentInitialEmail', group.shouldSentInitialEmail);
     formData.append('isSKKTStarachowice', group.isSKKTStarachowice);
 
     group.members.forEach((member: Member) => {
@@ -323,6 +325,30 @@ export default function EditGroupForm({
           <div className="mb-4 rounded-md bg-blue-200 p-3">
             Ale jesteś <span className="font-bold">🦸 adminem</span>, więc
             możesz edytować.
+          </div>
+        )}
+
+        {isAdmin && (
+          <div className="mb-8">
+            <label className="mb-2 block flex text-sm font-medium">
+              <input
+                name="shouldSentInitialEmail"
+                id="shouldSentInitialEmail"
+                className="peer mr-4 block border border-gray-200 text-sm placeholder:text-gray-500"
+                type="checkbox"
+                checked={!!group.shouldSentInitialEmail}
+                onChange={(ev) =>
+                  saveGroup({
+                    name: 'shouldSentInitialEmail',
+                    value: ev.target.checked ? 'true' : '',
+                  })
+                }
+              />
+              <span>
+                ADMINIE Czy wysłać maila z potwierdzeniem dodania grupy razem z
+                nowym hasłem zgłaszającego?
+              </span>
+            </label>
           </div>
         )}
 

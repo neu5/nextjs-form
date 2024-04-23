@@ -81,7 +81,7 @@ export default async function Page() {
       <h2 className="my-8 text-3xl font-bold">
         Zanim wypełnisz formularz zgłoszeniowy…
       </h2>
-      <ul className="list-disc leading-loose">
+      <ul className="list-disc pl-4 leading-loose">
         <li>
           Prosimy o wcześniejsze zapoznanie się z przebiegiem tras i godzinami
           startu.

@@ -154,6 +154,7 @@ const FormGroupSchema = z.object({
 
     return members;
   }),
+  shouldSentInitialEmail: z.string().optional(),
 });
 
 export type GroupState = {
@@ -171,7 +172,11 @@ export type GroupState = {
   message?: string | null;
 };
 
-const CreateGroup = FormGroupSchema.omit({ id: true, fee: true });
+const CreateGroup = FormGroupSchema.omit({
+  id: true,
+  fee: true,
+  shouldSentInitialEmail: true,
+});
 const UpdateGroup = FormGroupSchema.omit({
   rodo: true,
   termsAndConditions: true,
@@ -543,6 +548,7 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
     isSKKTStarachowice: formData.get('isSKKTStarachowice'),
     members: formData.getAll('members'),
     remarks: formData.get('remarks'),
+    shouldSentInitialEmail: formData.get('shouldSentInitialEmail'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
@@ -565,6 +571,7 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
     chefGroupPhoneNumber,
     members,
     remarks,
+    shouldSentInitialEmail,
   } = validatedFields.data;
   const datetime = new Date().toLocaleString('pl-PL');
 
@@ -738,7 +745,56 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
         ),
       );
 
-      sendGroupUpdateEmailToAdmin({ name });
+      if (shouldSentInitialEmail === 'true') {
+        const password = generator.generate({
+          length: 10,
+          numbers: true,
+        });
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        try {
+          await sql`
+            UPDATE users
+            SET               
+              password = ${hashedPassword}
+            WHERE email = ${submittingPersonEmail}
+          `;
+        } catch (error) {
+          return { message: 'Database Error: Failed to Update Users.' };
+        }
+
+        const path = await fetchPathById(pathId);
+        const leavingHour = await fetchLeavingHourById(leavingHourId);
+
+        try {
+          await sendGroupCreateEmail({
+            chefGroupPhoneNumber,
+            creationTime: datetime,
+            email: submittingPersonEmail,
+            leavingHour: leavingHour.value,
+            members,
+            name,
+            password,
+            pathName: path.name,
+            pathType: path.type,
+            shirts: members.reduce((shirts, member) => {
+              if (!!member.shirtType && !!member.shirtSize) {
+                shirts.push({
+                  shirtType: member.shirtType,
+                  shirtSize: member.shirtSize,
+                });
+              }
+
+              return shirts;
+            }, []),
+          });
+        } catch (e) {
+          throw Error(`Nie udało się wysłać maila. ${e}`);
+        }
+      }
+
+      await sendGroupUpdateEmailToAdmin({ name });
     } catch (error) {
       console.log(error);
 
