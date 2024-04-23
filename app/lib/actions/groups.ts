@@ -451,49 +451,61 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
       const path = await fetchPathById(pathId);
       const leavingHour = await fetchLeavingHourById(leavingHourId);
 
-      sendGroupCreateEmail({
-        chefGroupPhoneNumber,
-        creationTime: datetime,
-        email: submittingPersonEmail,
-        leavingHour: leavingHour.value,
-        members,
-        name,
-        password,
-        pathName: path.name,
-        pathType: path.type,
-        shirts: members.reduce((shirts, member) => {
-          if (!!member.shirtType && !!member.shirtSize) {
-            shirts.push({
-              shirtType: member.shirtType,
-              shirtSize: member.shirtSize,
-            });
-          }
+      try {
+        console.log('wysyłanie maili do użytkownika');
+        sendGroupCreateEmail({
+          chefGroupPhoneNumber,
+          creationTime: datetime,
+          email: submittingPersonEmail,
+          leavingHour: leavingHour.value,
+          members,
+          name,
+          password,
+          pathName: path.name,
+          pathType: path.type,
+          shirts: members.reduce((shirts, member) => {
+            if (!!member.shirtType && !!member.shirtSize) {
+              shirts.push({
+                shirtType: member.shirtType,
+                shirtSize: member.shirtSize,
+              });
+            }
 
-          return shirts;
-        }, []),
-      });
+            return shirts;
+          }, []),
+        });
+      } catch (e) {
+        console.log(`Nie udało się wysłać maila. ${e}`);
+        throw Error(`Nie udało się wysłać maila. ${e}`);
+      }
 
-      sendGroupCreateEmailToAdmin({
-        chefGroupPhoneNumber,
-        creationTime: datetime,
-        email: submittingPersonEmail,
-        leavingHour: leavingHour.value,
-        members,
-        name,
-        password,
-        pathName: path.name,
-        pathType: path.type,
-        shirts: members.reduce((shirts, member) => {
-          if (!!member.shirtType && !!member.shirtSize) {
-            shirts.push({
-              shirtType: member.shirtType,
-              shirtSize: member.shirtSize,
-            });
-          }
+      try {
+        console.log('wysyłanie maili do admina');
+        sendGroupCreateEmailToAdmin({
+          chefGroupPhoneNumber,
+          creationTime: datetime,
+          email: submittingPersonEmail,
+          leavingHour: leavingHour.value,
+          members,
+          name,
+          password,
+          pathName: path.name,
+          pathType: path.type,
+          shirts: members.reduce((shirts, member) => {
+            if (!!member.shirtType && !!member.shirtSize) {
+              shirts.push({
+                shirtType: member.shirtType,
+                shirtSize: member.shirtSize,
+              });
+            }
 
-          return shirts;
-        }, []),
-      });
+            return shirts;
+          }, []),
+        });
+      } catch (e) {
+        console.log(`Nie udało się wysłać maila. ${e}`);
+        throw Error(`Nie udało się wysłać maila. ${e}`);
+      }
     } catch (error) {
       console.log(error);
 
