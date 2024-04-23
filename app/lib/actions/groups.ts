@@ -452,8 +452,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
       const leavingHour = await fetchLeavingHourById(leavingHourId);
 
       try {
-        console.log('wysyłanie maili do użytkownika');
-        sendGroupCreateEmail({
+        await sendGroupCreateEmail({
           chefGroupPhoneNumber,
           creationTime: datetime,
           email: submittingPersonEmail,
@@ -475,13 +474,11 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           }, []),
         });
       } catch (e) {
-        console.log(`Nie udało się wysłać maila. ${e}`);
         throw Error(`Nie udało się wysłać maila. ${e}`);
       }
 
       try {
-        console.log('wysyłanie maili do admina');
-        sendGroupCreateEmailToAdmin({
+        await sendGroupCreateEmailToAdmin({
           chefGroupPhoneNumber,
           creationTime: datetime,
           email: submittingPersonEmail,
@@ -503,7 +500,6 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           }, []),
         });
       } catch (e) {
-        console.log(`Nie udało się wysłać maila. ${e}`);
         throw Error(`Nie udało się wysłać maila. ${e}`);
       }
     } catch (error) {
