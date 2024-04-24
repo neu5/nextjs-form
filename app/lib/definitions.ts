@@ -53,8 +53,8 @@ export type UsersTable = {
 export type OrganizersTable = {
   id: string;
   name: string;
-  shirt_size?: string;
-  shirt_type?: string;
+  shirt_size: 'S' | 'M' | 'L' | 'XL' | 'XXL';
+  shirt_type: 'damska' | 'męska';
 };
 
 export type TransportsTable = {

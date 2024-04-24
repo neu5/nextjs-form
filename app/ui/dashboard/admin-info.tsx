@@ -7,9 +7,36 @@ import {
   fetchPaths,
   fetchGroupsByPathId,
   fetchMembersGroupCount,
+  fetchOrganizers,
 } from '@/app/lib/data';
 import { getSortedMembersShirts, getSortedPaths } from '@/app/lib/utils';
 import type { PathsTable } from '@/app/lib/definitions';
+
+type sortedShirts = {
+  male: shirts;
+  female: shirts;
+};
+type shirts = { S: number; M: number; L: number; XL: number; XXL: number };
+
+const getSortedShirts = (
+  sortedMembersShirts: sortedShirts,
+  sortedOrganizersShirts: sortedShirts,
+) => ({
+  male: {
+    S: sortedMembersShirts.male.S + sortedOrganizersShirts.male.S,
+    M: sortedMembersShirts.male.M + sortedOrganizersShirts.male.M,
+    L: sortedMembersShirts.male.L + sortedOrganizersShirts.male.L,
+    XL: sortedMembersShirts.male.XL + sortedOrganizersShirts.male.XL,
+    XXL: sortedMembersShirts.male.XXL + sortedOrganizersShirts.male.XXL,
+  },
+  female: {
+    S: sortedMembersShirts.female.S + sortedOrganizersShirts.female.S,
+    M: sortedMembersShirts.female.M + sortedOrganizersShirts.female.M,
+    L: sortedMembersShirts.female.L + sortedOrganizersShirts.female.L,
+    XL: sortedMembersShirts.female.XL + sortedOrganizersShirts.female.XL,
+    XXL: sortedMembersShirts.female.XXL + sortedOrganizersShirts.female.XXL,
+  },
+});
 
 async function MembersList({ paths }: { paths: PathsTable[] }) {
   const pathsWithGroups = await Promise.all(
@@ -63,17 +90,38 @@ export default async function AdminInfo() {
     groupCount,
     membersWithShirts,
     paths,
+    organizers,
   ] = await Promise.all([
     fetchMembersCount(),
     fetchMembersWithPTTKCardCount(),
     fetchGroupCount(),
     fetchMembersWithShirts(),
     fetchPaths(),
+    fetchOrganizers(),
   ]);
 
   const membersWithoutPTTKCardCount = membersCount - membersWithPTTKCardCount;
 
   const sortedMembersShirts = getSortedMembersShirts(membersWithShirts);
+  const sortedOrganizersShirts = getSortedMembersShirts(organizers);
+
+  const sortedShirts = getSortedShirts(
+    sortedMembersShirts,
+    sortedOrganizersShirts,
+  );
+
+  const sortedShirtsSum =
+    sortedShirts.male.S +
+    sortedShirts.male.M +
+    sortedShirts.male.L +
+    sortedShirts.male.XL +
+    sortedShirts.male.XXL +
+    sortedShirts.female.S +
+    sortedShirts.female.M +
+    sortedShirts.female.L +
+    sortedShirts.female.XL +
+    sortedShirts.female.XXL;
+
   const sortedPaths = getSortedPaths(paths);
 
   return (
@@ -160,20 +208,20 @@ export default async function AdminInfo() {
           >
             Koszulki
           </Link>
-          : {membersWithShirts.length}
+          : {sortedShirtsSum}
         </h3>
         <h3 className="font-bold">Męskie</h3>
-        <p>S: {sortedMembersShirts.male.S}</p>
-        <p>M: {sortedMembersShirts.male.M}</p>
-        <p>L: {sortedMembersShirts.male.L}</p>
-        <p>XL: {sortedMembersShirts.male.XL}</p>
-        <p>XXL: {sortedMembersShirts.male.XXL}</p>
+        <p>S: {sortedShirts.male.S}</p>
+        <p>M: {sortedShirts.male.M}</p>
+        <p>L: {sortedShirts.male.L}</p>
+        <p>XL: {sortedShirts.male.XL}</p>
+        <p>XXL: {sortedShirts.male.XXL}</p>
         <h3 className="mt-4 font-bold">Damskie</h3>
-        <p>S: {sortedMembersShirts.female.S}</p>
-        <p>M: {sortedMembersShirts.female.M}</p>
-        <p>L: {sortedMembersShirts.female.L}</p>
-        <p>XL: {sortedMembersShirts.female.XL}</p>
-        <p>XXL: {sortedMembersShirts.female.XXL}</p>
+        <p>S: {sortedShirts.female.S}</p>
+        <p>M: {sortedShirts.female.M}</p>
+        <p>L: {sortedShirts.female.L}</p>
+        <p>XL: {sortedShirts.female.XL}</p>
+        <p>XXL: {sortedShirts.female.XXL}</p>
       </div>
     </div>
   );
