@@ -47,7 +47,8 @@ async function MembersList({ paths }: { paths: PathsTable[] }) {
             target="_blank"
             className="text-blue-600 underline"
           >
-            {name} {type ? `(${type})` : ''} ({membersCount})
+            {name} {type ? `(${type})` : ''}{' '}
+            <span className="font-bold">({membersCount})</span>
           </Link>
         </div>
       ))}

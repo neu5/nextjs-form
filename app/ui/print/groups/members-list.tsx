@@ -48,8 +48,9 @@ const Table = ({
       <div className="inline-block min-w-full align-middle">
         <div className="">
           <h2 className="mx-4">
-            {group.name} | {group.chef_group_phone_number} |{' '}
-            {group.submitting_person_email} | Suma opłat: {feeSum} PLN
+            <span className="font-bold">{group.name}</span> |{' '}
+            {group.chef_group_phone_number} | {group.submitting_person_email} |
+            Suma opłat: {feeSum} PLN
           </h2>
 
           <table className="min-w-full md:table">
@@ -59,7 +60,7 @@ const Table = ({
                   Lp.
                 </th>
                 <th scope="col" className="px-4 py-5 font-medium">
-                  Nazwa grupy
+                  Imię i nazwisko
                 </th>
                 <th scope="col" className="px-4 py-5 font-medium">
                   Data urodzenia
