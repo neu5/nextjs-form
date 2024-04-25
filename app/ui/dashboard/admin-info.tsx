@@ -8,6 +8,7 @@ import {
   fetchGroupsByPathId,
   fetchMembersGroupCount,
   fetchOrganizers,
+  fetchMembersFees,
 } from '@/app/lib/data';
 import { getSortedMembersShirts, getSortedPaths } from '@/app/lib/utils';
 import type { PathsTable } from '@/app/lib/definitions';
@@ -91,6 +92,7 @@ export default async function AdminInfo() {
     membersWithShirts,
     paths,
     organizers,
+    membersFees,
   ] = await Promise.all([
     fetchMembersCount(),
     fetchMembersWithPTTKCardCount(),
@@ -98,6 +100,7 @@ export default async function AdminInfo() {
     fetchMembersWithShirts(),
     fetchPaths(),
     fetchOrganizers(),
+    fetchMembersFees(),
   ]);
 
   const membersWithoutPTTKCardCount = membersCount - membersWithPTTKCardCount;
@@ -124,6 +127,11 @@ export default async function AdminInfo() {
 
   const sortedPaths = getSortedPaths(paths);
 
+  const membersFeesSum = membersFees.reduce(
+    (sum, member) => sum + Number(member.fee),
+    0,
+  );
+
   return (
     <div className="rounded-md bg-gray-50 p-4 md:p-6">
       <div>
@@ -142,6 +150,10 @@ export default async function AdminInfo() {
         <p>
           Liczba grup: <span className="font-bold">{groupCount}</span>
         </p>
+      </div>
+      <div className="mt-4">
+        Szacunkowe wpłaty:{' '}
+        <span className="font-bold">{membersFeesSum} PLN</span>
       </div>
       {/* @ts-ignore */}
       <MembersList paths={sortedPaths} />

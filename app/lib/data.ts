@@ -137,6 +137,20 @@ export async function fetchMembersCount() {
   }
 }
 
+export async function fetchMembersFees() {
+  noStore();
+
+  try {
+    const data = await sql`
+        SELECT fee FROM members`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch members data.');
+  }
+}
+
 export async function fetchMembersGroupCount(id: string) {
   noStore();
 
