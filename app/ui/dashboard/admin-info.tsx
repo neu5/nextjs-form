@@ -152,6 +152,15 @@ export default async function AdminInfo() {
         </p>
       </div>
       <div className="mt-4">
+        <Link
+          href="/print/groups/list-with-numbers"
+          target="_blank"
+          className="text-blue-600 underline"
+        >
+          Lista grup + ilość uczestników
+        </Link>
+      </div>
+      <div className="mt-4">
         Szacunkowe wpłaty:{' '}
         <span className="font-bold">{membersFeesSum} PLN</span>
       </div>
