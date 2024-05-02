@@ -30,6 +30,7 @@ import {
   sendGroupDeleteEmailToAdmin,
 } from '@/app/lib/email';
 import { getSession, logout } from '@/app/lib/session';
+import { isAtLeastSixteenYearsOld } from '@/app/lib/utils';
 
 const SHIRT_FEE = 25;
 const REGULAR_MEMBER_FEE = 30;
@@ -336,6 +337,34 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
     };
   }
 
+  const path = await fetchPathById(pathId);
+
+  if (path.type === 'rowerowa') {
+    let tooYoungMembers = [] as string[];
+
+    members.forEach(({ birthdayDate, id, isAdult }) => {
+      if (!isAdult && !isAtLeastSixteenYearsOld({ birthDate: birthdayDate })) {
+        tooYoungMembers.push(id);
+      }
+    });
+
+    if (tooYoungMembers.length > 0) {
+      return {
+        errors: {
+          members: tooYoungMembers.map((id) =>
+            JSON.stringify({
+              id,
+              field: 'birthdayDate',
+              message:
+                'Na trasie rowerowej uczestnik musi mieć co najmniej 16 lat rocznikowo (urodzony najpóźniej w 2008 roku)',
+            }),
+          ),
+        },
+        message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+      };
+    }
+  }
+
   // Insert data into the database
   try {
     const group = await sql`
@@ -453,7 +482,6 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
         };
       }
 
-      const path = await fetchPathById(pathId);
       const leavingHour = await fetchLeavingHourById(leavingHourId);
 
       try {
@@ -656,6 +684,34 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
     }
   }
 
+  const path = await fetchPathById(pathId);
+
+  if (path.type === 'rowerowa') {
+    let tooYoungMembers = [] as string[];
+
+    members.forEach(({ birthdayDate, id, isAdult }) => {
+      if (!isAdult && !isAtLeastSixteenYearsOld({ birthDate: birthdayDate })) {
+        tooYoungMembers.push(id);
+      }
+    });
+
+    if (tooYoungMembers.length > 0) {
+      return {
+        errors: {
+          members: tooYoungMembers.map((id) =>
+            JSON.stringify({
+              id,
+              field: 'birthdayDate',
+              message:
+                'Na trasie rowerowej uczestnik musi mieć co najmniej 16 lat rocznikowo (urodzony najpóźniej w 2008 roku)',
+            }),
+          ),
+        },
+        message: 'Nie udało się dodać grupy. Uzupełnij brakujące pola.',
+      };
+    }
+  }
+
   try {
     await sql`
       UPDATE groups
@@ -764,7 +820,6 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
           return { message: 'Database Error: Failed to Update Users.' };
         }
 
-        const path = await fetchPathById(pathId);
         const leavingHour = await fetchLeavingHourById(leavingHourId);
 
         try {
