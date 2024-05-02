@@ -2,9 +2,20 @@ import type { PathsTable } from '@/app/lib/definitions';
 
 const TRIP_STARTING_DATE = new Date('2024-05-25');
 const THE_YOUNGEST_MEMBER_BIRTHDAY_DATE = new Date('2014-12-31');
+const THE_YOUNGEST_MEMBER_BICYCLE_PATH_BIRTHDAY_DATE = new Date('2008-12-31');
 
 export const isAtLeastTenYearsOld = ({
   date = THE_YOUNGEST_MEMBER_BIRTHDAY_DATE,
+  birthDate,
+}: {
+  date?: Date;
+  birthDate: string;
+}) =>
+  /* @ts-ignore */
+  Math.floor((date - new Date(birthDate).getTime()) / 3.15576e10) >= 0;
+
+export const isAtLeastSixteenYearsOld = ({
+  date = THE_YOUNGEST_MEMBER_BICYCLE_PATH_BIRTHDAY_DATE,
   birthDate,
 }: {
   date?: Date;
