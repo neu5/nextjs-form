@@ -39,6 +39,35 @@ const getSortedShirts = (
   },
 });
 
+const getShirtsSum = (sortedShirts: sortedShirts) =>
+  sortedShirts.male.S +
+  sortedShirts.male.M +
+  sortedShirts.male.L +
+  sortedShirts.male.XL +
+  sortedShirts.male.XXL +
+  sortedShirts.female.S +
+  sortedShirts.female.M +
+  sortedShirts.female.L +
+  sortedShirts.female.XL +
+  sortedShirts.female.XXL;
+
+const Shirts = ({ sortedShirts }: { sortedShirts: sortedShirts }) => (
+  <>
+    <h3 className="font-bold">Męskie</h3>
+    <p>S: {sortedShirts.male.S}</p>
+    <p>M: {sortedShirts.male.M}</p>
+    <p>L: {sortedShirts.male.L}</p>
+    <p>XL: {sortedShirts.male.XL}</p>
+    <p>XXL: {sortedShirts.male.XXL}</p>
+    <h3 className="mt-4 font-bold">Damskie</h3>
+    <p>S: {sortedShirts.female.S}</p>
+    <p>M: {sortedShirts.female.M}</p>
+    <p>L: {sortedShirts.female.L}</p>
+    <p>XL: {sortedShirts.female.XL}</p>
+    <p>XXL: {sortedShirts.female.XXL}</p>
+  </>
+);
+
 async function MembersList({ paths }: { paths: PathsTable[] }) {
   const pathsWithGroups = await Promise.all(
     paths.map(async (path: PathsTable) => {
@@ -113,17 +142,9 @@ export default async function AdminInfo() {
     sortedOrganizersShirts,
   );
 
-  const sortedShirtsSum =
-    sortedShirts.male.S +
-    sortedShirts.male.M +
-    sortedShirts.male.L +
-    sortedShirts.male.XL +
-    sortedShirts.male.XXL +
-    sortedShirts.female.S +
-    sortedShirts.female.M +
-    sortedShirts.female.L +
-    sortedShirts.female.XL +
-    sortedShirts.female.XXL;
+  const organizersSortedShirtsSum = getShirtsSum(sortedOrganizersShirts);
+  const membersSortedShirtsSum = getShirtsSum(sortedMembersShirts);
+  const sortedShirtsSum = getShirtsSum(sortedShirts);
 
   const sortedPaths = getSortedPaths(paths);
 
@@ -221,28 +242,24 @@ export default async function AdminInfo() {
         </Link>
       </div>
       <div className="mt-6">
+        <h3>Suma wszystkich koszulek: {sortedShirtsSum}</h3>
+      </div>
+      <div className="mt-6">
+        <h3>Koszulki organizatorów: {organizersSortedShirtsSum}</h3>
+        <Shirts sortedShirts={sortedOrganizersShirts} />
+      </div>
+      <div className="mt-6">
         <h3>
           <Link
             href="/print/shirts-list"
             target="_blank"
             className="font-bold text-blue-600 underline"
           >
-            Koszulki
+            Koszulki uczestników rajdu
           </Link>
-          : {sortedShirtsSum}
+          : {membersSortedShirtsSum}
         </h3>
-        <h3 className="font-bold">Męskie</h3>
-        <p>S: {sortedShirts.male.S}</p>
-        <p>M: {sortedShirts.male.M}</p>
-        <p>L: {sortedShirts.male.L}</p>
-        <p>XL: {sortedShirts.male.XL}</p>
-        <p>XXL: {sortedShirts.male.XXL}</p>
-        <h3 className="mt-4 font-bold">Damskie</h3>
-        <p>S: {sortedShirts.female.S}</p>
-        <p>M: {sortedShirts.female.M}</p>
-        <p>L: {sortedShirts.female.L}</p>
-        <p>XL: {sortedShirts.female.XL}</p>
-        <p>XXL: {sortedShirts.female.XXL}</p>
+        <Shirts sortedShirts={sortedShirts} />
       </div>
     </div>
   );
