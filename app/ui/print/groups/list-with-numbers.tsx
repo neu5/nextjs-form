@@ -23,8 +23,6 @@ export default async function GroupsTable() {
     groups.map((group) => getMembersCount(group)),
   );
 
-  console.log(groupWithMembersCount);
-
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
@@ -36,13 +34,13 @@ export default async function GroupsTable() {
                   Lp.
                 </th>
                 <th scope="col" className="px-4 py-5 font-medium">
-                  Nazwa trasy
-                </th>
-                <th scope="col" className="px-4 py-5 font-medium">
                   Nazwa grupy
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Osób zgłoszonych
+                </th>
+                <th scope="col" className="px-4 py-5 font-medium">
+                  Nazwa trasy
                 </th>
               </tr>
             </thead>
@@ -56,13 +54,13 @@ export default async function GroupsTable() {
                     <div className="flex items-center gap-3">{idx + 1}</div>
                   </td>
                   <td className="whitespace-nowrap border border-black px-3 py-3">
-                    <p>{group.pathname}</p>
-                  </td>
-                  <td className="whitespace-nowrap border border-black px-3 py-3">
                     <p>{group.name}</p>
                   </td>
                   <td className="whitespace-nowrap border border-black px-3 py-3">
                     {group.membersCount}
+                  </td>
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
+                    <p>{group.pathname}</p>
                   </td>
                 </tr>
               ))}

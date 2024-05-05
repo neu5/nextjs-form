@@ -174,7 +174,7 @@ export default async function AdminInfo() {
       </div>
       <div className="mt-4">
         <Link
-          href="/print/groups/list-with-numbers"
+          href="/public/groups/list-with-numbers"
           target="_blank"
           className="text-blue-600 underline"
         >
