@@ -242,7 +242,10 @@ export default async function AdminInfo() {
         </Link>
       </div>
       <div className="mt-6">
-        <h3>Suma wszystkich koszulek: {sortedShirtsSum}</h3>
+        <h3>
+          Suma wszystkich koszulek:{' '}
+          <span className="font-bold">{sortedShirtsSum}</span>
+        </h3>
       </div>
       <div className="mt-6">
         <h3>Koszulki organizatorów: {organizersSortedShirtsSum}</h3>
@@ -259,7 +262,7 @@ export default async function AdminInfo() {
           </Link>
           : {membersSortedShirtsSum}
         </h3>
-        <Shirts sortedShirts={sortedShirts} />
+        <Shirts sortedShirts={sortedMembersShirts} />
       </div>
     </div>
   );
