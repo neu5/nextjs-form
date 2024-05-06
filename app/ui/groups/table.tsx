@@ -63,14 +63,12 @@ export default async function GroupsTable() {
                   key={group.id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                  <td className="py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
                       <p>{group.name}</p>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {group.pathname}
-                  </td>
+                  <td className="px-3 py-3">{group.pathname}</td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {group.creation_datetime}
                   </td>

@@ -39,15 +39,11 @@ export default async function GroupsRemarksTable() {
                   <td className="whitespace-nowrap px-3 py-3">
                     <p>{group.name}</p>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="px-3 py-3">
                     <p>{group.pathname}</p>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {group.submitting_person_email}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {group.remarks}
-                  </td>
+                  <td className="px-3 py-3">{group.submitting_person_email}</td>
+                  <td className="px-3 py-3">{group.remarks}</td>
                 </tr>
               ))}
             </tbody>
