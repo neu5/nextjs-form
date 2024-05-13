@@ -1,4 +1,4 @@
-import { fetchGroupRemarks } from '@/app/lib/data';
+import { fetchMembersGroup } from '@/app/lib/data';
 
 export default async function GroupsRemarksTable() {
   const groups = await fetchGroupRemarks();
@@ -28,7 +28,7 @@ export default async function GroupsRemarksTable() {
               </tr>
             </thead>
             <tbody>
-              {groups?.map((group, idx) => (
+              {/* {groups?.map((group, idx) => (
                 <tr
                   key={group.id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
@@ -45,7 +45,7 @@ export default async function GroupsRemarksTable() {
                   <td className="px-3 py-3">{group.submitting_person_email}</td>
                   <td className="px-3 py-3">{group.remarks}</td>
                 </tr>
-              ))}
+              ))} */}
             </tbody>
           </table>
         </div>
