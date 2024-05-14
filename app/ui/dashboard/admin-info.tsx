@@ -21,9 +21,7 @@ export default async function AdminInfo() {
     fetchMembersCount(),
     fetchMembersWithPTTKCardCount(),
     fetchGroupCount(),
-
     fetchPaths(),
-
     fetchMembersFees(),
   ]);
 

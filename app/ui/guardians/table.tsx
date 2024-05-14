@@ -1,7 +1,33 @@
-import { fetchGroupRemarks } from '@/app/lib/data';
+import { fetchGroups, fetchMembersGroup } from '@/app/lib/data';
 
-export default async function GroupsRemarksTable() {
-  const groups = await fetchGroupRemarks();
+type Group = {
+  id: string;
+  name: string;
+  pathname: string;
+};
+
+async function getMembers(group: Group) {
+  const members = await fetchMembersGroup(group.id);
+
+  return {
+    ...group,
+    guardians: members.filter(
+      (member) => member.is_guardian || member.guardian_name !== '',
+    ),
+  };
+}
+
+export default async function GuardiansTable() {
+  let groups = await fetchGroups();
+
+  const groupsWithMembers = await Promise.all(
+    /* @ts-ignore */
+    groups.map((group) => getMembers(group)),
+  );
+
+  const groupWithGuardians = groupsWithMembers.filter(
+    (group) => group.guardians.length > 0,
+  );
 
   return (
     <div className="mt-6 flow-root bg-gray-50">
@@ -19,16 +45,13 @@ export default async function GroupsRemarksTable() {
                 <th scope="col" className="px-4 py-5 font-medium">
                   Nazwa trasy
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Email
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Treść uwagi
+                <th scope="col" className="px-4 py-5 font-medium">
+                  Opiekunowie
                 </th>
               </tr>
             </thead>
             <tbody>
-              {groups?.map((group, idx) => (
+              {groupWithGuardians?.map((group, idx) => (
                 <tr
                   key={group.id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
@@ -42,8 +65,23 @@ export default async function GroupsRemarksTable() {
                   <td className="px-3 py-3">
                     <p>{group.pathname}</p>
                   </td>
-                  <td className="px-3 py-3">{group.submitting_person_email}</td>
-                  <td className="px-3 py-3">{group.remarks}</td>
+                  <td className="px-3 py-3">
+                    {group.guardians.map((member, idx) => {
+                      return member.is_guardian ? (
+                        <div key={idx}>
+                          <span className="font-bold">{member.name}</span>
+                        </div>
+                      ) : (
+                        <div key={idx}>
+                          <span className="font-bold">
+                            {member.guardian_name}
+                          </span>{' '}
+                          jest opiekunem{' '}
+                          <span className="font-bold">{member.name}</span>
+                        </div>
+                      );
+                    })}
+                  </td>
                 </tr>
               ))}
             </tbody>

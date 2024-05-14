@@ -1,5 +1,5 @@
 import { lusitana } from '@/app/ui/fonts';
-import Table from '@/app/ui/remarks/table';
+import Table from '@/app/ui/guardians/table';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

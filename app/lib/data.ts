@@ -568,8 +568,10 @@ export async function fetchMembersGroup(id: string) {
       SELECT
         members.id,
         members.name,
+        members.is_guardian,
         members.is_group_chef,
         members.birthday_date,
+        members.guardian_name,
         members.pttk_card_number,
         members.shirt_size,
         members.shirt_type,
