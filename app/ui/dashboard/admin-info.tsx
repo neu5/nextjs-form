@@ -21,9 +21,7 @@ export default async function AdminInfo() {
     fetchMembersCount(),
     fetchMembersWithPTTKCardCount(),
     fetchGroupCount(),
-
     fetchPaths(),
-
     fetchMembersFees(),
   ]);
 
@@ -106,6 +104,14 @@ export default async function AdminInfo() {
         ))}
       </div>
       <div className="mt-6">
+        <Link
+          href="/dashboard/guardians"
+          className="font-bold text-blue-600 underline"
+        >
+          Opiekunowie ze wszystkich grup
+        </Link>
+      </div>
+      <div className="mt-2">
         <Link
           href="/dashboard/remarks"
           className="font-bold text-blue-600 underline"

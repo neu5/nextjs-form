@@ -66,7 +66,6 @@ const Shirts = ({ sortedShirts }: { sortedShirts: sortedShirts }) => (
 export default async function Page() {
   const [membersWithShirts, organizers] = await Promise.all([
     fetchMembersWithShirts(),
-
     fetchOrganizers(),
   ]);
 
