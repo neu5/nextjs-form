@@ -9,6 +9,9 @@ export const groupCreateMail = ({
   pathName,
   pathType,
   shirts,
+
+//może dodać tutaj docelowo transports.name i transports_leaving_hours - jeśli trasa nie rowerowa
+  
 }: {
   chefGroupPhoneNumber: string;
   creationTime: string;
@@ -20,6 +23,9 @@ export const groupCreateMail = ({
   pathName: string;
   pathType: string;
   shirts: { shirtType: string; shirtSize: string }[];
+
+  //może dodać tutaj docelowo transports.name i transports_leaving_hours
+  
 }) => `<!doctype html>
 <html lang="PL-pl">
   <head>
@@ -97,6 +103,10 @@ Lista uczestników:
 <td>Imię i nazwisko</td>
 <td>Data urodzenia</td>
 <td>Nr leg. PTTK</td>
+
+//<td>Transport - trasa</td>
+//<td>Transport - godzina</td>
+
 </tr>
 ${members
   .map(({ name, birthdayDate, PTTKCardNumber }, idx) => {
@@ -105,6 +115,9 @@ ${members
   <td>${name}</td>
   <td>${birthdayDate}</td>
   <td>${PTTKCardNumber}</td>
+  
+//jw transport i godzina
+  
   </tr>`;
   })
   .join('')}
@@ -117,8 +130,8 @@ Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetw
 
 <h2>WAŻNE INFORMACJE</h2>
 <h3>TERMIN RAJDU:</h3>
-<ul><li>start w sobotę wieczorem 25 maja 2024 r.</li>
-<li>zakończenie w niedzielę rano 26 maja 2024 r. – teren Nadleśnictwa Skarżysko przy ul. Wiejskiej 1 w Skarżysku-Kamiennej.</li>
+<ul><li>start w sobotę wieczorem 7 czerwca 2025 r.</li>
+<li>zakończenie w niedzielę rano 8 czerwca 2025 r. – teren przy Zalewie Lipowica - gm. Chęciny.</li>
 </ul>
 
 ${
@@ -128,21 +141,21 @@ ${
 }
 <br>
 <h3>(*) WPŁATY:</h3>
-<ul><li>Opłata za jednego uczestnika w drużynie - 30 zł</li>
-<li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół (klubów) PTTK - 25 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2024 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2024 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
-<li>Opłata od członków SKKT przy Oddziale Międzyszkolnym PTTK w Starachowicach - 15 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2024 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2024 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
+<ul><li>Opłata za jednego uczestnika w drużynie - 40 zł</li>
+<li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół (klubów) PTTK - 30 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
+<li>Opłata od członków SKKT przy Oddziale Międzyszkolnym PTTK w Starachowicach - 20 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
 <li>Opłata od opiekunów grup młodzieży szkolnej (1 opiekun na 10 uczestników w wieku 10-17 lat) - nie jest pobierana.</li>
-<li>Korektę danych uczestnika/ów Rajdu można wykonać do 19 maja 2024 r. – po 5 maja 2024 r. korekcie nie podlega ilość, rodzaj oraz rozmiar zamówionych koszulek.</li>
+<li>Korektę danych uczestnika/ów Rajdu można wykonać do 31 maja 2025 r. – po 11 maja 2025 r. korekcie nie podlega ilość, rodzaj oraz rozmiar zamówionych koszulek.</li>
 </ul>
 <br>
-Wpłat prosimy dokonywać na konto Oddziału Międzyszkolnego PTTK w Starachowicach <b><u>do dnia 19 maja 2024 r. (zgłoszenia bez dokonanej wpłaty nie zostaną uwzględnione):</u></b>
+Wpłat prosimy dokonywać na konto Oddziału Międzyszkolnego PTTK w Starachowicach <b><u>do dnia 14 maja 2025 r. (zgłoszenia bez dokonanej wpłaty nie zostaną uwzględnione):</u></b>
 <br>
 <div>PKO BP O/Ostrowiec Św. 64 1020 2674 0000 2102 0043 1437</div>
 <div>PTTK O/Międzyszkolny w Starachowicach</div>
 <div>al. Armii Krajowej 1, 27-200 Starachowice</div>
 
 W tytule przelewu prosimy wpisać:
-<div><b>Wpisowe Emeryk 2024 - zgłoszenie drużyny ${name} ${
+<div><b>Wpisowe Emeryk 2025 - zgłoszenie drużyny ${name} ${
   pathType === 'rowerowa' ? `na trasę rowerową,` : ``
 } osób ${members.length}</b></div>
 
@@ -162,6 +175,18 @@ Każda koszulka kosztuje <b><u>25 zł</u></b>, zatem do przelewu należy doliczy
       } zł</b></u>.`
     : ``
 }
+
+//może coś na tej zasadzie ? - z wyłączeniem rowerowych 
+//${
+//  transport.length
+//    ? `
+//<h3>TRANSPORT</h3>
+//Zarezerwowano transport dla <b>${transports.length}</b> osób<br>
+//Koszt transportu to <b><u>15 zł</u></b>, zatem do przelewu należy doliczyć <b><u>${
+//        transport.length * 15
+//      } zł</b></u>.`
+//    : ``
+//}
 
 <br>
 <h3>KONTAKT:</h3>
@@ -299,8 +324,8 @@ Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetw
 
 <h2>WAŻNE INFORMACJE</h2>
 <h3>TERMIN RAJDU:</h3>
-<ul><li>start w sobotę wieczorem 25 maja 2024 r.</li>
-<li>zakończenie w niedzielę rano 26 maja 2024 r. – teren Nadleśnictwa Skarżysko przy ul. Wiejskiej 1 w Skarżysku-Kamiennej.</li>
+<ul><li>start w sobotę wieczorem 7 czerwca 2025 r.</li>
+<li>zakończenie w niedzielę rano 8 czerwca 2025 r. – teren przy Zalewie Lipowica - gm. Chęciny.</li>
 </ul>
 
 ${
@@ -310,21 +335,21 @@ ${
 }
 <br>
 <h3>(*) WPŁATY:</h3>
-<ul><li>Opłata za jednego uczestnika w drużynie - 30 zł</li>
-<li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół (klubów) PTTK - 25 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2024 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2024 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
-<li>Opłata od członków SKKT przy Oddziale Międzyszkolnym PTTK w Starachowicach - 15 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2024 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2024 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
+<ul><li>Opłata za jednego uczestnika w drużynie - 40 zł</li>
+<li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół (klubów) PTTK - 30 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
+<li>Opłata od członków SKKT przy Oddziale Międzyszkolnym PTTK w Starachowicach - 20 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
 <li>Opłata od opiekunów grup młodzieży szkolnej (1 opiekun na 10 uczestników w wieku 10-17 lat) - nie jest pobierana.</li>
-<li>Korektę danych uczestnika/ów Rajdu można wykonać do 19 maja 2024 r. – po 5 maja 2024 r. korekcie nie podlega ilość, rodzaj oraz rozmiar zamówionych koszulek.</li>
+<li>Korektę danych uczestnika/ów Rajdu można wykonać do 31 maja 2025 r. – po 11 maja 2025 r. korekcie nie podlega ilość, rodzaj oraz rozmiar zamówionych koszulek.</li>
 </ul>
 <br>
-Wpłat prosimy dokonywać na konto Oddziału Międzyszkolnego PTTK w Starachowicach <b><u>do dnia 19 maja 2024 r. (zgłoszenia bez dokonanej wpłaty nie zostaną uwzględnione):</u></b>
+Wpłat prosimy dokonywać na konto Oddziału Międzyszkolnego PTTK w Starachowicach <b><u>do dnia 14 maja 2025 r. (zgłoszenia bez dokonanej wpłaty nie zostaną uwzględnione):</u></b>
 <br>
 <div>PKO BP O/Ostrowiec Św. 64 1020 2674 0000 2102 0043 1437</div>
 <div>PTTK O/Międzyszkolny w Starachowicach</div>
 <div>al. Armii Krajowej 1, 27-200 Starachowice</div>
 
 W tytule przelewu prosimy wpisać:
-<div><b>Wpisowe Emeryk 2024 - zgłoszenie drużyny ${name} ${
+<div><b>Wpisowe Emeryk 2025 - zgłoszenie drużyny ${name} ${
   pathType === 'rowerowa' ? `na trasę rowerową,` : ``
 } osób ${members.length}</b></div>
 
@@ -344,6 +369,19 @@ Każda koszulka kosztuje <b><u>25 zł</u></b>, zatem do przelewu należy doliczy
       } zł</b></u>.`
     : ``
 }
+
+//może coś na tej zasadzie ? - z wyłączeniem rowerowych
+//${
+//  transport.length
+//    ? `
+//<h3>TRANSPORT</h3>
+//Zarezerwowano transport dla <b>${transports.length}</b> osób<br>
+//Koszt transportu to <b><u>15 zł</u></b>, zatem do przelewu należy doliczyć <b><u>${
+//        transport.length * 15
+//      } zł</b></u>.`
+//    : ``
+//}
+
 
 <br>
 <h3>KONTAKT:</h3>
