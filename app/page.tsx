@@ -62,7 +62,7 @@ export default async function Page() {
       </div>
       <div className="flex items-center justify-center p-6">
         <Image
-          src="/emeryk2024-znaczek.png"
+          src="/emeryk2025-znaczek.png"
           width={200}
           height={200}
           className="hidden md:block"
@@ -70,7 +70,7 @@ export default async function Page() {
           priority={true}
         />
         <Image
-          src="/emeryk2024-znaczek.png"
+          src="/emeryk2025-znaczek.png"
           width={100}
           height={100}
           className="block md:hidden"
@@ -91,7 +91,7 @@ export default async function Page() {
           Prosimy podawać prawidłowe i kompletne dane w zgłoszeniu. Podanie
           niewłaściwych danych może skutkować brakiem ubezpieczenia dla
           uczestnika Rajdu. W przypadku konieczności zmiany danych uczestnika
-          Rajdu możliwe jest wykonanie korekty do dnia 19 maja 2024 r.
+          Rajdu możliwe jest wykonanie korekty do dnia 31 maja 2025 r.
         </li>
         <li>
           Jeśli w grupie znajdują się osoby niepełnoletnie prosimy w formularzu
@@ -130,8 +130,15 @@ export default async function Page() {
           >
             KOSZULKI
           </a>
-          . Od dnia 6 maja 2024 r. korekcie nie podlega ilość, rodzaj oraz
+          . Od dnia 11 maja 2025 r. korekcie nie podlega ilość, rodzaj oraz
           rozmiar zamówionych koszulek.
+        </li>
+        <li>
+          Osoby zainteresowane transportem powrotnym (trasa Zalew Lipowica – 
+          Kielce Główne PKP) mogą wybrać opcję transportu w formularzu zgłoszeniowym 
+          (dla każdego uczestnika osobno – trasa, godzina odjazdu). 
+          Koszt transportu wynosi 15 zł za osobę. 
+          Liczba miejsc ograniczona. Decyduje kolejność zgłoszeń. 
         </li>
         <li>
           Wszystkie pola oznaczone <span className="text-red-600">*</span> są
