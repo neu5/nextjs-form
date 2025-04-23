@@ -20,6 +20,9 @@ type Member = {
   shirt_size: string;
   shirt_type: string;
   pttk_card_number: string;
+//transport_kierunek
+//transport_godzina
+  
 };
 
 async function getMembers(group: Group) {
@@ -104,6 +107,11 @@ const Table = ({
                   <td className="whitespace-nowrap border border-black px-3 py-3">
                     {member.shirt_type}, {member.shirt_size}
                   </td>
+                  
+ <td className="whitespace-nowrap border border-black px-3 py-3">  */ 
+   {member.transport_kierunek}, {member.transport_godzina}
+ </td>
+                 
                   <td className="whitespace-nowrap border border-black px-3 py-3">
                     {member.fee}
                   </td>
