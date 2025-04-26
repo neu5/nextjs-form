@@ -163,7 +163,7 @@ Każda koszulka kosztuje <b><u>25 zł</u></b>, zatem do przelewu należy doliczy
     : ``
 }
 <br>
-Jeśli zamówiliście transport powrotny, pamiętajcie o doliczeniu do przelweu kosztów przejazdu (15 zł/osoba).
+Jeśli zamówiliście transport powrotny, pamiętajcie o doliczeniu do przelewu kosztów przejazdu (15 zł/osoba).
 <br>
 
 <br>
@@ -315,7 +315,7 @@ ${
 <h3>(*) WPŁATY:</h3>
 <ul><li>Opłata za jednego uczestnika w drużynie - 40 zł</li>
 <li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół (klubów) PTTK - 30 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
-<li>Opłata od członków SKKT przy Oddziale Międzyszkolnym PTTK w Starachowicach - 15 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
+<li>Opłata od członków SKKT przy Oddziale Międzyszkolnym PTTK w Starachowicach - 20 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
 <li>Opłata od opiekunów grup młodzieży szkolnej (1 opiekun na 10 uczestników w wieku 10-17 lat) - nie jest pobierana.</li>
 <li>Korektę danych uczestnika/ów Rajdu można wykonać do 31 maja 2025 r. – po 11 maja 2025 r. korekcie nie podlega ilość, rodzaj oraz rozmiar zamówionych koszulek.</li>
 </ul>
@@ -348,7 +348,7 @@ Każda koszulka kosztuje <b><u>25 zł</u></b>, zatem do przelewu należy doliczy
     : ``
 }
 <br>
-Jeśli zamówiliście transport powrotny, pamiętajcie o doliczeniu do przelweu kosztów przejazdu (15 zł/osoba).
+Jeśli zamówiliście transport powrotny, pamiętajcie o doliczeniu do przelewu kosztów przejazdu (15 zł/osoba).
 <br>
 <br>
 <h3>KONTAKT:</h3>
