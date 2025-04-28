@@ -52,7 +52,7 @@ const getMemberFee = ({
       return 0;
     }
     if (isSKKTStarachowice) {
-      return 15;
+      return 20;
     }
     if (PTTKCardNumber) {
       return PTTK_MEMBER_FEE;
