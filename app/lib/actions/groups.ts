@@ -35,6 +35,7 @@ import { isAtLeastSixteenYearsOld } from '@/app/lib/utils';
 const SHIRT_FEE = 25;
 const REGULAR_MEMBER_FEE = 40;
 const PTTK_MEMBER_FEE = 30;
+const SKKT_FEE = 20;
 
 const getMemberFee = ({
   isInstitution,
@@ -52,7 +53,7 @@ const getMemberFee = ({
       return 0;
     }
     if (isSKKTStarachowice) {
-      return 20;
+      return SKKT_FEE;
     }
     if (PTTKCardNumber) {
       return PTTK_MEMBER_FEE;

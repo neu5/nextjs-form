@@ -1,8 +1,8 @@
 import type { PathsTable } from '@/app/lib/definitions';
 
-const TRIP_STARTING_DATE = new Date('2024-05-25');
-const THE_YOUNGEST_MEMBER_BIRTHDAY_DATE = new Date('2014-12-31');
-const THE_YOUNGEST_MEMBER_BICYCLE_PATH_BIRTHDAY_DATE = new Date('2008-12-31');
+const TRIP_STARTING_DATE = new Date('2025-06-07');
+const THE_YOUNGEST_MEMBER_BIRTHDAY_DATE = new Date('2015-12-31');
+const THE_YOUNGEST_MEMBER_BICYCLE_PATH_BIRTHDAY_DATE = new Date('2009-12-31');
 
 export const isAtLeastTenYearsOld = ({
   date = THE_YOUNGEST_MEMBER_BIRTHDAY_DATE,
