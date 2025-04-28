@@ -33,8 +33,8 @@ import { getSession, logout } from '@/app/lib/session';
 import { isAtLeastSixteenYearsOld } from '@/app/lib/utils';
 
 const SHIRT_FEE = 25;
-const REGULAR_MEMBER_FEE = 30;
-const PTTK_MEMBER_FEE = 25;
+const REGULAR_MEMBER_FEE = 40;
+const PTTK_MEMBER_FEE = 30;
 
 const getMemberFee = ({
   isInstitution,
