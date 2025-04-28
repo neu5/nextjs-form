@@ -8,8 +8,7 @@ import { revalidatePath } from 'next/cache';
 const FormLeavingHourSchema = z.object({
   id: z.string(),
   value: z
-    .string({ required_error: 'Value is required' })
-    .length(5, { message: 'Godzina startu powinna mieć format: HH:MM' }),
+    .string({ required_error: 'Value is required' }),
 });
 
 export type LeaivngHourState = {
