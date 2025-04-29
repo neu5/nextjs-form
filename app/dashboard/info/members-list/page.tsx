@@ -49,8 +49,8 @@ export default async function Page() {
       </div>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         <div className="mt-6">
-          <h3>Liczba ludzi na trasach:</h3>
-          {pathsWithGroups.map(({ id, name, type, membersCount }) => (
+          <h3>Liczba ludzi na trasach:</h3>      
+          {sortedPaths.map(({ id, name, type, membersCount }) => (
             <div key={id}>
               <Link
                 href={`/print/groups/members-list/${id}`}
