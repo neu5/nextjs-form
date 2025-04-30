@@ -354,7 +354,7 @@ export default function Form({
               Emeryka organizowanego przez Oddział Międzyszkolny PTTK w
               Starachowicach.{' '}
               <a
-                href="https://emeryk.pttk.pl/images/Emeryk_2025_regulamin.pdf"
+                href="https://emeryk.pttk.pl/images/Ogolnopolski-Rajd-Nocny-Swietego-Emeryka-RODO.pdf"
                 target="_blank"
                 className="text-blue-600 underline"
               >
