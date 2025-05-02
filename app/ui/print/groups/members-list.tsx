@@ -34,6 +34,8 @@ type ObjWithStringKeys = {
   [key: string]: string;
 };
 
+const TRANSPORT_FEE: number = 15;
+
 async function getMembers(group: Group) {
   const [members, transports, leavingHours] = await Promise.all([
     fetchMembersGroup(group.id),
@@ -61,12 +63,14 @@ async function getMembers(group: Group) {
     ...group,
     members: members.map((member) => ({
       ...member,
-      transport_name: member.transport_id
-        ? transportsObj[member.transport_id]
-        : undefined,
-      transport_leaving_hour: member.transport_leaving_hour_id
-        ? leavingHoursObj[member.transport_leaving_hour_id]
-        : undefined,
+      ...(member.transport_id
+        ? {
+            fee: (Number(member.fee) + TRANSPORT_FEE).toFixed(2),
+            transport_name: transportsObj[member.transport_id],
+            transport_leaving_hour:
+              leavingHoursObj[member.transport_leaving_hour_id],
+          }
+        : {}),
     })),
   };
 }
