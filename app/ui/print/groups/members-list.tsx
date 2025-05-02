@@ -1,5 +1,10 @@
 import clsx from 'clsx';
-import { fetchGroupsByPathId, fetchMembersGroup } from '@/app/lib/data';
+import {
+  fetchGroupsByPathId,
+  fetchMembersGroup,
+  fetchTransports,
+  fetchLeavingHours,
+} from '@/app/lib/data';
 
 type Group = {
   id: string;
@@ -14,20 +19,55 @@ type Group = {
 type Member = {
   id: string;
   is_group_chef: boolean;
+  birthday_date: string;
   name: string;
   fee: number;
-  birthday_date: string;
+  pttk_card_number: string;
   shirt_size: string;
   shirt_type: string;
-  pttk_card_number: string;
+  transport_id: string;
+  transport_name: string;
+  transport_leaving_hour: string;
+};
+
+type ObjWithStringKeys = {
+  [key: string]: string;
 };
 
 async function getMembers(group: Group) {
-  const members = await fetchMembersGroup(group.id);
+  const [members, transports, leavingHours] = await Promise.all([
+    fetchMembersGroup(group.id),
+    fetchTransports(),
+    fetchLeavingHours(),
+  ]);
+
+  const transportsObj: ObjWithStringKeys = transports.reduce(
+    (result, tranportObj) => ({
+      ...result,
+      [tranportObj.id]: tranportObj.name,
+    }),
+    {},
+  );
+
+  const leavingHoursObj: ObjWithStringKeys = leavingHours.reduce(
+    (result, tranportObj) => ({
+      ...result,
+      [tranportObj.id]: tranportObj.value,
+    }),
+    {},
+  );
 
   return {
     ...group,
-    members,
+    members: members.map((member) => ({
+      ...member,
+      transport_name: member.transport_id
+        ? transportsObj[member.transport_id]
+        : undefined,
+      transport_leaving_hour: member.transport_leaving_hour_id
+        ? leavingHoursObj[member.transport_leaving_hour_id]
+        : undefined,
+    })),
   };
 }
 
@@ -72,6 +112,9 @@ const Table = ({
                   Koszulka
                 </th>
                 <th scope="col" className="px-4 py-5 font-medium">
+                  Transport
+                </th>
+                <th scope="col" className="px-4 py-5 font-medium">
                   Opłata
                 </th>
               </tr>
@@ -102,7 +145,14 @@ const Table = ({
                     {member.pttk_card_number}
                   </td>
                   <td className="whitespace-nowrap border border-black px-3 py-3">
-                    {member.shirt_type}, {member.shirt_size}
+                    {member.shirt_type
+                      ? `${member.shirt_type}, ${member.shirt_size}`
+                      : ''}
+                  </td>
+                  <td className="whitespace-nowrap border border-black px-3 py-3">
+                    {member.transport_id
+                      ? `${member.transport_name}, ${member.transport_leaving_hour}`
+                      : ''}
                   </td>
                   <td className="whitespace-nowrap border border-black px-3 py-3">
                     {member.fee}

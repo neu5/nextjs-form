@@ -575,8 +575,10 @@ export async function fetchMembersGroup(id: string) {
         members.pttk_card_number,
         members.shirt_size,
         members.shirt_type,
+        members.transport_id,
+        members.transport_leaving_hour_id,
         members.fee
-      FROM members 
+      FROM members
       WHERE group_id = ${id}`;
 
     return data.rows;
