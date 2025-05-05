@@ -690,6 +690,27 @@ export async function fetchOrganizerById(id: string) {
   }
 }
 
+export async function fetchTransportPrint() {
+  noStore();
+
+  try {
+    const data = await sql`
+        SELECT 
+          members.id as id,
+          members.name as name,
+          groups.name as group_name,
+          members.transport_id,
+          members.transport_leaving_hour_id
+        FROM members
+        WHERE transport_leaving_hour_id != ''`;
+      
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch members data.');
+  }
+}
+
 export async function fetchTransports() {
   noStore();
 
