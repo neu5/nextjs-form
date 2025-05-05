@@ -4,6 +4,8 @@ const TRIP_STARTING_DATE = new Date('2025-06-07');
 const THE_YOUNGEST_MEMBER_BIRTHDAY_DATE = new Date('2015-12-31');
 const THE_YOUNGEST_MEMBER_BICYCLE_PATH_BIRTHDAY_DATE = new Date('2009-12-31');
 
+export const IS_TRANSPORTATION_ENABLED: boolean = true;
+
 export const isAtLeastTenYearsOld = ({
   date = THE_YOUNGEST_MEMBER_BIRTHDAY_DATE,
   birthDate,
