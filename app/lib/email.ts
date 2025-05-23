@@ -10,8 +10,7 @@ import { ADMIN_EMAIL_ADDRESS } from '@/app/lib/constants';
 
 const getTransporter = () => {
   return nodemailer.createTransport({
-    service: 'Cpanel',
-    host: 'mail.emeryk.pttk.pl',
+    host: 'host897071.hostido.net.pl',
     port: 465,
     secure: true,
     auth: {
