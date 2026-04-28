@@ -62,7 +62,7 @@ export default async function Page() {
       </div>
       <div className="flex items-center justify-center p-6">
         <Image
-          src="/emeryk2025-znaczek.png"
+          src="/emeryk2026-znaczek.png"
           width={200}
           height={200}
           className="hidden md:block"
@@ -70,7 +70,7 @@ export default async function Page() {
           priority={true}
         />
         <Image
-          src="/emeryk2025-znaczek.png"
+          src="/emeryk2026-znaczek.png"
           width={100}
           height={100}
           className="block md:hidden"
@@ -91,13 +91,12 @@ export default async function Page() {
           Prosimy podawać prawidłowe i kompletne dane w zgłoszeniu. Podanie
           niewłaściwych danych może skutkować brakiem ubezpieczenia dla
           uczestnika Rajdu. W przypadku konieczności zmiany danych uczestnika
-          Rajdu możliwe jest wykonanie korekty do dnia 31 maja 2025 r.
+          Rajdu możliwe jest wykonanie korekty do dnia{' '}
+          <span className="font-bold text-red-600">18 maja 2026 r.</span>
         </li>
         <li>
           Jeśli w grupie znajdują się osoby niepełnoletnie prosimy w formularzu
-          podać imię i nazwisko{' '}
-          <span className="text-red-600">opiekuna/opiekunów prawnych</span>
-          &nbsp; (opiekun prawny musi być uczestnikiem Rajdu).
+          podać imię i nazwisko (opiekun prawny musi być uczestnikiem Rajdu).
         </li>
         <li>
           Prosimy o wyznaczenie kierownika grupy (należy zaznaczyć opcję przy
@@ -130,20 +129,21 @@ export default async function Page() {
           >
             KOSZULKI
           </a>
-          . Od dnia 11 maja 2025 r. korekcie nie podlega ilość, rodzaj oraz
-          rozmiar zamówionych koszulek.
+          . Od dnia{' '}
+          <span className="font-bold text-red-600">4 maja 2026 r.</span>{' '}
+          korekcie nie podlega ilość, rodzaj oraz rozmiar zamówionych koszulek.
         </li>
         <li>
-          Osoby zainteresowane transportem powrotnym (trasa Zalew Lipowica – 
-          Kielce Główne PKP) mogą wybrać opcję transportu w formularzu zgłoszeniowym 
-          (dla każdego uczestnika osobno – trasa, godzina odjazdu). 
-          Koszt transportu wynosi 15 zł za osobę. 
-          Liczba miejsc ograniczona. Decyduje kolejność zgłoszeń. 
+          Osoby zainteresowane transportem powrotnym (
+          <span className="font-bold text-red-600">
+            trasa Nowa Słupia – Kielce, Nowa Słupia - Starachowice
+          </span>
+          ) mogą wybrać opcję transportu w formularzu zgłoszeniowym (dla każdego
+          uczestnika osobno – trasa, godzina odjazdu). Koszt transportu wynosi{' '}
+          <span className="font-bold text-red-600">20 zł</span> za osobę. Liczba
+          miejsc ograniczona. Decyduje kolejność zgłoszeń.
         </li>
-        <li>
-          Wszystkie pola oznaczone <span className="text-red-600">*</span> są
-          wymagane.
-        </li>
+        <li>Wszystkie pola oznaczone * są wymagane.</li>
         <li>
           <strong className="font-bold">
             Każde zgłoszenie jest potwierdzane na adres e-mail podany w

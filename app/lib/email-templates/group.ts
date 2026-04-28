@@ -110,9 +110,9 @@ ${members
   .join('')}
 </table>
 <br>
-Akceptuję <a href="https://emeryk.pttk.pl/images/Emeryk_2025_regulamin.pdf">regulamin</a> Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali się z regulaminem Rajdu
+Akceptuję <a href="https://emeryk.pttk.pl/images/2026/dokumenty/Emeryk2026-regulamin-v20260427.pdf">regulamin</a> Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali się z regulaminem Rajdu
 <br>
-Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a) rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św. Emeryka organizowanego przez Oddział Międzyszkolny PTTK w Starachowicach. <a href="https://emeryk.pttk.pl/images/Ogolnopolski-Rajd-Nocny-Swietego-Emeryka-RODO.pdf">Klauzula informacyjna ochrony danych osobowych</a>
+Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a) rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św. Emeryka organizowanego przez Oddział Międzyszkolny PTTK w Starachowicach. <a href="https://emeryk.pttk.pl/images/2026/dokumenty/XXV_Ogolnopolski_Rajd_Nocny_Swietego_Emeryka_Nowa_Slupia_2026-RODO.pdf">Klauzula informacyjna ochrony danych osobowych</a>
 <br>
 
 <h2>WAŻNE INFORMACJE</h2>
@@ -296,9 +296,9 @@ ${members
   .join('')}
 </table>
 <br>
-Akceptuję <a href="https://emeryk.pttk.pl/images/Emeryk_2025_regulamin.pdf">regulamin</a> Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali się z regulaminem Rajdu
+Akceptuję <a href="https://emeryk.pttk.pl/images/2026/dokumenty/Emeryk2026-regulamin-v20260427.pdf">regulamin</a> Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali się z regulaminem Rajdu
 <br>
-Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a) rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św. Emeryka organizowanego przez Oddział Międzyszkolny PTTK w Starachowicach. <a href="https://emeryk.pttk.pl/images/Ogolnopolski-Rajd-Nocny-Swietego-Emeryka-RODO.pdf">Klauzula informacyjna ochrony danych osobowych</a>
+Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a) rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św. Emeryka organizowanego przez Oddział Międzyszkolny PTTK w Starachowicach. <a href="https://emeryk.pttk.pl/images/2026/dokumenty/XXV_Ogolnopolski_Rajd_Nocny_Swietego_Emeryka_Nowa_Slupia_2026-RODO.pdf">Klauzula informacyjna ochrony danych osobowych</a>
 <br>
 
 <h2>WAŻNE INFORMACJE</h2>

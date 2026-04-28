@@ -304,7 +304,7 @@ export default function Form({
             <span className="after:ml-0.5 after:text-red-500 after:content-['*']">
               Akceptuję{' '}
               <a
-                href="https://emeryk.pttk.pl/images/Emeryk_2025_regulamin.pdf"
+                href="https://emeryk.pttk.pl/images/2026/dokumenty/Emeryk2026-regulamin-v20260427.pdf"
                 target="_blank"
                 className="text-blue-600 underline"
               >
@@ -354,7 +354,7 @@ export default function Form({
               Emeryka organizowanego przez Oddział Międzyszkolny PTTK w
               Starachowicach.{' '}
               <a
-                href="https://emeryk.pttk.pl/images/Ogolnopolski-Rajd-Nocny-Swietego-Emeryka-RODO.pdf"
+                href="https://emeryk.pttk.pl/images/2026/dokumenty/XXV_Ogolnopolski_Rajd_Nocny_Swietego_Emeryka_Nowa_Slupia_2026-RODO.pdf"
                 target="_blank"
                 className="text-blue-600 underline"
               >

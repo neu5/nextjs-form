@@ -34,7 +34,7 @@ type ObjWithStringKeys = {
   [key: string]: string;
 };
 
-const TRANSPORT_FEE: number = 15;
+const TRANSPORT_FEE: number = 20;
 
 async function getMembers(group: Group) {
   const [members, transports, leavingHours] = await Promise.all([
