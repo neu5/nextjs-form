@@ -167,9 +167,9 @@ Wpłat prosimy dokonywać na konto Oddziału Międzyszkolnego PTTK w Starachowic
 <div>al. Armii Krajowej 1, 27-200 Starachowice</div>
 
 W tytule przelewu prosimy wpisać:
-<div><b>Wpisowe Emeryk 2025 - zgłoszenie drużyny ${name} ${
+<div><b>Wpisowe Emeryk 2026 - zgłoszenie drużyny ${name} ${
   pathType === 'rowerowa' ? `na trasę rowerową,` : ``
-} osób ${members.length}</b></div>
+} osób ${members.length}, trasa: ${pathName}</b></div>
 
 ${
   shirts.length
@@ -380,7 +380,7 @@ Wpłat prosimy dokonywać na konto Oddziału Międzyszkolnego PTTK w Starachowic
 W tytule przelewu prosimy wpisać:
 <div><b>Wpisowe Emeryk 2026 - zgłoszenie drużyny ${name} ${
   pathType === 'rowerowa' ? `na trasę rowerową,` : ``
-} osób ${members.length}</b></div>
+} osób ${members.length}, trasa: ${pathName}</b></div>
 
 ${
   shirts.length
