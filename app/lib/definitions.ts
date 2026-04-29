@@ -78,6 +78,7 @@ export type PathForm = {
   name: string;
   type: string;
   path_order: string;
+  is_route_through_national_park: boolean;
   submitting_person_email: string;
   chef_group_phone_number: string;
   is_institution: boolean;

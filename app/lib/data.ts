@@ -344,6 +344,7 @@ export async function fetchPaths() {
      paths.id,
      paths.type,
      paths.name,
+     paths.is_route_through_national_park,
      paths.path_order,
      paths.date
     FROM paths`;
@@ -364,6 +365,7 @@ export async function fetchPathById(id: string) {
         paths.id,
         paths.name,
         paths.type,
+        paths.is_route_through_national_park,
         paths.path_order
       FROM paths
       WHERE paths.id = ${id};

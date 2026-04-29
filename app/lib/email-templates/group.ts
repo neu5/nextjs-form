@@ -8,6 +8,7 @@ export const groupCreateMail = ({
   password,
   pathName,
   pathType,
+  isRouteThroughNationalPark,
   shirts,
 }: {
   chefGroupPhoneNumber: string;
@@ -19,6 +20,7 @@ export const groupCreateMail = ({
   password: string;
   pathName: string;
   pathType: string;
+  isRouteThroughNationalPark: boolean;
   shirts: { shirtType: string; shirtSize: string }[];
 }) => `<!doctype html>
 <html lang="PL-pl">
@@ -110,15 +112,16 @@ ${members
   .join('')}
 </table>
 <br>
-Akceptuję <a href="https://emeryk.pttk.pl/images/2026/dokumenty/Emeryk2026-regulamin-v20260427.pdf">regulamin</a> Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali się z regulaminem Rajdu
+Akceptuję <a href="https://emeryk.pttk.pl/2026/dokumenty">regulamin</a> Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali się z regulaminem Rajdu
 <br>
-Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a) rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św. Emeryka organizowanego przez Oddział Międzyszkolny PTTK w Starachowicach. <a href="https://emeryk.pttk.pl/images/2026/dokumenty/XXV_Ogolnopolski_Rajd_Nocny_Swietego_Emeryka_Nowa_Slupia_2026-RODO.pdf">Klauzula informacyjna ochrony danych osobowych</a>
+Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a) rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św. Emeryka organizowanego przez Oddział Międzyszkolny PTTK w Starachowicach. <a href="https://emeryk.pttk.pl/2026/dokumenty">Klauzula informacyjna ochrony danych osobowych</a>
 <br>
 
 <h2>WAŻNE INFORMACJE</h2>
 <h3>TERMIN RAJDU:</h3>
-<ul><li>start w sobotę wieczorem 7 czerwca2025 r.</li>
-<li>zakończenie w niedzielę rano 8 czerwca 2025 r. – teren przy Zalewie Lipowica (gm. Chęciny).</li>
+<ul><li>start w sobotę wieczorem 30 maja 2026 r.</li>
+<li>zakończenie w niedzielę rano 31 maja 2026 r. – na terenie przy Muzeum Starożytnego Hutnictwa Świętokrzyskiego im. Mieczysława Radwana w Nowej Słupi</li>
+<li>przemieszczając się po terenie Świętokrzyskiego Parku Narodowego należy przestrzegać <a href="https://swpn.gov.pl/szlaki-turystyczne">regulaminu ŚPN</a></li>
 </ul>
 
 ${
@@ -128,11 +131,33 @@ ${
 }
 <br>
 <h3>(*) WPŁATY:</h3>
-<ul><li>Opłata za jednego uczestnika w drużynie - 40 zł</li>
-<li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół (klubów) PTTK - 30 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
-<li>Opłata od członków SKKT przy Oddziale Międzyszkolnym PTTK w Starachowicach - 20 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
-<li>Opłata od opiekunów grup młodzieży szkolnej (1 opiekun na 10 uczestników w wieku 10-17 lat) - nie jest pobierana.</li>
-<li>Korektę danych uczestnika/ów Rajdu można wykonać do 31 maja 2025 r. – po 11 maja 2025 r. korekcie nie podlega ilość, rodzaj oraz rozmiar zamówionych koszulek.</li>
+<ul>
+${
+  isRouteThroughNationalPark
+    ? `<li>Opłata za jednego uczestnika w drużynie - 56zł (45 zł uczestnictwo w Rajdzie + 11 zł/os za
+udostępnienie terenu ŚPN w celach edukacyjnych i turystycznych)</li><li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół
+(klubów) PTTK - 46 zł (35 zł uczestnictwo w Rajdzie + 11 zł/os za udostępnienie terenu ŚPN w celach
+edukacyjnych i turystycznych) - tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK
+za 2026 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka
+potwierdzającego opłacenie składki członkowskiej za 2026 r. spowoduje skreślenie z listy uczestników
+Rajdu.</li><li>Opłata od członków SKKT (Szkolnych Klubów Krajoznawczo-Turystycznych) - 36 zł (25 zł uczestnictwo
+w Rajdzie + 11 zł/os za udostępnienie terenu ŚPN w celach edukacyjnych i turystycznych) - tylko
+uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2026 r. - prosimy o zabranie
+legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie
+składki członkowskiej za 2026 r. spowoduje skreślenie z listy uczestników Rajdu.</li>`
+    : `<li>Opłata za jednego uczestnika w drużynie - 45zł</li><li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół
+(klubów) PTTK - 35 zł - tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2026
+r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka
+potwierdzającego opłacenie składki członkowskiej za 2026 r. spowoduje skreślenie z listy uczestników
+Rajdu.</li><li>Opłata od członków SKKT (Szkolnych Klubów Krajoznawczo-Turystycznych) - 25 zł - tylko uczestnicy
+zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2026 r. - prosimy o zabranie legitymacji PTTK
+na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki
+członkowskiej za 2026 r. spowoduje skreślenie z listy uczestników Rajdu.</li>`
+}
+
+<li>Opłata od opiekunów grup młodzieży szkolnej (1 opiekun na 10 uczestników) - za uczestnictwo w Rajdzie opłata nie jest pobierana.</li>
+<li>W przypadku konieczności korekty danych uczestnika/ów Rajdu prosimy o kontakt - dane można
+edytować do 18.05.2026 r.</li>
 </ul>
 <br>
 Wpłat prosimy dokonywać na konto Oddziału Międzyszkolnego PTTK w Starachowicach <b><u>do dnia 14 maja 2025 r. (zgłoszenia bez dokonanej wpłaty nie zostaną uwzględnione):</u></b>
@@ -194,6 +219,7 @@ export const groupCreateMailAdmin = ({
   password,
   pathName,
   pathType,
+  isRouteThroughNationalPark,
   shirts,
 }: {
   chefGroupPhoneNumber: string;
@@ -205,6 +231,7 @@ export const groupCreateMailAdmin = ({
   password: string;
   pathName: string;
   pathType: string;
+  isRouteThroughNationalPark: boolean;
   shirts: { shirtType: string; shirtSize: string }[];
 }) => `<!doctype html>
 <html lang="PL-pl">
@@ -296,15 +323,16 @@ ${members
   .join('')}
 </table>
 <br>
-Akceptuję <a href="https://emeryk.pttk.pl/images/2026/dokumenty/Emeryk2026-regulamin-v20260427.pdf">regulamin</a> Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali się z regulaminem Rajdu
+Akceptuję <a href="https://emeryk.pttk.pl/2026/dokumenty">regulamin</a> Rajdu. Oświadczam, że wszyscy zgłoszeni uczestnicy Rajdu zapoznali się z regulaminem Rajdu
 <br>
-Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a) rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św. Emeryka organizowanego przez Oddział Międzyszkolny PTTK w Starachowicach. <a href="https://emeryk.pttk.pl/images/2026/dokumenty/XXV_Ogolnopolski_Rajd_Nocny_Swietego_Emeryka_Nowa_Slupia_2026-RODO.pdf">Klauzula informacyjna ochrony danych osobowych</a>
+Oświadczam, że wszyscy zgłaszani uczestnicy Rajdu wyrażają zgodę na przetwarzanie danych osobowych zgodnie z art. 6 ust. 1 pkt a) rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO), w celach niezbędnych do przeprowadzenia Ogólnopolskiego Rajdu Nocnego św. Emeryka organizowanego przez Oddział Międzyszkolny PTTK w Starachowicach. <a href="https://emeryk.pttk.pl/2026/dokumenty">Klauzula informacyjna ochrony danych osobowych</a>
 <br>
 
 <h2>WAŻNE INFORMACJE</h2>
 <h3>TERMIN RAJDU:</h3>
-<ul><li>start w sobotę wieczorem 7 czerwca 2025 r.</li>
-<li>zakończenie w niedzielę rano 8 czerwca 2025 r. – teren przy Zalewie Lipowica (gm. Chęciny).</li>
+<ul><li>start w sobotę wieczorem 30 maja 2026 r.</li>
+<li>zakończenie w niedzielę rano 31 maja 2026 r. – na terenie przy Muzeum Starożytnego Hutnictwa Świętokrzyskiego im. Mieczysława Radwana w Nowej Słupi</li>
+<li>przemieszczając się po terenie Świętokrzyskiego Parku Narodowego należy przestrzegać <a href="https://swpn.gov.pl/szlaki-turystyczne">regulaminu ŚPN</a></li>
 </ul>
 
 ${
@@ -314,21 +342,43 @@ ${
 }
 <br>
 <h3>(*) WPŁATY:</h3>
-<ul><li>Opłata za jednego uczestnika w drużynie - 40 zł</li>
-<li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół (klubów) PTTK - 30 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
-<li>Opłata od członków SKKT przy Oddziale Międzyszkolnym PTTK w Starachowicach - 20 zł (tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2025 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki członkowskiej za 2025 r. spowoduje skreślenie z listy uczestników Rajdu.)</li>
-<li>Opłata od opiekunów grup młodzieży szkolnej (1 opiekun na 10 uczestników w wieku 10-17 lat) - nie jest pobierana.</li>
-<li>Korektę danych uczestnika/ów Rajdu można wykonać do 31 maja 2025 r. – po 11 maja 2025 r. korekcie nie podlega ilość, rodzaj oraz rozmiar zamówionych koszulek.</li>
+<ul>
+${
+  isRouteThroughNationalPark
+    ? `<li>Opłata za jednego uczestnika w drużynie - 56zł (45 zł uczestnictwo w Rajdzie + 11 zł/os za
+udostępnienie terenu ŚPN w celach edukacyjnych i turystycznych)</li><li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół
+(klubów) PTTK - 46 zł (35 zł uczestnictwo w Rajdzie + 11 zł/os za udostępnienie terenu ŚPN w celach
+edukacyjnych i turystycznych) - tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK
+za 2026 r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka
+potwierdzającego opłacenie składki członkowskiej za 2026 r. spowoduje skreślenie z listy uczestników
+Rajdu.</li><li>Opłata od członków SKKT (Szkolnych Klubów Krajoznawczo-Turystycznych) - 36 zł (25 zł uczestnictwo
+w Rajdzie + 11 zł/os za udostępnienie terenu ŚPN w celach edukacyjnych i turystycznych) - tylko
+uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2026 r. - prosimy o zabranie
+legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie
+składki członkowskiej za 2026 r. spowoduje skreślenie z listy uczestników Rajdu.</li>`
+    : `<li>Opłata za jednego uczestnika w drużynie - 45zł</li><li>Opłata od przewodników turystycznych, przodowników turystyki kwalifikowanej, członków kół
+(klubów) PTTK - 35 zł - tylko uczestnicy zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2026
+r. - prosimy o zabranie legitymacji PTTK na start w celu weryfikacji - brak aktualnego znaczka
+potwierdzającego opłacenie składki członkowskiej za 2026 r. spowoduje skreślenie z listy uczestników
+Rajdu.</li><li>Opłata od członków SKKT (Szkolnych Klubów Krajoznawczo-Turystycznych) - 25 zł - tylko uczestnicy
+zaznaczeni w zgłoszeniu z opłaconymi składkami PTTK za 2026 r. - prosimy o zabranie legitymacji PTTK
+na start w celu weryfikacji - brak aktualnego znaczka potwierdzającego opłacenie składki
+członkowskiej za 2026 r. spowoduje skreślenie z listy uczestników Rajdu.</li>`
+}
+
+<li>Opłata od opiekunów grup młodzieży szkolnej (1 opiekun na 10 uczestników) - za uczestnictwo w Rajdzie opłata nie jest pobierana.</li>
+<li>W przypadku konieczności korekty danych uczestnika/ów Rajdu prosimy o kontakt - dane można
+edytować do 18.05.2026 r.</li>
 </ul>
 <br>
-Wpłat prosimy dokonywać na konto Oddziału Międzyszkolnego PTTK w Starachowicach <b><u>do dnia 14 maja 2025 r. (zgłoszenia bez dokonanej wpłaty nie zostaną uwzględnione):</u></b>
+Wpłat prosimy dokonywać na konto Oddziału Międzyszkolnego PTTK w Starachowicach <b><u>do dnia 18 maja 2026 r. (zgłoszenia bez dokonanej wpłaty nie zostaną uwzględnione):</u></b>
 <br>
 <div>PKO BP O/Ostrowiec Św. 64 1020 2674 0000 2102 0043 1437</div>
 <div>PTTK O/Międzyszkolny w Starachowicach</div>
 <div>al. Armii Krajowej 1, 27-200 Starachowice</div>
 
 W tytule przelewu prosimy wpisać:
-<div><b>Wpisowe Emeryk 2025 - zgłoszenie drużyny ${name} ${
+<div><b>Wpisowe Emeryk 2026 - zgłoszenie drużyny ${name} ${
   pathType === 'rowerowa' ? `na trasę rowerową,` : ``
 } osób ${members.length}</b></div>
 
@@ -350,11 +400,11 @@ Każda koszulka kosztuje <b><u>25 zł</u></b>, zatem do przelewu należy doliczy
 }
 <br>
 <br>
-Jeśli zamówiliście transport powrotny, pamiętajcie o doliczeniu do przelewu kosztów przejazdu (<b>15 zł/osoba</b>).
+Jeśli zamówiliście transport powrotny, pamiętajcie o doliczeniu do przelewu kosztów przejazdu (<b>20 zł/osoba</b>).
 <br>
 <br>
 <h3>KONTAKT:</h3>
-<div>tel. 515 045 475 (Komendant Rajdu)</div>
+<div>Telefon: 515 045 475 - Komendant Rajdu</div>
 <div>e-mail: kontakt@emeryk.pttk.pl</div>
 <br>
 <div><a href="kontakt@emeryk.pttk.pl">kontakt@emeryk.pttk.pl</a> - oficjalny adres email Rajdu</div>

@@ -55,6 +55,7 @@ export async function sendGroupCreateEmail({
   password,
   pathName,
   pathType,
+  isRouteThroughNationalPark,
   shirts,
 }: {
   chefGroupPhoneNumber: string;
@@ -66,6 +67,7 @@ export async function sendGroupCreateEmail({
   password: string;
   pathName: string;
   pathType: string;
+  isRouteThroughNationalPark: boolean;
   shirts: { shirtType: string; shirtSize: string }[];
 }) {
   const transporter = getTransporter();
@@ -84,6 +86,7 @@ export async function sendGroupCreateEmail({
       password,
       pathName,
       pathType,
+      isRouteThroughNationalPark,
       shirts,
     }),
   };
@@ -101,6 +104,7 @@ export async function sendGroupCreateEmailToAdmin({
   password,
   pathName,
   pathType,
+  isRouteThroughNationalPark,
   shirts,
 }: {
   chefGroupPhoneNumber: string;
@@ -112,6 +116,7 @@ export async function sendGroupCreateEmailToAdmin({
   password: string;
   pathName: string;
   pathType: string;
+  isRouteThroughNationalPark: boolean;
   shirts: { shirtType: string; shirtSize: string }[];
 }) {
   const transporter = getTransporter();
@@ -119,7 +124,7 @@ export async function sendGroupCreateEmailToAdmin({
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
     to: ADMIN_EMAIL_ADDRESS,
-    subject: 'Rajd Nocny Świętego Emeryka',
+    subject: 'Rajd Nocny Świętego Emeryka 2026',
     html: groupCreateMailAdmin({
       chefGroupPhoneNumber,
       creationTime,
@@ -130,6 +135,7 @@ export async function sendGroupCreateEmailToAdmin({
       password,
       pathName,
       pathType,
+      isRouteThroughNationalPark,
       shirts,
     }),
   };
@@ -181,7 +187,7 @@ export function sendGroupDeleteEmailToAdmin({ name }: { name: string }) {
   const mailOptions = {
     from: ADMIN_EMAIL_ADDRESS,
     to: ADMIN_EMAIL_ADDRESS,
-    subject: 'Rajd Nocny Świętego Emeryka',
+    subject: 'Rajd Nocny Świętego Emeryka 2026',
     text: groupDeleteMail({ name }),
   };
 
