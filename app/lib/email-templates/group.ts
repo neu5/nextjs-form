@@ -189,7 +189,7 @@ Każda koszulka kosztuje <b><u>25 zł</u></b>, zatem do przelewu należy doliczy
 }
 <br>
 <br>
-Jeśli zamówiliście transport powrotny, pamiętajcie o doliczeniu do przelewu kosztów przejazdu (<b>15 zł/osoba</b>).
+Jeśli zamówiliście transport powrotny, pamiętajcie o doliczeniu do przelewu kosztów przejazdu (<b>20 zł/osoba</b>).
 <br>
 
 <br>
