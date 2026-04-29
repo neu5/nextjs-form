@@ -100,8 +100,6 @@ export async function updatePath(prevState: PathState, formData: FormData) {
     order,
   } = validatedFields.data;
 
-  console.log({ isRouteThroughNationalPark });
-
   try {
     await sql`
       UPDATE paths
