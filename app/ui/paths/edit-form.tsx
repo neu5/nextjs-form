@@ -77,6 +77,27 @@ export default function EditPathForm({
           </div>
         </div>
 
+        {/* Special route */}
+        <div className="mb-4">
+          <label
+            htmlFor="isRouteThroughNationalPark"
+            className="mb-2 block text-sm font-medium"
+          >
+            Czy trasa idzie przez Park Narodowy? (+ 11zł)
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative mt-2">
+              <input
+                id="isRouteThroughNationalPark"
+                name="isRouteThroughNationalPark"
+                type="checkbox"
+                className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                defaultChecked={path.is_route_through_national_park}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Path Order */}
         <div className="mb-4">
           <label htmlFor="order" className="mb-2 block text-sm font-medium">

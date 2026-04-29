@@ -118,6 +118,14 @@ export default async function Page() {
           </strong>
         </li>
         <li>
+          Ze względu na przebieg trasy 1, 2 i 6 przez teren Świętokrzyskiego
+          Parku Narodowego obowiązuje dopłata{' '}
+          <span className="font-bold text-red-600">11 zł/os</span>.
+          (udostępnienie terenu Parku do celów rekreacyjnych). Liczba
+          uczestników na tej trasie jest ograniczona (łącznie maks. 300 osób na
+          wszystkich trasach objętych limitem).
+        </li>
+        <li>
           W celu zakupu koszulek Rajdowych należy w formularzu zaznaczyć taką
           opcję (przy każdym uczestniku Rajdu osobno) i z opcji wybrać rodzaj
           koszulki i rozmiar. Szczegóły w zakładce &nbsp;

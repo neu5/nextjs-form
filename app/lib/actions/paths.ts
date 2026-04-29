@@ -12,6 +12,7 @@ const FormPathsSchema = z.object({
     .min(2, { message: 'Nazwa musi mieć co najmniej 2 znaki' })
     .max(255, { message: 'Nazwa nie może mieć więcej niż 255 znaków' }),
   leavingHours: z.array(z.string()).optional(),
+  isRouteThroughNationalPark: z.string().optional().nullish(),
   pathType: z.string().optional(),
   order: z
     .string()
@@ -76,6 +77,7 @@ export async function updatePath(prevState: PathState, formData: FormData) {
   const validatedFields = UpdatePath.safeParse({
     id: formData.get('id'),
     name: formData.get('name'),
+    isRouteThroughNationalPark: formData.get('isRouteThroughNationalPark'),
     pathType: formData.get('pathType'),
     order: formData.get('order'),
     leavingHours: formData.getAll('leavingHours'),
@@ -89,12 +91,23 @@ export async function updatePath(prevState: PathState, formData: FormData) {
     };
   }
 
-  const { id, name, leavingHours, pathType, order } = validatedFields.data;
+  const {
+    id,
+    isRouteThroughNationalPark,
+    name,
+    leavingHours,
+    pathType,
+    order,
+  } = validatedFields.data;
 
   try {
     await sql`
       UPDATE paths
-      SET name = ${name}, type = ${pathType}, path_order = ${order}
+      SET name = ${name}, type = ${pathType}, path_order = ${order}, is_route_through_national_park = ${
+        isRouteThroughNationalPark && isRouteThroughNationalPark.length > 0
+          ? 'TRUE'
+          : 'FALSE'
+      }
       WHERE id = ${id}
     `;
   } catch (error) {

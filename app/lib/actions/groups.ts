@@ -496,6 +496,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           password,
           pathName: path.name,
           pathType: path.type,
+          isRouteThroughNationalPark: path.is_route_through_national_park,
           shirts: members.reduce((shirts, member) => {
             if (!!member.shirtType && !!member.shirtSize) {
               shirts.push({
@@ -522,6 +523,7 @@ export async function createGroup(prevState: GroupState, formData: FormData) {
           password,
           pathName: path.name,
           pathType: path.type,
+          isRouteThroughNationalPark: path.is_route_through_national_park,
           shirts: members.reduce((shirts, member) => {
             if (!!member.shirtType && !!member.shirtSize) {
               shirts.push({
@@ -834,6 +836,7 @@ export async function updateGroup(prevState: GroupState, formData: FormData) {
             password,
             pathName: path.name,
             pathType: path.type,
+            isRouteThroughNationalPark: path.is_route_through_national_park,
             shirts: members.reduce((shirts, member) => {
               if (!!member.shirtType && !!member.shirtSize) {
                 shirts.push({

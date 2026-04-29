@@ -141,6 +141,7 @@ async function seedPaths(client) {
           id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
           type VARCHAR(50),
           name VARCHAR(255) NOT NULL,
+          is_route_through_national_park BOOLEAN DEFAULT FALSE,
           path_order VARCHAR(10),
           date DATE NOT NULL
         );
@@ -227,6 +228,7 @@ async function seedGroups(client) {
         CREATE TABLE IF NOT EXISTS groups (
           id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
+          origin VARCHAR(255) NOT NULL,
           path_id UUID NOT NULL,
           leaving_hour_id UUID NOT NULL,
           submitting_person_email VARCHAR(100) NOT NULL,
@@ -425,19 +427,19 @@ async function seedOrganizers(client) {
 
 async function dropTables(client) {
   try {
-    const createTable = await client.sql`
-      DROP TABLE IF EXISTS paths_types;
-      DROP TABLE IF EXISTS paths;
-      DROP TABLE IF EXISTS leaving_hours;
-      DROP TABLE IF EXISTS paths_leaving_hours;
-      DROP TABLE IF EXISTS groups;
-      DROP TABLE IF EXISTS members;
-      DROP TABLE IF EXISTS shirts_types;
-      DROP TABLE IF EXISTS shirts_sizes;
-      DROP TABLE IF EXISTS transports;
-      DROP TABLE IF EXISTS transports_leaving_hours;
-      DROP TABLE IF EXISTS organizers;
-    `;
+    // const createTable = await client.sql`
+    //   DROP TABLE IF EXISTS paths_types;
+    //   DROP TABLE IF EXISTS paths;
+    //   DROP TABLE IF EXISTS leaving_hours;
+    //   DROP TABLE IF EXISTS paths_leaving_hours;
+    //   DROP TABLE IF EXISTS groups;
+    //   DROP TABLE IF EXISTS members;
+    //   DROP TABLE IF EXISTS shirts_types;
+    //   DROP TABLE IF EXISTS shirts_sizes;
+    //   DROP TABLE IF EXISTS transports;
+    //   DROP TABLE IF EXISTS transports_leaving_hours;
+    //   DROP TABLE IF EXISTS organizers;
+    // `;
 
     console.log(`Dropped tables`);
 
