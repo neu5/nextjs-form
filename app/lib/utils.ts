@@ -1,8 +1,8 @@
 import type { PathsTable } from '@/app/lib/definitions';
 
-const TRIP_STARTING_DATE = new Date('2025-06-07');
-const THE_YOUNGEST_MEMBER_BIRTHDAY_DATE = new Date('2015-12-31');
-const THE_YOUNGEST_MEMBER_BICYCLE_PATH_BIRTHDAY_DATE = new Date('2009-12-31');
+const TRIP_STARTING_DATE = new Date('2026-05-30');
+const THE_YOUNGEST_MEMBER_BIRTHDAY_DATE = new Date('2016-12-31');
+const THE_YOUNGEST_MEMBER_BICYCLE_PATH_BIRTHDAY_DATE = new Date('2010-12-31');
 
 export const IS_TRANSPORTATION_ENABLED: boolean = true;
 
