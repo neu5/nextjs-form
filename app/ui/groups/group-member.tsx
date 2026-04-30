@@ -485,11 +485,13 @@ export default function GroupMember({
                     }
                   >
                     <option value="">Gdzie chcesz dojechać</option>
-                    {transports.map((transport) => (
-                      <option key={transport.id} value={transport.id}>
-                        {transport.name}
-                      </option>
-                    ))}
+                    {transports
+                      .filter((transport) => transport.leavingHours.length > 0)
+                      .map((transport) => (
+                        <option key={transport.id} value={transport.id}>
+                          {transport.name}
+                        </option>
+                      ))}
                   </select>
                   <TruckIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
                 </div>
