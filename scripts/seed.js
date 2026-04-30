@@ -228,7 +228,6 @@ async function seedGroups(client) {
         CREATE TABLE IF NOT EXISTS groups (
           id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
-          origin VARCHAR(255) NOT NULL,
           path_id UUID NOT NULL,
           leaving_hour_id UUID NOT NULL,
           submitting_person_email VARCHAR(100) NOT NULL,
