@@ -11,6 +11,7 @@ type Group = {
   name: string;
   chef_group_phone_number: string;
   leaving_hour_id: string;
+  is_route_through_national_park: boolean;
   path_id: string;
   leaving_hour: string;
   submitting_person_email: string;
@@ -35,6 +36,7 @@ type ObjWithStringKeys = {
 };
 
 const TRANSPORT_FEE: number = 20;
+const PATH_FEE: number = 11;
 
 async function getMembers(group: Group) {
   const [members, transports, leavingHours] = await Promise.all([
@@ -63,9 +65,13 @@ async function getMembers(group: Group) {
     ...group,
     members: members.map((member) => ({
       ...member,
+      fee: (
+        Number(member.fee) +
+        (group.is_route_through_national_park ? PATH_FEE : 0) +
+        (member.transport_id ? TRANSPORT_FEE : 0)
+      ).toFixed(2),
       ...(member.transport_id
         ? {
-            fee: (Number(member.fee) + TRANSPORT_FEE).toFixed(2),
             transport_name: transportsObj[member.transport_id],
             transport_leaving_hour:
               leavingHoursObj[member.transport_leaving_hour_id],

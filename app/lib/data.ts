@@ -548,6 +548,7 @@ export async function fetchGroupsByPathId(id: string) {
         groups.submitting_person_email,
         groups.leaving_hour_id,
         paths.id as path_id,
+        paths.is_route_through_national_park as is_route_through_national_park,
         leaving_hours.value as leaving_hour
       FROM groups
       JOIN paths ON groups.path_id = paths.id
